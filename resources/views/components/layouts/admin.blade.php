@@ -10,98 +10,92 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <style>
         body { font-family: 'Cairo', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
-        .dark ::-webkit-scrollbar-thumb { background: #374151; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
-<body class="font-sans antialiased bg-[#F8FAFC] text-slate-900 dark:bg-[#09090b] dark:text-slate-100 flex min-h-screen overflow-hidden selection:bg-indigo-500 selection:text-white">
-    
-    <!-- Admin Sidebar (Stripe/Notion style - Slate/Indigo theme) -->
-    <aside class="w-[280px] bg-slate-900 dark:bg-[#09090b] border-l border-slate-800 dark:border-white/5 flex flex-col shrink-0 z-20 hidden md:flex h-screen sticky top-0 text-slate-300">
-        <!-- Admin Branding -->
-        <div class="h-[72px] flex items-center px-6 border-b border-slate-800 shrink-0">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-500/20">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                </div>
-                <div>
-                    <h2 class="font-bold text-sm text-white">كلينورا للإدارة العليا</h2>
-                    <p class="text-xs text-slate-400">Super Admin</p>
-                </div>
+<body class="font-sans antialiased bg-[#05050A] text-slate-100 flex min-h-screen overflow-hidden">
+
+    {{-- ══════ ADMIN SIDEBAR ══════ --}}
+    <aside class="w-[260px] bg-[#0A0A12] border-l border-white/[0.06] flex flex-col shrink-0 z-20 hidden md:flex h-screen sticky top-0">
+
+        {{-- Brand --}}
+        <div class="h-[68px] flex items-center px-5 border-b border-white/[0.06] shrink-0 gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 shrink-0">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <div>
+                <h2 class="font-black text-sm text-white leading-none">كلينورا</h2>
+                <p class="text-[10px] text-slate-500 mt-0.5">Super Admin Panel</p>
             </div>
         </div>
 
-        <!-- Navigation -->
-        <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+        {{-- Navigation --}}
+        <nav class="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
             <x-admin.nav-item route="admin.dashboard" icon="home" label="الرئيسية" />
-            
-            <div class="pt-4 pb-1">
-                <p class="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">إدارة المنصة</p>
-            </div>
+
+            <p class="px-3 pt-5 pb-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">إدارة المنصة</p>
             <x-admin.nav-item route="admin.clinics.index" icon="office-building" label="العيادات" />
-            <x-admin.nav-item route="admin.subscriptions.index" icon="credit-card" label="الاشتراكات والباقات" />
+            <x-admin.nav-item route="admin.subscriptions.index" icon="credit-card" label="الباقات والاشتراكات" />
             <x-admin.nav-item route="admin.revenue.index" icon="chart-bar" label="الإيرادات" />
-            
-            <div class="pt-4 pb-1">
-                <p class="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">الدعم والمستخدمين</p>
-            </div>
+
+            <p class="px-3 pt-5 pb-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">الدعم والمستخدمون</p>
             <x-admin.nav-item route="admin.tickets.index" icon="support" label="تذاكر الدعم" />
-            <x-admin.nav-item route="admin.users.index" icon="users" label="المستخدمين" />
-            <x-admin.nav-item route="admin.roles.index" icon="shield-check" label="الصلاحيات والأدوار" />
-            
-            <div class="pt-4 pb-1">
-                <p class="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">إعدادات النظام</p>
-            </div>
+            <x-admin.nav-item route="admin.users.index" icon="users" label="المستخدمون" />
+            <x-admin.nav-item route="admin.roles.index" icon="shield-check" label="الصلاحيات" />
+
+            <p class="px-3 pt-5 pb-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">إعدادات النظام</p>
             <x-admin.nav-item route="admin.settings.index" icon="cog" label="إعدادات المنصة" />
-            <x-admin.nav-item route="admin.logs.index" icon="clipboard-list" label="سجلات النظام (Logs)" />
+            <x-admin.nav-item route="admin.logs.index" icon="clipboard-list" label="سجلات النظام" />
         </nav>
-        
-        <!-- User Profile Footer -->
-        <div class="p-4 border-t border-slate-800 shrink-0">
-            <button class="w-full flex items-center gap-3 p-2 hover:bg-slate-800 rounded-xl transition-colors">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6366f1&color=fff" alt="Avatar" class="w-9 h-9 rounded-full ring-2 ring-slate-800">
-                <div class="text-right flex-1 min-w-0">
+
+        {{-- User Footer --}}
+        <div class="p-3 border-t border-white/[0.06] shrink-0">
+            <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/5 transition-colors group">
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6366f1&color=fff&size=80" alt="Avatar" class="w-9 h-9 rounded-full shrink-0 ring-2 ring-white/10">
+                <div class="flex-1 min-w-0">
                     <p class="text-sm font-bold text-white truncate">{{ Auth::user()->name }}</p>
-                    <p class="text-xs text-slate-400 truncate">Super Admin</p>
+                    <p class="text-[10px] text-slate-500 truncate">Super Admin</p>
                 </div>
-            </button>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" title="تسجيل الخروج" class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-900/20 transition-colors opacity-0 group-hover:opacity-100">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    </button>
+                </form>
+            </div>
         </div>
     </aside>
 
-    <!-- Main Wrapper -->
+    {{-- ══════ MAIN CONTENT ══════ --}}
     <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        
-        <!-- Topbar -->
-        <header class="h-[72px] bg-white/80 dark:bg-[#09090b]/80 backdrop-blur-xl border-b border-slate-200 dark:border-white/5 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-10 shrink-0">
-            <!-- Mobile Menu Toggle -->
-            <button class="md:hidden p-2 -ml-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
 
-            <!-- Title -->
-            <div class="flex-1">
-                <h1 class="text-xl font-bold text-slate-900 dark:text-white">{{ $title ?? 'الإدارة' }}</h1>
+        {{-- Topbar --}}
+        <header class="h-[68px] bg-[#0A0A12]/80 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
+            <div>
+                <h1 class="text-lg font-black text-white leading-none">{{ $title ?? 'الإدارة العليا' }}</h1>
+                <p class="text-xs text-slate-500 mt-0.5">{{ now()->translatedFormat('l، d F Y') }}</p>
             </div>
-
-            <!-- Right Actions -->
-            <div class="flex items-center gap-4">
-                <button class="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                </button>
+            <div class="flex items-center gap-2">
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
+                    <span class="text-xs font-bold text-indigo-300">النظام يعمل بشكل طبيعي</span>
+                </div>
             </div>
         </header>
 
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-            <div class="max-w-7xl mx-auto space-y-8">
+        {{-- Content --}}
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6">
+            <div class="max-w-7xl mx-auto space-y-6">
                 {{ $slot }}
             </div>
         </main>
     </div>
+
+    @stack('scripts')
 </body>
 </html>

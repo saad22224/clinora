@@ -5,14 +5,41 @@
 @source '../views/**/*.blade.php';
 
 @theme {
-    --color-brand-50: oklch(0.97 0.01 240);
+    --color-brand-50:  oklch(0.97 0.01 240);
     --color-brand-100: oklch(0.94 0.03 240);
+    --color-brand-200: oklch(0.88 0.06 240);
+    --color-brand-300: oklch(0.78 0.10 240);
+    --color-brand-400: oklch(0.67 0.13 245);
     --color-brand-500: oklch(0.60 0.15 245);
     --color-brand-600: oklch(0.50 0.15 245);
+    --color-brand-700: oklch(0.42 0.14 245);
+    --color-brand-800: oklch(0.34 0.12 245);
     --color-brand-900: oklch(0.25 0.10 245);
     --font-sans: 'Cairo', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+/* ── Global: all buttons & interactive elements get pointer ── */
+button, [type="button"], [type="submit"], [type="reset"],
+a[href], label[for], select, summary,
+[role="button"], [role="tab"], [role="option"] {
+    cursor: pointer;
+}
+
+/* ── Modal transitions ── */
+[data-modal] {
+    transition: opacity 0.2s ease;
+}
+[data-modal].hidden {
+    display: none !important;
+}
+[data-modal-panel] {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+[data-modal-panel].scale-95 {
+    transform: scale(0.95) translateY(1rem);
+}
+
+/* ── Glass utilities ── */
 @utility glass {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);

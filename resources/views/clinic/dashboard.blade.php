@@ -33,15 +33,24 @@
         </div>
 
         <!-- Stat Card 3 -->
-        <div class="bg-white dark:bg-[#111] border border-gray-200 dark:border-white/5 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
+        <div class="bg-white dark:bg-[#111] border border-gray-200 dark:border-white/5 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow relative group">
             <div class="flex items-center justify-between mb-4">
                 <div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400 flex items-center justify-center">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
+                
+                <!-- Filter Dropdown -->
+                <form action="{{ route('clinic.dashboard') }}" method="GET" class="absolute top-4 left-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <select name="filter" onchange="this.form.submit()" class="text-xs bg-gray-50 border border-gray-200 text-gray-700 py-1 pl-6 pr-2 rounded-lg cursor-pointer outline-none hover:bg-gray-100 dark:bg-white/5 dark:border-white/10 dark:text-gray-300 transition-colors appearance-none">
+                        <option value="1" {{ $stats['current_filter'] == '1' ? 'selected' : '' }}>آخر شهر</option>
+                        <option value="2" {{ $stats['current_filter'] == '2' ? 'selected' : '' }}>آخر شهرين</option>
+                        <option value="3" {{ $stats['current_filter'] == '3' ? 'selected' : '' }}>آخر 3 أشهر</option>
+                    </select>
+                </form>
             </div>
             <div>
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">إيرادات الشهر</p>
-                <h3 class="text-2xl font-black text-gray-900 dark:text-white mt-1">{{ number_format($stats['monthly_revenue'], 2) }} <span class="text-sm font-normal text-gray-400">ر.س</span></h3>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ $stats['revenue_label'] }}</p>
+                <h3 class="text-2xl font-black text-gray-900 dark:text-white mt-1">{{ number_format($stats['revenue_amount'], 2) }} <span class="text-sm font-normal text-gray-400">ج.م</span></h3>
             </div>
         </div>
 

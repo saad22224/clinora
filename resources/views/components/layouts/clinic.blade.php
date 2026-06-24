@@ -10,113 +10,121 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <style>
         body { font-family: 'Cairo', sans-serif; }
-        /* Premium Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
         .dark ::-webkit-scrollbar-thumb { background: #374151; }
-        ::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
-        .dark ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
     </style>
 </head>
-<body class="font-sans antialiased bg-gray-50/50 text-gray-900 dark:bg-[#0A0A0A] dark:text-gray-100 flex min-h-screen overflow-hidden selection:bg-brand-500 selection:text-white">
-    
-    <!-- Clinic Sidebar (Linear/Vercel style) -->
-    <aside class="w-[280px] bg-white dark:bg-[#111111] border-l border-gray-200 dark:border-white/5 flex flex-col shrink-0 z-20 hidden md:flex h-screen sticky top-0">
-        <!-- Clinic Branding -->
-        <div class="h-[72px] flex items-center px-6 border-b border-gray-200 dark:border-white/5 shrink-0">
+<body class="font-sans antialiased bg-slate-50 text-gray-900 dark:bg-[#0A0A0F] dark:text-gray-100 flex min-h-screen overflow-hidden">
+
+    {{-- ══════ SIDEBAR ══════ --}}
+    <aside id="sidebar" class="w-[268px] bg-white dark:bg-[#0F0F14] border-l border-gray-100 dark:border-white/[0.06] flex flex-col shrink-0 z-20 hidden md:flex h-screen sticky top-0 shadow-sm">
+
+        {{-- Brand --}}
+        <div class="h-[68px] flex items-center justify-between px-5 border-b border-gray-100 dark:border-white/[0.06] shrink-0">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold shadow-lg shadow-brand-500/20">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/30">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                 </div>
                 <div>
-                    <h2 class="font-bold text-sm text-gray-900 dark:text-white truncate max-w-[150px]">{{ Auth::user()->clinic->name ?? 'العيادة' }}</h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">لوحة تحكم العيادة</p>
+                    <h2 class="font-black text-sm text-gray-900 dark:text-white leading-none">{{ Auth::user()->clinic->name ?? 'العيادة' }}</h2>
+                    <p class="text-[10px] text-gray-400 mt-0.5">لوحة تحكم العيادة</p>
                 </div>
             </div>
-            <!-- Quick actions dropdown could go here -->
+            {{-- View Public Page Button --}}
+            @if(Auth::user()->clinic?->slug)
+            <a href="{{ route('clinic.public.show', Auth::user()->clinic->slug) }}" target="_blank"
+               title="عرض الصفحة العامة"
+               class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 dark:hover:text-brand-400 transition-all" >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            </a>
+            @endif
         </div>
 
-        <!-- Navigation -->
-        <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+        {{-- Navigation --}}
+        <nav class="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
             <x-clinic.nav-item route="clinic.dashboard" icon="home" label="الرئيسية" />
-            
-            <div class="pt-4 pb-1">
-                <p class="px-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">العمليات الطبية</p>
-            </div>
-            <x-clinic.nav-item route="clinic.patients.index" icon="users" label="المرضى" badge="3" />
+
+            <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">العمليات الطبية</p>
+            <x-clinic.nav-item route="clinic.patients.index" icon="users" label="المرضى" />
             <x-clinic.nav-item route="clinic.appointments.index" icon="calendar" label="المواعيد" />
+            <x-clinic.nav-item route="clinic.bookings.index" icon="inbox" label="طلبات الحجز" />
             <x-clinic.nav-item route="clinic.prescriptions.index" icon="document-text" label="الوصفات الطبية" />
             <x-clinic.nav-item route="clinic.records.index" icon="folder" label="السجلات الطبية" />
-            
-            <div class="pt-4 pb-1">
-                <p class="px-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">الإدارة والمالية</p>
-            </div>
+
+            <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">الإدارة والمالية</p>
             <x-clinic.nav-item route="clinic.billing.index" icon="credit-card" label="الفواتير" />
             <x-clinic.nav-item route="clinic.reports.index" icon="chart-bar" label="التقارير" />
             <x-clinic.nav-item route="clinic.staff.index" icon="user-group" label="فريق العمل" />
-            
-            <div class="pt-4 pb-1">
-                <p class="px-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">النظام</p>
-            </div>
-            <x-clinic.nav-item route="clinic.settings.index" icon="cog" label="الإعدادات" />
+
+            <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">النظام</p>
+            <x-clinic.nav-item route="clinic.visit-types.index" icon="cube" label="الخدمات وأنواع الزيارات" />
+            <x-clinic.nav-item route="clinic.settings.index" icon="cog" label="إعدادات العيادة" />
         </nav>
-        
-        <!-- User Profile Footer -->
-        <div class="p-4 border-t border-gray-200 dark:border-white/5 shrink-0">
-            <button class="w-full flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl transition-colors group">
-                <div class="flex items-center gap-3">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=0D8ABC&color=fff" alt="Avatar" class="w-9 h-9 rounded-full border border-gray-200 dark:border-white/10 shadow-sm">
-                    <div class="text-right flex-1 min-w-0">
-                        <p class="text-sm font-bold text-gray-900 dark:text-white truncate">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ Auth::user()->email }}</p>
-                    </div>
+
+        {{-- User Footer --}}
+        <div class="p-3 border-t border-gray-100 dark:border-white/[0.06] shrink-0">
+            <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group">
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=3b5bdb&color=fff&size=80" alt="Avatar" class="w-9 h-9 rounded-full shrink-0 ring-2 ring-gray-100 dark:ring-white/10">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold text-gray-900 dark:text-white truncate">{{ Auth::user()->name }}</p>
+                    <p class="text-xs text-gray-400 truncate">{{ Auth::user()->email }}</p>
                 </div>
-                <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
-            </button>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" title="تسجيل الخروج" class="w-7 h-7 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors opacity-0 group-hover:opacity-100">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    </button>
+                </form>
+            </div>
         </div>
     </aside>
 
-    <!-- Main Wrapper -->
+    {{-- ══════ MAIN CONTENT ══════ --}}
     <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        
-        <!-- Topbar -->
-        <header class="h-[72px] bg-white/80 dark:bg-[#0A0A0A]/80 backdrop-blur-xl border-b border-gray-200 dark:border-white/5 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-10 shrink-0">
-            <!-- Mobile Menu Toggle -->
-            <button class="md:hidden p-2 -ml-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
 
-            <!-- Global Search (Linear style) -->
-            <div class="flex-1 max-w-xl hidden md:flex items-center">
-                <div class="relative w-full group">
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <svg class="w-5 h-5 text-gray-400 group-focus-within:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    </div>
-                    <input type="text" class="block w-full py-2 pr-10 pl-3 bg-gray-100/50 dark:bg-white/5 border-transparent rounded-xl text-sm placeholder-gray-500 dark:placeholder-gray-400 focus:border-brand-500 focus:bg-white dark:focus:bg-[#111] focus:ring-4 focus:ring-brand-500/10 transition-all dark:text-white" placeholder="ابحث عن مريض، موعد، أو فاتورة... (Cmd+K)">
+        {{-- Topbar --}}
+        <header class="h-[68px] bg-white/90 dark:bg-[#0F0F14]/90 backdrop-blur-xl border-b border-gray-100 dark:border-white/[0.06] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="sidebar-toggle" class="md:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+                <div>
+                    <h1 class="text-lg font-black text-gray-900 dark:text-white leading-none">{{ $title ?? 'لوحة التحكم' }}</h1>
+                    <p class="text-xs text-gray-400 mt-0.5">{{ now()->translatedFormat('l، d F Y') }}</p>
                 </div>
             </div>
 
-            <!-- Right Actions -->
-            <div class="flex items-center gap-4">
-                <button class="relative p-2 rounded-xl text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                    <span class="absolute top-2 right-2.5 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-[#0A0A0A]"></span>
+            <div class="flex items-center gap-2">
+                {{-- View public page quick button --}}
+                @if(Auth::user()->clinic?->slug)
+                <a href="{{ route('clinic.public.show', Auth::user()->clinic->slug) }}" target="_blank"
+                   class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold rounded-xl border border-brand-200 text-brand-600 hover:bg-brand-50 dark:border-brand-700/40 dark:text-brand-400 dark:hover:bg-brand-900/20 transition-colors">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    عرض الصفحة العامة
+                </a>
+                @endif
+
+                {{-- Notifications placeholder --}}
+                <button class="relative p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    <span class="absolute top-2 right-2 block h-1.5 w-1.5 rounded-full bg-red-500 ring-1 ring-white dark:ring-[#0A0A0F]"></span>
                 </button>
             </div>
         </header>
 
-        <!-- Main Content Scrollable Area -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-            <div class="max-w-7xl mx-auto space-y-8">
+        {{-- Content --}}
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6">
+            <div class="max-w-7xl mx-auto space-y-6">
                 {{ $slot }}
             </div>
         </main>
     </div>
-    
+
     @stack('scripts')
 </body>
 </html>

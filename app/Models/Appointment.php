@@ -16,6 +16,7 @@ class Appointment extends Model
 
     protected $casts = [
         'scheduled_at' => 'datetime',
+        'price' => 'decimal:2',
     ];
 
     public function patient()
@@ -31,5 +32,10 @@ class Appointment extends Model
     public function prescription()
     {
         return $this->hasOne(Prescription::class);
+    }
+
+    public function visitType()
+    {
+        return $this->belongsTo(VisitType::class);
     }
 }
