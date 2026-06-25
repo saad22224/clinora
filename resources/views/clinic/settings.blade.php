@@ -97,6 +97,33 @@
                             </div>
                         </div>
 
+                        <div class="rounded-2xl border border-gray-100 dark:border-white/[0.06] bg-gray-50/70 dark:bg-white/[0.03] p-4">
+                            <div class="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                    <label class="block text-sm font-black text-gray-800 dark:text-gray-200">موقع العيادة على الخريطة</label>
+                                    <p class="mt-1 text-xs font-semibold text-gray-500 dark:text-gray-400">اضغط على الخريطة لتحديد مكان العيادة، أو استخدم موقعك الحالي.</p>
+                                </div>
+                                <button type="button" id="use-current-location" class="inline-flex items-center justify-center rounded-xl bg-brand-600 px-4 py-2 text-xs font-black text-white transition hover:bg-brand-500">
+                                    استخدام موقعي الحالي
+                                </button>
+                            </div>
+                            <div id="clinic-map" class="h-80 rounded-2xl border border-gray-200 dark:border-white/10 z-0"></div>
+                            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+                            <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+                            <div class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                <div>
+                                    <label class="mb-1 block text-xs font-bold text-gray-500 dark:text-gray-400">خط العرض</label>
+                                    <input id="clinic-latitude" type="number" step="0.0000001" name="latitude" value="{{ old('latitude', $clinic->latitude) }}"
+                                           class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-white/10 dark:bg-white/5 dark:text-white dir-ltr">
+                                </div>
+                                <div>
+                                    <label class="mb-1 block text-xs font-bold text-gray-500 dark:text-gray-400">خط الطول</label>
+                                    <input id="clinic-longitude" type="number" step="0.0000001" name="longitude" value="{{ old('longitude', $clinic->longitude) }}"
+                                           class="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-white/10 dark:bg-white/5 dark:text-white dir-ltr">
+                                </div>
+                            </div>
+                        </div>
+
                         <div>
                             <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">نبذة عن الطبيب / العيادة</label>
                             <textarea name="doctor_bio" rows="4"
@@ -232,48 +259,82 @@
     </div>
     @push('scripts')
     <script>
+        // ── Working Hours helpers ──────────────────────────────────────
         function toggleDayPeriods(checkbox, dayKey) {
             const container = document.getElementById(`periods-${dayKey}`);
-            const inputs = container.querySelectorAll('input[type=time]');
-            const removeBtns = container.querySelectorAll('button[onclick="removePeriod(this)"]');
-            const addBtn = container.querySelector('.add-period-btn');
-
+            const inputs    = container.querySelectorAll('input[type=time]');
+            const removeBtns = container.querySelectorAll('button[onclick^="removePeriod"]');
+            const addBtn    = container.querySelector('.add-period-btn');
             inputs.forEach(i => i.disabled = !checkbox.checked);
-            
             if (checkbox.checked) {
                 addBtn.classList.remove('hidden');
-                removeBtns.forEach(btn => btn.classList.remove('opacity-40', 'pointer-events-none'));
+                removeBtns.forEach(b => b.classList.remove('opacity-40', 'pointer-events-none'));
             } else {
                 addBtn.classList.add('hidden');
-                removeBtns.forEach(btn => btn.classList.add('opacity-40', 'pointer-events-none'));
+                removeBtns.forEach(b => b.classList.add('opacity-40', 'pointer-events-none'));
             }
         }
-
         function addPeriod(dayKey) {
             const container = document.getElementById(`periods-${dayKey}`);
-            const rows = container.querySelectorAll('.period-row');
-            const newIndex = rows.length;
-            
-            const newRow = document.createElement('div');
-            newRow.className = 'flex items-center gap-2 period-row mt-2';
-            newRow.innerHTML = `
-                <input type="time" name="working_hours[${dayKey}][periods][${newIndex}][open]" value="09:00" required
-                       class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-brand-500/30 outline-none dark:text-white transition-opacity">
+            const idx       = container.querySelectorAll('.period-row').length;
+            const row       = document.createElement('div');
+            row.className   = 'flex items-center gap-2 period-row mt-2';
+            row.innerHTML   = `
+                <input type="time" name="working_hours[${dayKey}][periods][${idx}][open]" value="09:00" required class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-brand-500/30 outline-none dark:text-white">
                 <span class="text-gray-400 text-xs font-bold">—</span>
-                <input type="time" name="working_hours[${dayKey}][periods][${newIndex}][close]" value="17:00" required
-                       class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-brand-500/30 outline-none dark:text-white transition-opacity">
-                <button type="button" onclick="removePeriod(this)" class="p-1.5 text-gray-400 hover:text-red-500" title="حذف هذه الفترة">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            `;
-            
-            // Insert before the add button
-            container.insertBefore(newRow, container.querySelector('.add-period-btn'));
+                <input type="time" name="working_hours[${dayKey}][periods][${idx}][close]" value="17:00" required class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-brand-500/30 outline-none dark:text-white">
+                <button type="button" onclick="removePeriod(this)" class="p-1.5 text-gray-400 hover:text-red-500"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>`;
+            container.insertBefore(row, container.querySelector('.add-period-btn'));
         }
+        function removePeriod(btn) { btn.closest('.period-row').remove(); }
 
-        function removePeriod(btn) {
-            btn.closest('.period-row').remove();
-        }
+        // ── Leaflet Map Picker ─────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', function () {
+            const latInput = document.getElementById('clinic-latitude');
+            const lngInput = document.getElementById('clinic-longitude');
+            const mapEl    = document.getElementById('clinic-map');
+            if (!mapEl || typeof L === 'undefined') return;
+
+            const savedLat = parseFloat(latInput.value) || 30.0444;
+            const savedLng = parseFloat(lngInput.value) || 31.2357;
+
+            const map    = L.map('clinic-map').setView([savedLat, savedLng], latInput.value ? 15 : 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+
+            const icon = L.divIcon({
+                className: '',
+                html: '<div style="width:36px;height:36px;border-radius:50%;background:#3b5bdb;border:3px solid white;box-shadow:0 4px 12px rgba(59,91,219,.4);display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>',
+                iconSize: [36, 36],
+                iconAnchor: [18, 36],
+            });
+
+            let marker = null;
+            function placeMarker(lat, lng) {
+                if (marker) marker.setLatLng([lat, lng]);
+                else marker = L.marker([lat, lng], { icon, draggable: true }).addTo(map);
+                latInput.value = lat.toFixed(7);
+                lngInput.value = lng.toFixed(7);
+                marker.on('dragend', e => {
+                    const p = e.target.getLatLng();
+                    latInput.value = p.lat.toFixed(7);
+                    lngInput.value = p.lng.toFixed(7);
+                });
+            }
+
+            if (latInput.value && lngInput.value) placeMarker(savedLat, savedLng);
+
+            map.on('click', e => { placeMarker(e.latlng.lat, e.latlng.lng); map.setView(e.latlng, 15); });
+
+            document.getElementById('use-current-location')?.addEventListener('click', function () {
+                if (!navigator.geolocation) return alert('المتصفح لا يدعم تحديد الموقع.');
+                navigator.geolocation.getCurrentPosition(
+                    pos => { placeMarker(pos.coords.latitude, pos.coords.longitude); map.setView([pos.coords.latitude, pos.coords.longitude], 16); },
+                    () => alert('تعذّر الحصول على موقعك الحالي.')
+                );
+            });
+        });
     </script>
     @endpush
 </x-layouts.clinic>

@@ -133,6 +133,12 @@
     </div>
 
     @push('scripts')
-    <script>window.reopenModalOnError('modal-add-plan');</script>
+    @if($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof CModal !== 'undefined') CModal.open('modal-add-plan');
+        });
+    </script>
+    @endif
     @endpush
 </x-layouts.admin>

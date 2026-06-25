@@ -134,6 +134,12 @@
     </div>
 
     @push('scripts')
-    <script>window.reopenModalOnError('modal-add-record');</script>
+    @if($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof CModal !== 'undefined') CModal.open('modal-add-record');
+        });
+    </script>
+    @endif
     @endpush
 </x-layouts.clinic>

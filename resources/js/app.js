@@ -76,9 +76,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ─── Reopen modal if validation errors present (server-side) ─────
-window.reopenModalOnError = function(modalId) {
-    if (document.querySelector('.server-error')) {
-        CModal.open(modalId);
-    }
-};

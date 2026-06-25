@@ -17,7 +17,7 @@ use App\Http\Controllers\PublicClinicController;
 use App\Http\Middleware\CheckSubscriptionStatus;
 use App\Http\Middleware\IdentifyTenant;
 use Illuminate\Support\Facades\Route;
- 
+
 // ==========================================
 // Marketing Pages
 // ==========================================
@@ -94,10 +94,6 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
         Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
         Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
 
-        // Booking Requests (from public page)
-        Route::get('/bookings', [SettingsController::class, 'bookingRequests'])->name('bookings.index');
-        Route::patch('/bookings/{booking}/status', [SettingsController::class, 'updateBookingStatus'])->name('bookings.update-status');
-
         // Settings / Clinic Profile
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
         Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
@@ -111,6 +107,7 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
         // Prescriptions
         Route::get('/prescriptions', [PrescriptionController::class, 'index'])->name('prescriptions.index');
         Route::post('/prescriptions', [PrescriptionController::class, 'store'])->name('prescriptions.store');
+        Route::get('/prescriptions/{prescription}/print', [PrescriptionController::class, 'print'])->name('prescriptions.print');
         Route::delete('/prescriptions/{prescription}', [PrescriptionController::class, 'destroy'])->name('prescriptions.destroy');
 
         // Medical Records

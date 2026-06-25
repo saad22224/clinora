@@ -20,6 +20,8 @@ class Clinic extends Model
         'doctor_image',
         'phone',
         'address',
+        'latitude',
+        'longitude',
         'working_hours',
         'hero_title',
         'hero_subtitle',
@@ -29,6 +31,8 @@ class Clinic extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'latitude' => 'decimal:7',
+        'longitude' => 'decimal:7',
         'working_hours' => 'array',
         'social_links' => 'array',
     ];
@@ -66,11 +70,6 @@ class Clinic extends Model
     public function finances(): HasMany
     {
         return $this->hasMany(Finance::class);
-    }
-
-    public function bookingRequests(): HasMany
-    {
-        return $this->hasMany(BookingRequest::class);
     }
 
     public function visitTypes(): HasMany

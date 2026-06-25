@@ -200,6 +200,12 @@
     </div>
 
     @push('scripts')
-    <script>window.reopenModalOnError('modal-add-clinic');</script>
+    @if($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof CModal !== 'undefined') CModal.open('modal-add-clinic');
+        });
+    </script>
+    @endif
     @endpush
 </x-layouts.admin>

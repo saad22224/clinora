@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BookingRequest;
+use App\Models\Appointment;
 use App\Models\Clinic;
+use App\Models\Patient;
+use App\Models\VisitType;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PublicClinicController extends Controller
@@ -23,17 +26,46 @@ class PublicClinicController extends Controller
             'patient_name' => ['required', 'string', 'max:255'],
             'patient_phone' => ['required', 'string', 'max:30'],
             'patient_email' => ['nullable', 'email', 'max:255'],
+            'visit_type_id' => ['required', 'exists:visit_types,id'],
             'preferred_date' => ['required', 'date', 'after_or_equal:today'],
-            'preferred_time' => ['nullable', 'string', 'max:10'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        BookingRequest::create([
-            ...$validated,
+        $visitType = VisitType::findOrFail($validated['visit_type_id']);
+        abort_if($visitType->clinic_id !== $clinic->id, 403);
+
+        $patient = Patient::firstOrCreate(
+            [
+                'clinic_id' => $clinic->id,
+                'phone' => $validated['patient_phone'],
+            ],
+            [
+                'name' => $validated['patient_name'],
+                'notes' => 'تم إنشاء المريض من طلب حجز صفحة الهبوط.',
+            ],
+        );
+
+        if ($patient->wasRecentlyCreated === false && blank($patient->name)) {
+            $patient->update(['name' => $validated['patient_name']]);
+        }
+
+        $appointmentNotes = collect([
+            $validated['notes'] ?? null,
+            ! empty($validated['patient_email']) ? 'البريد الإلكتروني للمريض: '.$validated['patient_email'] : null,
+        ])->filter()->implode(PHP_EOL);
+
+        Appointment::create([
             'clinic_id' => $clinic->id,
-            'status' => 'new',
+            'patient_id' => $patient->id,
+            'doctor_id' => $clinic->users()->value('id'),
+            'visit_type_id' => $visitType?->id,
+            'price' => $visitType?->price,
+            'scheduled_at' => Carbon::parse($validated['preferred_date'])->startOfDay(),
+            'status' => 'pending',
+            'source' => 'website_landing_page',
+            'notes' => $appointmentNotes ?: null,
         ]);
 
-        return back()->with('booking_success', 'تم إرسال طلب الحجز بنجاح! سيتصل بك الفريق قريباً.');
+        return back()->with('booking_success', 'تم إرسال طلب الموعد بنجاح، وسيقوم فريق العيادة بتأكيده قريباً.');
     }
 }

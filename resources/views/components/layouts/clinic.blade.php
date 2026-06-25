@@ -52,7 +52,6 @@
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">العمليات الطبية</p>
             <x-clinic.nav-item route="clinic.patients.index" icon="users" label="المرضى" />
             <x-clinic.nav-item route="clinic.appointments.index" icon="calendar" label="المواعيد" />
-            <x-clinic.nav-item route="clinic.bookings.index" icon="inbox" label="طلبات الحجز" />
             <x-clinic.nav-item route="clinic.prescriptions.index" icon="document-text" label="الوصفات الطبية" />
             <x-clinic.nav-item route="clinic.records.index" icon="folder" label="السجلات الطبية" />
 

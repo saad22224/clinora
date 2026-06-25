@@ -96,11 +96,22 @@
                                         <textarea name="description" rows="3"
                                                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white resize-none">{{ $visit->description }}</textarea>
                                     </div>
-                                    <div>
-                                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">أيقونة (SVG path) <span class="text-xs text-gray-400 font-normal">(اختياري)</span></label>
-                                        <input type="text" name="icon" value="{{ $visit->icon }}"
-                                               class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white dir-ltr font-mono text-xs"
-                                               placeholder='d="M3 5h12M9 3v2m1.048...'>
+                                    <div class="icon-dropdown-wrap" data-icon-input="icon-edit-{{ $visit->id }}" data-initial="{{ $visit->icon }}">
+                                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">أيقونة الخدمة <span class="text-xs text-gray-400 font-normal">(اختياري)</span></label>
+                                        <input type="hidden" name="icon" id="icon-edit-{{ $visit->id }}">
+                                        <div class="icon-dropdown relative">
+                                            <button type="button" class="icon-trigger w-full flex items-center gap-3 px-4 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-bold text-gray-700 dark:text-gray-200 hover:border-brand-500 transition-colors">
+                                                <svg class="icon-trigger-svg w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                                                <span class="icon-trigger-label flex-1 text-right">اختر أيقونة...</span>
+                                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                            </button>
+                                            <div class="icon-panel hidden absolute z-50 mt-1 w-full bg-white dark:bg-[#1a1a2e] border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+                                                <div class="p-3 border-b border-gray-100 dark:border-white/10">
+                                                    <input type="text" placeholder="🔍 ابحث عن أيقونة..." class="icon-search w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/30 dark:text-white">
+                                                </div>
+                                                <div class="icon-list max-h-56 overflow-y-auto p-2 space-y-0.5"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="px-6 py-4 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] flex justify-end gap-3">
@@ -160,11 +171,22 @@
                                   placeholder="وصف موجز للخدمة يشرح ما تتضمنه للمريض...">{{ old('description') }}</textarea>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">أيقونة (SVG path) <span class="text-xs text-gray-400 font-normal">(اختياري)</span></label>
-                        <input type="text" name="icon" value="{{ old('icon') }}"
-                               class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white dir-ltr font-mono text-xs"
-                               placeholder='d="M12 6v6m0 0v6m0-6h6m-6 0H6"'>
+                    <div class="icon-dropdown-wrap" data-icon-input="icon-add" data-initial="">
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">أيقونة الخدمة <span class="text-xs text-gray-400 font-normal">(اختياري)</span></label>
+                        <input type="hidden" name="icon" id="icon-add">
+                        <div class="icon-dropdown relative">
+                            <button type="button" class="icon-trigger w-full flex items-center gap-3 px-4 py-2.5 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-sm font-bold text-gray-700 dark:text-gray-200 hover:border-brand-500 transition-colors">
+                                <svg class="icon-trigger-svg w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                                <span class="icon-trigger-label flex-1 text-right">اختر أيقونة...</span>
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+                            <div class="icon-panel hidden absolute z-50 mt-1 w-full bg-white dark:bg-[#1a1a2e] border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+                                <div class="p-3 border-b border-gray-100 dark:border-white/10">
+                                    <input type="text" placeholder="🔍 ابحث عن أيقونة..." class="icon-search w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/30 dark:text-white">
+                                </div>
+                                <div class="icon-list max-h-56 overflow-y-auto p-2 space-y-0.5"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="px-6 py-4 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] flex justify-end gap-3">
@@ -176,6 +198,99 @@
     </div>
 
     @push('scripts')
-    <script>window.reopenModalOnError('modal-add-visit-type');</script>
+    <script>
+        @if($errors->any())
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof CModal !== 'undefined') CModal.open('modal-add-visit-type');
+        });
+        @endif
+
+        const ICONS = {
+            'كشف عام': 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
+            'قلب': 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+            'مُخة': 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z',
+            'عين': 'M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
+            'أسنان': 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+            'عظم': 'M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+            'جلد': 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01',
+            'أطفال': 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
+            'تغذية': 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z',
+            'مختبر': 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547',
+            'حقنة': 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
+            'موجات دماغ': 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1',
+            'سماع': 'M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a5 5 0 001.414 1.414m2.828-9.9a9 9 0 0112.728 0',
+            'دم': 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+            'خطة علاج': 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
+            'موعد': 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+            'شخص': 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+            'طوارئ': 'M13 10V3L4 14h7v7l9-11h-7z',
+            'عيادة': 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4',
+        };
+
+        function buildIconDropdown(wrap) {
+            const inputId  = wrap.dataset.iconInput;
+            const initial  = wrap.dataset.initial || '';
+            const input    = document.getElementById(inputId);
+            const trigger  = wrap.querySelector('.icon-trigger');
+            const panel    = wrap.querySelector('.icon-panel');
+            const search   = wrap.querySelector('.icon-search');
+            const list     = wrap.querySelector('.icon-list');
+            const trigSvg  = wrap.querySelector('.icon-trigger-svg path');
+            const trigLbl  = wrap.querySelector('.icon-trigger-label');
+
+            if (!input || !trigger || !panel) return;
+
+            // Set initial value
+            input.value = initial;
+            if (initial) {
+                const name = Object.keys(ICONS).find(k => ICONS[k] === initial) || 'أيقونة مختارة';
+                trigSvg?.setAttribute('d', initial);
+                trigLbl.textContent = name;
+            }
+
+            function renderList(q) {
+                list.innerHTML = '';
+                Object.entries(ICONS).forEach(([name, path]) => {
+                    if (q && !name.includes(q)) return;
+                    const row = document.createElement('button');
+                    row.type = 'button';
+                    const selected = input.value === path;
+                    row.className = 'w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-bold transition-colors ' +
+                        (selected ? 'bg-brand-50 dark:bg-brand-900/20 text-brand-700 dark:text-brand-300' : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5');
+                    row.innerHTML = `<svg class="w-5 h-5 shrink-0 text-brand-600 dark:text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="${path}"/></svg><span>${name}</span>` +
+                        (selected ? '<svg class="w-4 h-4 ms-auto text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>' : '');
+                    row.addEventListener('click', () => {
+                        input.value = path;
+                        trigSvg?.setAttribute('d', path);
+                        trigLbl.textContent = name;
+                        panel.classList.add('hidden');
+                        renderList(search.value.trim());
+                    });
+                    list.appendChild(row);
+                });
+                if (!list.children.length) {
+                    list.innerHTML = '<p class="text-center text-sm text-gray-400 py-4">لا توجد نتائج</p>';
+                }
+            }
+
+            renderList('');
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isHidden = panel.classList.contains('hidden');
+                document.querySelectorAll('.icon-panel').forEach(p => p.classList.add('hidden'));
+                if (isHidden) { panel.classList.remove('hidden'); search.focus(); }
+            });
+
+            search.addEventListener('input', e => renderList(e.target.value.trim()));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.icon-dropdown-wrap').forEach(buildIconDropdown);
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.icon-panel').forEach(p => p.classList.add('hidden'));
+            });
+        });
+    </script>
     @endpush
 </x-layouts.clinic>

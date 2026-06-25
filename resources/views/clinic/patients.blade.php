@@ -193,7 +193,11 @@
 
     @push('scripts')
     <script>
-        window.reopenModalOnError('modal-add-patient');
+        @if($errors->any())
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof CModal !== 'undefined') CModal.open('modal-add-patient');
+        });
+        @endif
     </script>
     @endpush
 

@@ -3,57 +3,62 @@
 namespace App\Http\Controllers\Clinic;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Patient;
 use App\Models\Appointment;
-use App\Models\Finance;
+use App\Models\Patient;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $clinic = \Illuminate\Support\Facades\Auth::user()->clinic;
-        
-        $filter = $request->query('filter', '1'); // Default 1 month
-        $startDate = Carbon::now()->subMonths((int)$filter)->startOfMonth();
-        if ($filter == '1') {
-            $startDate = Carbon::now()->startOfMonth();
-            $label = 'إيرادات الشهر';
-        } elseif ($filter == '2') {
-            $label = 'إيرادات آخر شهرين';
-        } elseif ($filter == '3') {
-            $label = 'إيرادات آخر 3 أشهر';
-        } else {
-            $startDate = Carbon::now()->startOfMonth();
-            $label = 'إيرادات الشهر';
-            $filter = '1';
-        }
+        $clinic = Auth::user()->clinic;
+        $clinicId = $clinic->id;
 
-        // Calculate revenue from completed appointments
-        $revenue = Appointment::where('clinic_id', $clinic->id)
+        $filter = $request->query('filter', '1');
+        [$startDate, $label] = match ($filter) {
+            '3' => [Carbon::now()->subMonths(3)->startOfMonth(), 'إيرادات آخر 3 أشهر'],
+            '2' => [Carbon::now()->subMonths(2)->startOfMonth(), 'إيرادات آخر شهرين'],
+            default => [Carbon::now()->startOfMonth(), 'إيرادات هذا الشهر'],
+        };
+        $filter = in_array($filter, ['1', '2', '3']) ? $filter : '1';
+
+        // Revenue from completed appointments in date range
+        $revenue = Appointment::where('clinic_id', $clinicId)
             ->where('status', 'completed')
             ->where('scheduled_at', '>=', $startDate)
             ->sum('price');
 
-        // Sample stats for the beautiful dashboard
+        $base = Appointment::where('clinic_id', $clinicId);
+
         $stats = [
-            'total_patients' => Patient::where('clinic_id', $clinic->id)->count(),
-            'today_appointments' => Appointment::where('clinic_id', $clinic->id)->whereDate('scheduled_at', Carbon::today())->count(),
+            'total_patients' => Patient::where('clinic_id', $clinicId)->count(),
+            'today_appointments' => (clone $base)->whereDate('scheduled_at', Carbon::today())->count(),
+            'pending_appointments' => (clone $base)->where('status', 'pending')->count(),
+            'confirmed_appointments' => (clone $base)->where('status', 'confirmed')->count(),
+            'completed_appointments' => (clone $base)->where('status', 'completed')->count(),
+            'cancelled_appointments' => (clone $base)->whereIn('status', ['cancelled', 'rejected'])->whereMonth('scheduled_at', Carbon::now()->month)->count(),
             'revenue_label' => $label,
             'revenue_amount' => $revenue,
             'current_filter' => $filter,
-            'cancelled_appointments' => Appointment::where('clinic_id', $clinic->id)->where('status', 'cancelled')->whereMonth('scheduled_at', Carbon::now()->month)->count(),
         ];
-        
-        $upcoming_appointments = Appointment::with(['patient', 'doctor'])
-            ->where('clinic_id', $clinic->id)
+
+        $upcoming_appointments = Appointment::with(['patient', 'visitType'])
+            ->where('clinic_id', $clinicId)
             ->whereDate('scheduled_at', '>=', Carbon::today())
-            ->where('status', '!=', 'cancelled')
+            ->whereIn('status', ['confirmed', 'pending'])
             ->orderBy('scheduled_at', 'asc')
+            ->take(6)
+            ->get();
+
+        // Recent activity: last 5 created appointments
+        $recent_appointments = Appointment::with(['patient', 'visitType'])
+            ->where('clinic_id', $clinicId)
+            ->latest()
             ->take(5)
             ->get();
 
-        return view('clinic.dashboard', compact('stats', 'upcoming_appointments'));
+        return view('clinic.dashboard', compact('stats', 'upcoming_appointments', 'recent_appointments'));
     }
 }

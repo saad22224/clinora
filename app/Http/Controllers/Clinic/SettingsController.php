@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Clinic;
 
 use App\Http\Controllers\Controller;
-use App\Models\BookingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -27,6 +26,8 @@ class SettingsController extends Controller
             'doctor_bio' => ['nullable', 'string', 'max:2000'],
             'phone' => ['nullable', 'string', 'max:30'],
             'address' => ['nullable', 'string', 'max:500'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'theme_color' => ['nullable', 'string', 'max:7'],
             'doctor_image' => ['nullable', 'image', 'max:2048'],
             'working_hours' => ['nullable', 'array'],
@@ -48,7 +49,7 @@ class SettingsController extends Controller
         if (isset($validated['working_hours']) && is_array($validated['working_hours'])) {
             $formattedHours = [];
             foreach ($validated['working_hours'] as $day => $data) {
-                $enabled = !empty($data['enabled']);
+                $enabled = ! empty($data['enabled']);
                 $formattedHours[$day] = [
                     'enabled' => $enabled,
                     'periods' => [],
@@ -56,7 +57,7 @@ class SettingsController extends Controller
                 if ($enabled && isset($data['periods']) && is_array($data['periods'])) {
                     // Filter out invalid periods
                     foreach ($data['periods'] as $period) {
-                        if (!empty($period['open']) && !empty($period['close'])) {
+                        if (! empty($period['open']) && ! empty($period['close'])) {
                             $formattedHours[$day]['periods'][] = [
                                 'open' => $period['open'],
                                 'close' => $period['close'],
@@ -76,27 +77,6 @@ class SettingsController extends Controller
         $clinic->update($validated);
 
         return redirect()->route('clinic.settings.index')
-            ->with('success', 'تم حفظ إعدادات العيادة بنجاح!');
-    }
-
-    public function bookingRequests()
-    {
-        $clinic = Auth::user()->clinic;
-        $bookings = $clinic->bookingRequests()->latest()->paginate(20);
-
-        return view('clinic.bookings', compact('bookings'));
-    }
-
-    public function updateBookingStatus(Request $request, BookingRequest $booking)
-    {
-        abort_if($booking->clinic_id !== Auth::user()->clinic_id, 403);
-
-        $validated = $request->validate([
-            'status' => ['required', 'in:new,contacted,confirmed,rejected'],
-        ]);
-
-        $booking->update($validated);
-
-        return back()->with('success', 'تم تحديث حالة الحجز.');
+            ->with('success', 'تم حفظ إعدادات العيادة بنجاح.');
     }
 }

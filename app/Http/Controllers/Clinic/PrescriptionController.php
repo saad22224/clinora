@@ -52,4 +52,16 @@ class PrescriptionController extends Controller
 
         return back()->with('success', 'تم حذف الوصفة الطبية بنجاح.');
     }
+
+    public function print(Prescription $prescription)
+    {
+        if ($prescription->clinic_id !== Auth::user()->clinic_id) {
+            abort(403);
+        }
+
+        $prescription->load('patient');
+        $clinic = Auth::user()->clinic;
+
+        return view('clinic.prescriptions-print', compact('prescription', 'clinic'));
+    }
 }
