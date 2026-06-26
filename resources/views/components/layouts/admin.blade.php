@@ -49,6 +49,7 @@
             <x-admin.nav-item route="admin.roles.index" icon="shield-check" label="الصلاحيات" />
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">إعدادات النظام</p>
+            <x-admin.nav-item route="admin.whatsapp.index" icon="whatsapp" label="اتصال الواتساب (سريع)" badge="Live" />
             <x-admin.nav-item route="admin.settings.index" icon="cog" label="إعدادات المنصة" />
             <x-admin.nav-item route="admin.logs.index" icon="clipboard-list" label="سجلات النظام" />
         </nav>

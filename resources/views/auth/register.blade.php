@@ -29,6 +29,11 @@
                         @error('email')<span class="text-red-500 text-xs mt-1">{{ $message }}</span>@enderror
                     </div>
                     <div>
+                        <label for="phone" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">رقم هاتف العيادة (إرسال كود تفعيل الواتساب)</label>
+                        <input id="phone" name="phone" type="text" required dir="ltr" class="appearance-none block w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-base dark:bg-gray-800 dark:text-white text-right font-mono" placeholder="01012345678">
+                        @error('phone')<span class="text-red-500 text-xs mt-1">{{ $message }}</span>@enderror
+                    </div>
+                    <div>
                         <label for="password" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">كلمة المرور</label>
                         <input id="password" name="password" type="password" required dir="ltr" class="appearance-none block w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-base dark:bg-gray-800 dark:text-white text-right" placeholder="••••••••">
                         @error('password')<span class="text-red-500 text-xs mt-1">{{ $message }}</span>@enderror

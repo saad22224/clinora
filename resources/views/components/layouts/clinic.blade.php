@@ -50,19 +50,33 @@
             <x-clinic.nav-item route="clinic.dashboard" icon="home" label="الرئيسية" />
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">العمليات الطبية</p>
-            <x-clinic.nav-item route="clinic.patients.index" icon="users" label="المرضى" />
-            <x-clinic.nav-item route="clinic.appointments.index" icon="calendar" label="المواعيد" />
-            <x-clinic.nav-item route="clinic.prescriptions.index" icon="document-text" label="الوصفات الطبية" />
-            <x-clinic.nav-item route="clinic.records.index" icon="folder" label="السجلات الطبية" />
+            @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_patients'))
+                <x-clinic.nav-item route="clinic.patients.index" icon="users" label="المرضى" />
+            @endif
+            @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_appointments'))
+                <x-clinic.nav-item route="clinic.appointments.index" icon="calendar" label="المواعيد" />
+            @endif
+            @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_prescriptions'))
+                <x-clinic.nav-item route="clinic.prescriptions.index" icon="document-text" label="الوصفات الطبية" />
+            @endif
+            @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_records'))
+                <x-clinic.nav-item route="clinic.records.index" icon="folder" label="السجلات الطبية" />
+            @endif
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">الإدارة والمالية</p>
-            <x-clinic.nav-item route="clinic.billing.index" icon="credit-card" label="الفواتير" />
-            <x-clinic.nav-item route="clinic.reports.index" icon="chart-bar" label="التقارير" />
-            <x-clinic.nav-item route="clinic.staff.index" icon="user-group" label="فريق العمل" />
+            @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_billing'))
+                <x-clinic.nav-item route="clinic.billing.index" icon="credit-card" label="الفواتير" />
+            @endif
+            @if(Auth::user()->role !== 'secretary')
+                <x-clinic.nav-item route="clinic.reports.index" icon="chart-bar" label="التقارير" />
+                <x-clinic.nav-item route="clinic.staff.index" icon="user-group" label="فريق العمل" />
+            @endif
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">النظام</p>
-            <x-clinic.nav-item route="clinic.visit-types.index" icon="cube" label="الخدمات وأنواع الزيارات" />
-            <x-clinic.nav-item route="clinic.settings.index" icon="cog" label="إعدادات العيادة" />
+            @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_settings'))
+                <x-clinic.nav-item route="clinic.visit-types.index" icon="cube" label="الخدمات وأنواع الزيارات" />
+                <x-clinic.nav-item route="clinic.settings.index" icon="cog" label="إعدادات العيادة" />
+            @endif
         </nav>
 
         {{-- User Footer --}}

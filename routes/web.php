@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ClinicController;
 use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\WhatsAppController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Clinic\AppointmentController;
 use App\Http\Controllers\Clinic\BillingController;
@@ -48,6 +49,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+    Route::get('/verify-otp', [AuthController::class, 'showVerifyOtp'])->name('otp.verify');
+    Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('otp.verify.post');
 });
 
 Route::middleware('auth')->group(function () {
@@ -123,6 +126,9 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
 
         // Staff
         Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
+        Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
+        Route::put('/staff/{user}', [StaffController::class, 'update'])->name('staff.update');
+        Route::delete('/staff/{user}', [StaffController::class, 'destroy'])->name('staff.destroy');
     });
 
 // ==========================================
@@ -167,4 +173,10 @@ Route::middleware(['auth'])
         Route::get('/logs', function () {
             return view('admin.logs');
         })->name('logs.index');
+
+        // WhatsApp Service Manager
+        Route::get('/whatsapp', [WhatsAppController::class, 'index'])->name('whatsapp.index');
+        Route::get('/whatsapp/status', [WhatsAppController::class, 'status'])->name('whatsapp.status');
+        Route::post('/whatsapp/logout', [WhatsAppController::class, 'logout'])->name('whatsapp.logout');
+        Route::post('/whatsapp/test', [WhatsAppController::class, 'sendTest'])->name('whatsapp.test');
     });

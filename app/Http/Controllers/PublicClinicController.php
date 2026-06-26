@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Patient;
 use App\Models\VisitType;
+use App\Services\WhatsAppService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -65,6 +66,13 @@ class PublicClinicController extends Controller
             'source' => 'website_landing_page',
             'notes' => $appointmentNotes ?: null,
         ]);
+
+        // Send WhatsApp confirmation to patient
+        $dateStr = Carbon::parse($validated['preferred_date'])->translatedFormat('l، d F Y');
+        app(WhatsAppService::class)->sendMessage(
+            $validated['patient_phone'],
+            "مرحباً بك في *{$clinic->name}* 🏥\n\nلقد تم استلام طلب حجزك المبدئي بنجاح:\n• الخدمة: {$visitType->name}\n• التاريخ المقترح: {$dateStr}\n\nسيقوم فريق الاستقبال بمراجعة الموعد وتأكيده معك قريباً. نتمنى لك دوام الصحة والعافية."
+        );
 
         return back()->with('booking_success', 'تم إرسال طلب الموعد بنجاح، وسيقوم فريق العيادة بتأكيده قريباً.');
     }

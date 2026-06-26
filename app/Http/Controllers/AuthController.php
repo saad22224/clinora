@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Clinic;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -46,6 +47,7 @@ class AuthController extends Controller
             'clinic_name' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone' => ['required', 'string', 'max:20'],
             'password' => ['required', 'string', 'min:8'],
         ]);
 
@@ -62,8 +64,17 @@ class AuthController extends Controller
         $clinic = Clinic::create([
             'name' => $request->clinic_name,
             'slug' => $slug,
+            'phone' => $request->phone,
             'is_active' => true,
         ]);
+
+        // Send WhatsApp Registration OTP
+        $otp = rand(100000, 999999);
+        session(['whatsapp_otp' => $otp]);
+        app(WhatsAppService::class)->sendMessage(
+            $request->phone,
+            "مرحباً بك في منصة Clinora SaaS 🏥\nكود التحقق (OTP) الخاص بتفعيل حساب عيادتك هو: *{$otp}*"
+        );
 
         // Create Free Subscription
         Subscription::create([
@@ -83,7 +94,37 @@ class AuthController extends Controller
             'role' => 'owner',
         ]);
 
+        session(['pending_verification_user_id' => $user->id]);
+
+        return redirect()->route('otp.verify');
+    }
+
+    public function showVerifyOtp()
+    {
+        if (!session('pending_verification_user_id')) {
+            return redirect()->route('register');
+        }
+
+        return view('auth.verify-otp');
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'otp' => ['required', 'string'],
+        ]);
+
+        $userId = session('pending_verification_user_id');
+        $savedOtp = session('whatsapp_otp');
+
+        if (!$userId || !$savedOtp || trim($request->otp) !== (string) $savedOtp) {
+            return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
+        }
+
+        $user = User::findOrFail($userId);
         Auth::login($user);
+
+        session()->forget(['pending_verification_user_id', 'whatsapp_otp']);
 
         return redirect()->route('dashboard');
     }
