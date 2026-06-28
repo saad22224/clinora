@@ -69,9 +69,9 @@ function createClient() {
             wid: newClient.info?.wid?._serialized || ''
         };
         try {
-            console.log('🚀 [Test] Sending immediate auto-ping on ready...');
-            await newClient.sendMessage('201556477029@c.us', 'Hello from Clinora Ready Event!');
-            console.log('✅ [Test] Auto-ping sent!');
+            // console.log('🚀 [Test] Sending immediate auto-ping on ready...');
+            // await newClient.sendMessage('201556477029@c.us', 'Hello from Clinora Ready Event!');
+            // console.log('✅ [Test] Auto-ping sent!');
         } catch(e) {
             console.error('❌ [Test] Auto-ping failed:', e);
         }
