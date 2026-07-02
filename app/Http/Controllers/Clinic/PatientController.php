@@ -18,6 +18,19 @@ class PatientController extends Controller
         return view('clinic.patients', compact('patients'));
     }
 
+    public function medicalFile(Patient $patient)
+    {
+        abort_if($patient->clinic_id !== Auth::user()->clinic_id, 403);
+
+        $patient->load([
+            'medicalFiles' => fn ($q) => $q->latest(),
+            'prescriptions' => fn ($q) => $q->with('items')->latest(),
+            'diagnoses',
+        ]);
+
+        return view('clinic.patient-medical-file', compact('patient'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

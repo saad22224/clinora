@@ -91,6 +91,14 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <a href="{{ route('clinic.patients.medical-file', $patient) }}"
+                                           class="p-1.5 rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors"
+                                           title="الملف الطبي">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                        </a>
                                         <form method="POST" action="{{ route('clinic.patients.destroy', $patient) }}"
                                               data-confirm="هل أنت متأكد من حذف مريض '{{ $patient->name }}'؟ لا يمكن التراجع.">
                                             @csrf @method('DELETE')
@@ -100,6 +108,7 @@
                                         </form>
                                     </div>
                                 </td>
+
                             </tr>
                         @endforeach
                     </tbody>

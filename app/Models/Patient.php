@@ -32,4 +32,9 @@ class Patient extends Model
     {
         return $this->hasMany(MedicalFile::class);
     }
+
+    public function diagnoses()
+    {
+        return $this->hasMany(PatientDiagnosis::class)->latest('diagnosed_at');
+    }
 }

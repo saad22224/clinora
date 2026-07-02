@@ -8,7 +8,9 @@ use App\Http\Controllers\Clinic\AppointmentController;
 use App\Http\Controllers\Clinic\BillingController;
 use App\Http\Controllers\Clinic\DashboardController;
 use App\Http\Controllers\Clinic\MedicalFileController;
+use App\Http\Controllers\Clinic\PatientAIChatController;
 use App\Http\Controllers\Clinic\PatientController;
+use App\Http\Controllers\Clinic\PatientDiagnosisController;
 use App\Http\Controllers\Clinic\PrescriptionController;
 use App\Http\Controllers\Clinic\ReportController;
 use App\Http\Controllers\Clinic\SettingsController;
@@ -88,8 +90,16 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
         // Patients CRUD
         Route::get('/patients', [PatientController::class, 'index'])->name('patients.index');
         Route::post('/patients', [PatientController::class, 'store'])->name('patients.store');
+        Route::get('/patients/{patient}/medical-file', [PatientController::class, 'medicalFile'])->name('patients.medical-file');
         Route::put('/patients/{patient}', [PatientController::class, 'update'])->name('patients.update');
         Route::delete('/patients/{patient}', [PatientController::class, 'destroy'])->name('patients.destroy');
+
+        // Patient Diagnoses
+        Route::post('/patients/{patient}/diagnoses', [PatientDiagnosisController::class, 'store'])->name('patients.diagnoses.store');
+        Route::delete('/patients/{patient}/diagnoses/{diagnosis}', [PatientDiagnosisController::class, 'destroy'])->name('patients.diagnoses.destroy');
+
+        // Patient AI Chat
+        Route::post('/patients/{patient}/ai-chat', [PatientAIChatController::class, 'chat'])->name('patients.ai-chat');
 
         // Appointments CRUD
         Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
