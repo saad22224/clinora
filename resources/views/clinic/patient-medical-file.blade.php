@@ -38,6 +38,11 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                 {{ $patient->dob->diffInYears(now()) }} سنة ({{ $patient->dob->format('Y/m/d') }})
                             </span>
+                        @elseif($patient->age)
+                            <span class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                {{ $patient->age }} سنة
+                            </span>
                         @endif
                         @if($patient->phone)
                             <span class="flex items-center gap-1.5 dir-ltr">
@@ -73,6 +78,46 @@
             </div>
         </div>
     </div>
+
+    {{-- ═══════════════════════════════════════════
+         MEDICAL & SURGICAL HISTORY
+    ════════════════════════════════════════════ --}}
+    @if($patient->medical_history || $patient->surgical_history)
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        @if($patient->medical_history)
+        <div class="bg-white dark:bg-[#0F0F1A] border border-gray-100 dark:border-white/[0.06] rounded-2xl p-5 shadow-sm">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-9 h-9 rounded-xl bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-orange-500 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-black text-gray-900 dark:text-white text-sm">التاريخ المرضي</h3>
+                    <p class="text-xs text-gray-400">الأمراض المزمنة والحالات الصحية</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">{{ $patient->medical_history }}</p>
+        </div>
+        @endif
+        @if($patient->surgical_history)
+        <div class="bg-white dark:bg-[#0F0F1A] border border-gray-100 dark:border-white/[0.06] rounded-2xl p-5 shadow-sm">
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-9 h-9 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-red-500 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-black text-gray-900 dark:text-white text-sm">التاريخ الجراحي</h3>
+                    <p class="text-xs text-gray-400">العمليات الجراحية السابقة</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">{{ $patient->surgical_history }}</p>
+        </div>
+        @endif
+    </div>
+    @endif
 
     {{-- ═══════════════════════════════════════════
          MAIN GRID  (medical data + chatbot)

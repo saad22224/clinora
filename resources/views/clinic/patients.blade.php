@@ -90,7 +90,7 @@
                                     {{ $patient->created_at->format('Y/m/d') }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div class="flex items-center gap-1">
                                         <a href="{{ route('clinic.patients.medical-file', $patient) }}"
                                            class="p-1.5 rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors"
                                            title="الملف الطبي">
@@ -124,10 +124,11 @@
     </div>
 
     {{-- ══════ ADD PATIENT MODAL ══════ --}}
+    {{-- ══════ ADD PATIENT MODAL ══════ --}}
     <div id="modal-add-patient" data-modal class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-200">
-        <div data-modal-panel class="bg-white dark:bg-[#0F0F1A] w-full max-w-lg rounded-2xl shadow-2xl border border-gray-100 dark:border-white/10 overflow-hidden scale-95 opacity-0 translate-y-4 transition-all duration-200">
+        <div data-modal-panel class="bg-white dark:bg-[#0F0F1A] w-full max-w-xl rounded-2xl shadow-2xl border border-gray-100 dark:border-white/10 overflow-hidden scale-95 opacity-0 translate-y-4 transition-all duration-200 max-h-[90vh] flex flex-col">
 
-            <div class="px-6 py-4 border-b border-gray-100 dark:border-white/[0.06] flex justify-between items-center">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-white/[0.06] flex justify-between items-center shrink-0">
                 <div>
                     <h3 class="font-black text-lg text-gray-900 dark:text-white">إضافة مريض جديد</h3>
                     <p class="text-xs text-gray-400 mt-0.5">أدخل بيانات المريض لتسجيله في النظام</p>
@@ -137,9 +138,9 @@
                 </button>
             </div>
 
-            <form method="POST" action="{{ route('clinic.patients.store') }}">
+            <form method="POST" action="{{ route('clinic.patients.store') }}" class="flex flex-col flex-1 min-h-0">
                 @csrf
-                <div class="p-6 space-y-4">
+                <div class="p-6 space-y-5 overflow-y-auto flex-1">
                     @if($errors->any())
                         <div class="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700/30 rounded-xl">
                             @foreach($errors->all() as $error)
@@ -148,6 +149,7 @@
                         </div>
                     @endif
 
+                    {{-- Name --}}
                     <div>
                         <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">الاسم الكامل <span class="text-red-500">*</span></label>
                         <input type="text" name="name" value="{{ old('name') }}" required autocomplete="off"
@@ -155,6 +157,7 @@
                                placeholder="مثال: أحمد محمد علي">
                     </div>
 
+                    {{-- Phone + Gender --}}
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">رقم الهاتف <span class="text-red-500">*</span></label>
@@ -172,21 +175,64 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">تاريخ الميلاد</label>
-                        <input type="date" name="dob" value="{{ old('dob') }}"
-                               class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-shadow">
+                    {{-- DOB + Age --}}
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">تاريخ الميلاد</label>
+                            <input type="date" name="dob" value="{{ old('dob') }}"
+                                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-shadow">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
+                                العمر
+                                <span class="text-xs font-normal text-gray-400">(إن لم يُعرف تاريخ الميلاد)</span>
+                            </label>
+                            <input type="number" name="age" value="{{ old('age') }}" min="0" max="150"
+                                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-shadow"
+                                   placeholder="مثال: 45">
+                        </div>
                     </div>
 
+                    {{-- Medical History --}}
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">ملاحظات</label>
-                        <textarea name="notes" rows="3"
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                            التاريخ المرضي
+                            <span class="text-xs font-normal text-gray-400 mr-1">— اختياري</span>
+                        </label>
+                        <div class="flex flex-wrap gap-2 mb-2.5">
+                            @foreach(['سكري', 'ضغط دم', 'قلب وشرايين', 'فشل كلوي', 'أمراض كبد', 'غدة درقية', 'ربو', 'حساسية'] as $cond)
+                                <button type="button" data-chip data-target="medical_history_add" data-value="{{ $cond }}"
+                                        class="chip-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-all">
+                                    {{ $cond }}
+                                </button>
+                            @endforeach
+                        </div>
+                        <textarea name="medical_history" id="medical_history_add" rows="2"
+                                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white resize-none transition-shadow"
+                                  placeholder="مثال: سكري نوع 2، ضغط دم مرتفع...">{{ old('medical_history') }}</textarea>
+                    </div>
+
+                    {{-- Surgical History --}}
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
+                            التاريخ الجراحي
+                            <span class="text-xs font-normal text-gray-400 mr-1">— اختياري</span>
+                        </label>
+                        <textarea name="surgical_history" rows="2"
+                                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white resize-none transition-shadow"
+                                  placeholder="مثال: استئصال زائدة 2018، عملية قلب مفتوح 2021...">{{ old('surgical_history') }}</textarea>
+                    </div>
+
+                    {{-- Notes --}}
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">ملاحظات عامة</label>
+                        <textarea name="notes" rows="2"
                                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white resize-none transition-shadow"
                                   placeholder="أي ملاحظات خاصة بالمريض...">{{ old('notes') }}</textarea>
                     </div>
                 </div>
 
-                <div class="px-6 py-4 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] flex justify-end gap-3">
+                <div class="px-6 py-4 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] flex justify-end gap-3 shrink-0">
                     <button type="button" data-modal-close="modal-add-patient"
                             class="px-4 py-2 text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
                         إلغاء
@@ -207,6 +253,27 @@
             if (typeof CModal !== 'undefined') CModal.open('modal-add-patient');
         });
         @endif
+
+        // Quick-select chips for medical history
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-chip]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.dataset.target;
+                    const value = btn.dataset.value;
+                    const textarea = document.getElementById(targetId);
+                    if (!textarea) return;
+                    const current = textarea.value.trim();
+                    if (current.includes(value)) {
+                        // Remove if already added
+                        textarea.value = current.replace(new RegExp(',?\\s*' + value.replace(/[.*+?^${}()|[\]\\]/g, '\\\$&') + '\\s*,?', 'g'), '').replace(/^,\s*|,\s*$/g, '').trim();
+                        btn.classList.remove('border-brand-400', 'text-brand-600', 'bg-brand-50', 'dark:text-brand-400', 'dark:bg-brand-900/20');
+                    } else {
+                        textarea.value = current ? current + '، ' + value : value;
+                        btn.classList.add('border-brand-400', 'text-brand-600', 'bg-brand-50', 'dark:text-brand-400', 'dark:bg-brand-900/20');
+                    }
+                });
+            });
+        });
     </script>
     @endpush
 

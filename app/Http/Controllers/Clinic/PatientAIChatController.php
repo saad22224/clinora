@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PatientAIChatController extends Controller
 {
@@ -30,6 +31,7 @@ class PatientAIChatController extends Controller
 
         try {
             $response = $this->callGemini(
+                $patient,
                 $systemContext,
                 $request->input('message'),
                 $request->input('history', [])
@@ -48,15 +50,20 @@ class PatientAIChatController extends Controller
 
     private function buildSystemContext(Patient $patient): string
     {
-        $age = $patient->dob
-            ? $patient->dob->diffInYears(now()).' سنة'
-            : 'غير محدد';
-
         $gender = match ($patient->gender) {
             'male' => 'ذكر',
             'female' => 'أنثى',
             default => 'غير محدد',
         };
+
+        // Age: prefer dob-calculated age, fallback to explicit age field
+        if ($patient->dob) {
+            $age = $patient->dob->diffInYears(now()).' سنة';
+        } elseif ($patient->age) {
+            $age = $patient->age.' سنة';
+        } else {
+            $age = 'غير محدد';
+        }
 
         // Medical files summary
         $filesText = $patient->medicalFiles->isEmpty()
@@ -81,6 +88,10 @@ class PatientAIChatController extends Controller
 
         $patientNotes = $patient->notes ?? 'لا يوجد';
         $patientPhone = $patient->phone ?? 'غير محدد';
+        $medicalHistoryText = $patient->medical_history ?? 'لا يوجد تاريخ مرضي مسجل.';
+        $surgicalHistoryText = $patient->surgical_history ?? 'لا يوجد تاريخ جراحي مسجل.';
+
+        $name = $patient->name;
 
         return <<<PROMPT
 أنت مساعد طبي ذكي (ClinoraAI) متخصص في مساعدة الأطباء داخل نظام إدارة العيادات "كلينورا".
@@ -90,11 +101,21 @@ class PatientAIChatController extends Controller
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 بيانات المريض الأساسية:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• الاسم: {$patient->name}
+• الاسم: {$name}
 • العمر: {$age}
 • الجنس: {$gender}
 • رقم الهاتف: {$patientPhone}
 • ملاحظات عامة: {$patientNotes}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏥 التاريخ المرضي (الأمراض المزمنة):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+{$medicalHistoryText}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔪 التاريخ الجراحي (العمليات السابقة):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+{$surgicalHistoryText}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔬 الأشعة والتحاليل المرفوعة:
@@ -125,7 +146,7 @@ PROMPT;
     /**
      * @param  array<int, array{role: string, message: string}>  $history
      */
-    private function callGemini(string $systemContext, string $userMessage, array $history): string
+    private function callGemini(Patient $patient, string $systemContext, string $userMessage, array $history): string
     {
         $apiKey = env('GEMINI_API');
 
@@ -141,13 +162,37 @@ PROMPT;
                 'parts' => [['text' => $turn['message']]],
             ];
         }
+
+        // Gather attached medical files (images/PDFs up to 10 files <= 10MB each)
+        $userParts = [];
+        foreach ($patient->medicalFiles->take(10) as $file) {
+            if ($file->file_path && Storage::disk('public')->exists($file->file_path)) {
+                $size = Storage::disk('public')->size($file->file_path);
+                if ($size <= 10 * 1024 * 1024) {
+                    $mimeType = Storage::disk('public')->mimeType($file->file_path);
+                    if (in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'application/pdf'])) {
+                        $userParts[] = [
+                            'text' => "[مرفق صورة/ملف طبي: {$file->type} - تاريخ المرفق: {$file->created_at->format('Y/m/d')}]",
+                        ];
+                        $userParts[] = [
+                            'inlineData' => [
+                                'mimeType' => $mimeType,
+                                'data' => base64_encode(Storage::disk('public')->get($file->file_path)),
+                            ],
+                        ];
+                    }
+                }
+            }
+        }
+        $userParts[] = ['text' => $userMessage];
+
         $contents[] = [
             'role' => 'user',
-            'parts' => [['text' => $userMessage]],
+            'parts' => $userParts,
         ];
 
         $response = Http::withHeaders(['Content-Type' => 'application/json'])
-            ->timeout(30)
+            ->timeout(60)
             ->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={$apiKey}", [
                 'system_instruction' => [
                     'parts' => [['text' => $systemContext]],

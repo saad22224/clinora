@@ -38,6 +38,9 @@ class PatientController extends Controller
             'phone' => ['required', 'string', 'max:30'],
             'dob' => ['nullable', 'date'],
             'gender' => ['nullable', 'in:male,female'],
+            'age' => ['nullable', 'integer', 'min:0', 'max:150'],
+            'medical_history' => ['nullable', 'string', 'max:5000'],
+            'surgical_history' => ['nullable', 'string', 'max:5000'],
             'notes' => ['nullable', 'string', 'max:2000'],
         ]);
 
@@ -59,6 +62,9 @@ class PatientController extends Controller
             'phone' => ['required', 'string', 'max:30'],
             'dob' => ['nullable', 'date'],
             'gender' => ['nullable', 'in:male,female'],
+            'age' => ['nullable', 'integer', 'min:0', 'max:150'],
+            'medical_history' => ['nullable', 'string', 'max:5000'],
+            'surgical_history' => ['nullable', 'string', 'max:5000'],
             'notes' => ['nullable', 'string', 'max:2000'],
         ]);
 
