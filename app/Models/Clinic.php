@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Clinic extends Model
 {
     protected $fillable = [
+        'marketer_id',
         'slug',
         'name',
         'logo',
@@ -75,5 +77,10 @@ class Clinic extends Model
     public function visitTypes(): HasMany
     {
         return $this->hasMany(VisitType::class);
+    }
+
+    public function marketer(): BelongsTo
+    {
+        return $this->belongsTo(Marketer::class);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\SubscriptionService;
+use App\Models\Subscription;
 use Illuminate\Console\Command;
 
 class CheckSubscriptions extends Command
@@ -26,7 +26,7 @@ class CheckSubscriptions extends Command
      */
     public function handle()
     {
-        $expiredCount = \App\Models\Subscription::where('is_active', true)
+        $expiredCount = Subscription::where('is_active', true)
             ->where('ends_at', '<', now())
             ->update(['is_active' => false]);
 

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Plan;
 use Illuminate\Database\Seeder;
 
 class PlanSeeder extends Seeder
@@ -12,7 +12,7 @@ class PlanSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Plan::create([
+        Plan::create([
             'name' => 'الباقة المجانية الأساسية',
             'price' => 0.00,
             'duration_in_days' => 30,
@@ -20,7 +20,7 @@ class PlanSeeder extends Seeder
                 'max_patients' => 'unlimited',
                 'max_appointments' => 'unlimited',
                 'max_doctors' => 'unlimited',
-                'support' => 'vip'
+                'support' => 'vip',
             ],
             'is_active' => true,
         ]);

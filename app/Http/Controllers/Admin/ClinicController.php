@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clinic;
+use App\Models\Marketer;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\User;
@@ -15,13 +16,14 @@ class ClinicController extends Controller
 {
     public function index()
     {
-        $clinics = Clinic::with(['subscription', 'users'])
+        $clinics = Clinic::with(['subscription', 'users', 'marketer'])
             ->latest()
             ->paginate(15);
 
         $plans = Plan::where('is_active', true)->get();
+        $marketers = Marketer::where('is_active', true)->get();
 
-        return view('admin.clinics', compact('clinics', 'plans'));
+        return view('admin.clinics', compact('clinics', 'plans', 'marketers'));
     }
 
     public function store(Request $request)
@@ -32,6 +34,7 @@ class ClinicController extends Controller
             'owner_email' => ['required', 'email', 'unique:users,email'],
             'owner_password' => ['required', 'string', 'min:8'],
             'plan_id' => ['nullable', 'exists:plans,id'],
+            'marketer_id' => ['nullable', 'exists:marketers,id'],
         ]);
 
         // Generate unique slug
@@ -45,6 +48,7 @@ class ClinicController extends Controller
         $clinic = Clinic::create([
             'name' => $validated['clinic_name'],
             'slug' => $slug,
+            'marketer_id' => $validated['marketer_id'] ?? null,
             'is_active' => true,
         ]);
 

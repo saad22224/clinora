@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ClinicController;
+use App\Http\Controllers\Admin\MarketerController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\WhatsAppController;
 use App\Http\Controllers\AuthController;
@@ -19,12 +20,17 @@ use App\Http\Controllers\Clinic\VisitTypeController;
 use App\Http\Controllers\PublicClinicController;
 use App\Http\Middleware\CheckSubscriptionStatus;
 use App\Http\Middleware\IdentifyTenant;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // ==========================================
 // Marketing Pages
 // ==========================================
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
+    if ($request->has('ref')) {
+        session(['referral_code' => $request->query('ref')]);
+    }
+
     return view('pages.landing');
 })->name('home');
 Route::get('/pricing', function () {
@@ -155,6 +161,12 @@ Route::middleware(['auth'])
         Route::post('/clinics', [ClinicController::class, 'store'])->name('clinics.store');
         Route::patch('/clinics/{clinic}/toggle', [ClinicController::class, 'toggle'])->name('clinics.toggle');
         Route::delete('/clinics/{clinic}', [ClinicController::class, 'destroy'])->name('clinics.destroy');
+
+        // Marketers CRUD
+        Route::get('/marketers', [MarketerController::class, 'index'])->name('marketers.index');
+        Route::post('/marketers', [MarketerController::class, 'store'])->name('marketers.store');
+        Route::put('/marketers/{marketer}', [MarketerController::class, 'update'])->name('marketers.update');
+        Route::delete('/marketers/{marketer}', [MarketerController::class, 'destroy'])->name('marketers.destroy');
 
         // Plans CRUD
         Route::get('/subscriptions', function () {

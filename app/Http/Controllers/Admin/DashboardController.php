@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Clinic;
 use App\Models\Subscription;
 
@@ -18,7 +17,7 @@ class DashboardController extends Controller
             'total_revenue' => 0, // Placeholder
             'new_clinics_this_month' => Clinic::whereMonth('created_at', now()->month)->count(),
         ];
-        
+
         $recent_clinics = Clinic::with('subscription')
             ->latest()
             ->take(5)

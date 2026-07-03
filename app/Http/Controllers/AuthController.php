@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clinic;
+use App\Models\Marketer;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Services\WhatsAppService;
@@ -36,9 +37,14 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    public function showRegister()
+    public function showRegister(Request $request)
     {
-        return view('auth.register');
+        if ($request->has('ref')) {
+            session(['referral_code' => $request->query('ref')]);
+        }
+        $ref = $request->query('ref', session('referral_code'));
+
+        return view('auth.register', compact('ref'));
     }
 
     public function register(Request $request)
@@ -50,6 +56,17 @@ class AuthController extends Controller
             'phone' => ['required', 'string', 'max:20'],
             'password' => ['required', 'string', 'min:8'],
         ]);
+
+        $marketerId = null;
+        $refCode = $request->input('ref', session('referral_code'));
+        if (! empty($refCode)) {
+            $marketer = Marketer::where('referral_code', trim($refCode))
+                ->where('is_active', true)
+                ->first();
+            if ($marketer) {
+                $marketerId = $marketer->id;
+            }
+        }
 
         // Create Clinic
         $slug = Str::slug($request->clinic_name);
@@ -65,6 +82,7 @@ class AuthController extends Controller
             'name' => $request->clinic_name,
             'slug' => $slug,
             'phone' => $request->phone,
+            'marketer_id' => $marketerId,
             'is_active' => true,
         ]);
 
@@ -101,7 +119,7 @@ class AuthController extends Controller
 
     public function showVerifyOtp()
     {
-        if (!session('pending_verification_user_id')) {
+        if (! session('pending_verification_user_id')) {
             return redirect()->route('register');
         }
 
@@ -117,7 +135,7 @@ class AuthController extends Controller
         $userId = session('pending_verification_user_id');
         $savedOtp = session('whatsapp_otp');
 
-        if (!$userId || !$savedOtp || trim($request->otp) !== (string) $savedOtp) {
+        if (! $userId || ! $savedOtp || trim($request->otp) !== (string) $savedOtp) {
             return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
         }
 

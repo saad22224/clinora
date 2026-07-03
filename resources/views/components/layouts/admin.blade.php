@@ -40,6 +40,7 @@
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">إدارة المنصة</p>
             <x-admin.nav-item route="admin.clinics.index" icon="office-building" label="العيادات" />
+            <x-admin.nav-item route="admin.marketers.index" icon="users" label="المسوقون والإحالات" badge="جديد" />
             <x-admin.nav-item route="admin.subscriptions.index" icon="credit-card" label="الباقات والاشتراكات" />
             <x-admin.nav-item route="admin.revenue.index" icon="chart-bar" label="الإيرادات" />
 

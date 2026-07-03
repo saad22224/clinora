@@ -64,6 +64,12 @@
                                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                                                 </a>
                                             </div>
+                                            @if($clinic->marketer)
+                                                <div class="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[11px] font-bold">
+                                                    <span>🎁 إحالة من:</span>
+                                                    <span>{{ $clinic->marketer->name }}</span>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </td>
@@ -176,6 +182,18 @@
                             </select>
                         </div>
                     </div>
+
+                    @if(isset($marketers) && $marketers->isNotEmpty())
+                        <div>
+                            <label class="block text-sm font-bold text-slate-300 mb-1.5">المسوق المحيل (اختياري)</label>
+                            <select name="marketer_id" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-white">
+                                <option value="">بدون إحالة</option>
+                                @foreach($marketers as $marketer)
+                                    <option value="{{ $marketer->id }}" {{ old('marketer_id') == $marketer->id ? 'selected' : '' }}>{{ $marketer->name }} ({{ $marketer->referral_code }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
 
                     <div>
                         <label class="block text-sm font-bold text-slate-300 mb-1.5">البريد الإلكتروني <span class="text-red-400">*</span></label>

@@ -12,6 +12,14 @@
             
             <form class="mt-8 space-y-6" action="{{ route('register.post') }}" method="POST">
                 @csrf
+                @php $currentRef = $ref ?? request()->query('ref', session('referral_code')); @endphp
+                @if($currentRef)
+                    <input type="hidden" name="ref" value="{{ $currentRef }}">
+                    <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold flex items-center gap-2">
+                        <span>🎁 تم تفعيل رابط الإحالة من المسوق:</span>
+                        <span class="font-mono bg-emerald-100 dark:bg-emerald-800/50 px-2 py-0.5 rounded">{{ $currentRef }}</span>
+                    </div>
+                @endif
                 <div class="space-y-4">
                     <div>
                         <label for="clinic_name" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">اسم العيادة</label>
