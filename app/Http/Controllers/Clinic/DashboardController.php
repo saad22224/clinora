@@ -59,6 +59,6 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('clinic.dashboard', compact('stats', 'upcoming_appointments', 'recent_appointments'));
+        return view('clinic.dashboard', compact('stats', 'upcoming_appointments', 'recent_appointments', 'clinic'));
     }
 }

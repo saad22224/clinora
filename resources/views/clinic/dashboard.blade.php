@@ -1,6 +1,44 @@
 <x-layouts.clinic>
     <x-slot:title>نظرة عامة</x-slot>
 
+    {{-- Top Barcode Banner --}}
+    <div class="mb-6 bg-gradient-to-r from-emerald-900 via-teal-800 to-brand-900 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 border border-white/10">
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-10 -top-10 w-48 h-48 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none"></div>
+        
+        <div class="flex-1 text-center md:text-right z-10 space-y-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-emerald-300 text-xs font-bold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                باركود الحجز الذكي للعيادة
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
+                {{ $clinic->name }}
+            </h2>
+            <p class="text-emerald-100 text-sm max-w-xl leading-relaxed">
+                اعرض هذا الباركود في استقبال العيادة أو اطبعه ليتمكن مرضاك من مسحه بهواتفهم والدخول لصفحة العيادة وحجز مواعيدهم وإدارة ملفاتهم الطبية مباشرة.
+            </p>
+            <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
+                <button onclick="printClinicQR()" type="button"
+                    class="inline-flex items-center gap-2 bg-white text-teal-900 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-emerald-50 shadow-md transition-all duration-200 active:scale-95">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    طباعة بطاقة الباركود
+                </button>
+                <a href="{{ route('clinic.public.show', $clinic->slug) }}" target="_blank"
+                    class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-5 py-2.5 rounded-xl font-bold text-sm backdrop-blur-md transition-all duration-200">
+                    <span>زيارة صفحة الهبوط</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="z-10 shrink-0 flex flex-col items-center bg-white p-4 rounded-2xl shadow-xl border border-white/20 text-gray-900">
+            <div class="bg-white p-1 rounded-xl">
+                {!! SimpleSoftwareIO\QrCode\Facades\QrCode::size(150)->margin(1)->generate(route('clinic.public.show', $clinic->slug)) !!}
+            </div>
+            <span class="text-[11px] font-bold text-gray-500 mt-2">امسح الكود عبر الكاميرا</span>
+        </div>
+    </div>
+
     {{-- Top Stats --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {{-- Total Patients --}}
@@ -179,4 +217,55 @@
             </div>
         </div>
     </div>
+
+    {{-- Printable QR Area (Visible only when printing) --}}
+    <style>
+        @media print {
+            body * {
+                visibility: hidden !important;
+            }
+            #printable-qr-section {
+                display: flex !important;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                visibility: visible !important;
+                position: absolute !important;
+                left: 0;
+                top: 0;
+                width: 100%;
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 40px !important;
+                z-index: 999999 !important;
+            }
+            #printable-qr-section * {
+                visibility: visible !important;
+            }
+        }
+    </style>
+    <div id="printable-qr-section" class="hidden text-center">
+        <div class="border-4 border-[#0f766e] rounded-3xl p-10 max-w-md mx-auto my-8 bg-white shadow-none text-center">
+            <h1 class="text-3xl font-black text-[#0f766e] mb-1">{{ $clinic->name }}</h1>
+            @if($clinic->doctor_title)
+                <p class="text-base font-bold text-gray-600 mb-6">{{ $clinic->doctor_title }}</p>
+            @endif
+            <div class="inline-block p-6 bg-white border-2 border-dashed border-gray-300 rounded-2xl mb-6">
+                {!! SimpleSoftwareIO\QrCode\Facades\QrCode::size(220)->margin(1)->generate(route('clinic.public.show', $clinic->slug)) !!}
+            </div>
+            <h2 class="text-xl font-black text-gray-900 mb-2">امسح الباركود لحجز موعدك الآن</h2>
+            <p class="text-sm text-gray-600 mb-6">وجه كاميرا هاتفك نحو الرمز للانتقال لصفحة الحجز المباشر</p>
+            @if($clinic->phone)
+                <div class="pt-4 border-t border-gray-200 text-sm font-bold text-gray-700">
+                    هاتـف: {{ $clinic->phone }}
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <script>
+        function printClinicQR() {
+            window.print();
+        }
+    </script>
 </x-layouts.clinic>
