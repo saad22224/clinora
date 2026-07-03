@@ -141,7 +141,7 @@
                     <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="#services">التخصصات والخدمات</a>
                     <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="#about">عن العيادة</a>
                     <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="#hours">المواعيد</a>
-                    <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="#reviews">آراء المرضى</a>
+                    <!-- <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="#reviews">آراء المرضى</a> -->
                     <a class="text-on-surface-variant hover:text-primary transition-colors text-sm font-semibold" href="#contact">اتصل بنا</a>
                 </nav>
             </div>
