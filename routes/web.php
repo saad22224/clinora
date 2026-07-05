@@ -126,6 +126,7 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
 
         // Prescriptions
         Route::get('/prescriptions', [PrescriptionController::class, 'index'])->name('prescriptions.index');
+        Route::get('/drugs/search', [PrescriptionController::class, 'searchDrugs'])->name('drugs.search');
         Route::post('/prescriptions', [PrescriptionController::class, 'store'])->name('prescriptions.store');
         Route::get('/prescriptions/{prescription}/print', [PrescriptionController::class, 'print'])->name('prescriptions.print');
         Route::delete('/prescriptions/{prescription}', [PrescriptionController::class, 'destroy'])->name('prescriptions.destroy');

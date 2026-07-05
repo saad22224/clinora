@@ -10,10 +10,25 @@ use Illuminate\Support\Facades\Storage;
 
 class MedicalFileController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $clinic = Auth::user()->clinic;
-        $records = $clinic->medicalFiles()->with('patient')->latest()->paginate(15);
+        $query = trim($request->query('search', ''));
+
+        $records = $clinic->medicalFiles()
+            ->with('patient')
+            ->when($query, function ($q) use ($query) {
+                $q->where(function ($sq) use ($query) {
+                    $sq->whereHas('patient', function ($pq) use ($query) {
+                        $pq->where('name', 'LIKE', "%{$query}%")
+                            ->orWhere('phone', 'LIKE', "%{$query}%");
+                    })->orWhere('type', 'LIKE', "%{$query}%");
+                });
+            })
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
         $patients = $clinic->patients()->latest()->get();
 
         return view('clinic.records', compact('records', 'patients'));

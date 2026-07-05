@@ -150,8 +150,43 @@
             <div class="flex-1">
                 <div class="rx-symbol mb-6">Rx</div>
                 
-                <div class="rx-text pl-8 pr-4 text-left" dir="ltr">
+                <div class="pl-8 pr-4">
+                    @if($prescription->items->isNotEmpty())
+                        <div class="space-y-6 mb-8" dir="ltr">
+                            @foreach($prescription->items as $index => $item)
+                                <div class="border-b border-gray-200 pb-4 last:border-0 last:pb-0">
+                                    <div class="flex items-baseline gap-3">
+                                        <span class="font-bold text-lg text-gray-500">{{ $index + 1 }}.</span>
+                                        <div class="flex-1">
+                                            <h3 class="text-xl font-black text-gray-900 tracking-wide">{{ $item->medicine_name }}</h3>
+                                            @if($item->dosage || $item->instructions)
+                                                <div class="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-base font-bold text-gray-700 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 inline-block">
+                                                    @if($item->dosage)
+                                                        <span class="text-indigo-900">{{ $item->dosage }}</span>
+                                                    @endif
+                                                    @if($item->instructions)
+                                                        <span class="text-gray-600 font-medium">— {{ $item->instructions }}</span>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        @if($prescription->notes)
+                            <div class="mt-6 pt-6 border-t-2 border-dashed border-gray-300">
+                                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2" dir="ltr">General Notes / Recommendations:</h4>
+                                <div class="rx-text text-left" dir="ltr">
 {!! nl2br(e($prescription->notes)) !!}
+                                </div>
+                            </div>
+                        @endif
+                    @else
+                        <div class="rx-text text-left" dir="ltr">
+{!! nl2br(e($prescription->notes)) !!}
+                        </div>
+                    @endif
                 </div>
             </div>
 

@@ -9,17 +9,27 @@
     @endif
 
     <div class="bg-white dark:bg-[#0F0F1A] border border-gray-100 dark:border-white/[0.06] rounded-2xl shadow-sm overflow-hidden">
-        <div class="px-6 py-5 border-b border-gray-100 dark:border-white/[0.06] flex items-center justify-between">
+        <div class="px-6 py-5 border-b border-gray-100 dark:border-white/[0.06] flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
                 <h3 class="font-black text-gray-900 dark:text-white text-lg">السجلات الطبية</h3>
                 <p class="text-sm text-gray-400 mt-0.5">{{ $records->total() }} ملف مرفوع</p>
             </div>
-            <button data-modal-open="modal-add-record"
-                    class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-white bg-brand-600 hover:bg-brand-500 rounded-xl transition-all shadow-sm hover:shadow-brand-500/30 hover:shadow-lg active:scale-95">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                رفع سجل طبي
-            </button>
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <div class="relative flex-1 md:w-80">
+                    <input id="records-live-search" type="text" placeholder="🔍 ابحث بالمريض أو نوع السجل..." value="{{ request('search') }}"
+                           class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl pl-9 pr-4 py-2 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-all">
+                    <div class="absolute left-3 top-2.5 text-gray-400">
+                        <svg id="rec-search-spinner" style="display: none;" class="w-4 h-4 animate-spin text-brand-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    </div>
+                </div>
+                <button data-modal-open="modal-add-record"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-white bg-brand-600 hover:bg-brand-500 rounded-xl transition-all shadow-sm hover:shadow-brand-500/30 hover:shadow-lg active:scale-95 shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    رفع سجل طبي
+                </button>
+            </div>
         </div>
+        <div id="records-list-wrapper">
 
         @if($records->isEmpty())
             <div class="py-20 flex flex-col items-center justify-center text-center px-6">
@@ -82,6 +92,7 @@
                 <div class="px-6 py-4 border-t border-gray-100 dark:border-white/[0.06]">{{ $records->links() }}</div>
             @endif
         @endif
+        </div>
     </div>
 
     {{-- Add Record Modal --}}
@@ -102,14 +113,20 @@
                         </div>
                     @endif
 
-                    <div>
+                    {{-- Patient Selection (Searchable Autocomplete) --}}
+                    <div class="relative" id="patient-select-container">
                         <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">المريض <span class="text-red-500">*</span></label>
-                        <select name="patient_id" required class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white">
-                            <option value="">— اختر المريض —</option>
-                            @foreach($patients as $p)
-                                <option value="{{ $p->id }}" {{ old('patient_id') == $p->id ? 'selected' : '' }}>{{ $p->name }}</option>
-                            @endforeach
-                        </select>
+                        <input type="hidden" name="patient_id" id="hidden-patient-id" required value="{{ old('patient_id') }}">
+                        <div class="relative">
+                            <input type="text" id="patient-search-input" placeholder="🔍 ابحث واقتر المريض (الاسم، رقم الهاتف)..." autocomplete="off"
+                                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-all">
+                            <button type="button" id="btn-clear-patient" style="display: none;" class="absolute left-3 top-2.5 text-gray-400 hover:text-red-500 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                        <div id="patient-search-dropdown" style="display: none;"
+                             class="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-[#1A1A2E] border border-gray-200 dark:border-white/10 rounded-xl shadow-xl max-h-60 overflow-y-auto divide-y divide-gray-100 dark:divide-white/5">
+                        </div>
                     </div>
 
                     <div>
@@ -134,12 +151,128 @@
     </div>
 
     @push('scripts')
-    @if($errors->any())
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            @if($errors->any())
             if (typeof CModal !== 'undefined') CModal.open('modal-add-record');
+            @endif
+
+            // 1. Live Search for Records List
+            const recSearchInput = document.getElementById('records-live-search');
+            const recSearchSpinner = document.getElementById('rec-search-spinner');
+            const recWrapper = document.getElementById('records-list-wrapper');
+            let recTimeout = null;
+
+            if (recSearchInput && recWrapper) {
+                recSearchInput.addEventListener('input', (e) => {
+                    clearTimeout(recTimeout);
+                    if (recSearchSpinner) recSearchSpinner.style.display = 'block';
+                    
+                    recTimeout = setTimeout(async () => {
+                        try {
+                            const url = `{{ route('clinic.records.index', [], false) }}?search=${encodeURIComponent(e.target.value.trim())}`;
+                            const res = await fetch(url, {
+                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                                credentials: 'same-origin'
+                            });
+                            if (res.ok) {
+                                const html = await res.text();
+                                const doc = new DOMParser().parseFromString(html, 'text/html');
+                                const newWrapper = doc.getElementById('records-list-wrapper');
+                                if (newWrapper) {
+                                    recWrapper.innerHTML = newWrapper.innerHTML;
+                                }
+                            }
+                        } catch (err) {
+                            console.error('Live search error:', err);
+                        } finally {
+                            if (recSearchSpinner) recSearchSpinner.style.display = 'none';
+                        }
+                    }, 300);
+                });
+            }
+
+            // 2. Searchable Patient Dropdown
+            const allPatients = @json($patients);
+            const patientSearchInput = document.getElementById('patient-search-input');
+            const hiddenPatientId = document.getElementById('hidden-patient-id');
+            const patientDropdown = document.getElementById('patient-search-dropdown');
+            const btnClearPatient = document.getElementById('btn-clear-patient');
+
+            if (patientSearchInput && hiddenPatientId && patientDropdown) {
+                if (hiddenPatientId.value) {
+                    const found = allPatients.find(p => p.id == hiddenPatientId.value);
+                    if (found) {
+                        patientSearchInput.value = found.name + (found.phone ? ` (${found.phone})` : '');
+                        if (btnClearPatient) btnClearPatient.style.display = 'block';
+                    }
+                }
+
+                function renderPatientDropdown(list) {
+                    if (!list || list.length === 0) {
+                        patientDropdown.innerHTML = `<div class="p-3 text-center text-xs text-gray-400">لا يوجد مريض مطابق للبحث</div>`;
+                        patientDropdown.style.display = 'block';
+                        return;
+                    }
+                    patientDropdown.innerHTML = '';
+                    list.forEach(p => {
+                        const item = document.createElement('div');
+                        item.className = 'p-3 hover:bg-brand-50 dark:hover:bg-brand-900/20 cursor-pointer transition-colors flex items-center justify-between gap-3 border-b border-gray-50 dark:border-white/5 last:border-0';
+                        item.innerHTML = `
+                            <div>
+                                <div class="font-bold text-sm text-gray-900 dark:text-white">${p.name}</div>
+                                <div class="text-xs text-gray-400 mt-0.5">${p.phone || 'بدون رقم هاتف'}</div>
+                            </div>
+                        `;
+                        item.addEventListener('click', () => {
+                            hiddenPatientId.value = p.id;
+                            patientSearchInput.value = p.name + (p.phone ? ` (${p.phone})` : '');
+                            patientDropdown.style.display = 'none';
+                            if (btnClearPatient) btnClearPatient.style.display = 'block';
+                        });
+                        patientDropdown.appendChild(item);
+                    });
+                    patientDropdown.style.display = 'block';
+                }
+
+                patientSearchInput.addEventListener('input', (e) => {
+                    const val = e.target.value.trim().toLowerCase();
+                    if (!val) {
+                        hiddenPatientId.value = '';
+                        if (btnClearPatient) btnClearPatient.style.display = 'none';
+                        renderPatientDropdown(allPatients);
+                        return;
+                    }
+                    const filtered = allPatients.filter(p => {
+                        return (p.name && p.name.toLowerCase().includes(val)) ||
+                               (p.phone && p.phone.includes(val));
+                    });
+                    renderPatientDropdown(filtered);
+                });
+
+                patientSearchInput.addEventListener('focus', () => {
+                    const val = patientSearchInput.value.trim().toLowerCase();
+                    const filtered = !val ? allPatients : allPatients.filter(p => (p.name && p.name.toLowerCase().includes(val)) || (p.phone && p.phone.includes(val)));
+                    renderPatientDropdown(filtered);
+                });
+
+                if (btnClearPatient) {
+                    btnClearPatient.addEventListener('click', () => {
+                        hiddenPatientId.value = '';
+                        patientSearchInput.value = '';
+                        btnClearPatient.style.display = 'none';
+                        renderPatientDropdown(allPatients);
+                        patientSearchInput.focus();
+                    });
+                }
+
+                document.addEventListener('click', (e) => {
+                    if (!patientSearchInput.contains(e.target) && !patientDropdown.contains(e.target) && (!btnClearPatient || !btnClearPatient.contains(e.target))) {
+                        patientDropdown.style.display = 'none';
+                    }
+                });
+            }
         });
     </script>
-    @endif
     @endpush
 </x-layouts.clinic>
