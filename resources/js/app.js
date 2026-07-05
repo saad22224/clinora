@@ -1,7 +1,13 @@
 /**
  * Clinora – Global Vanilla JS
- * Handles: modals, flash messages, confirmations, pointers
+ * Handles: modals, flash messages, confirmations, pointers, theme
  */
+
+// ─── Theme Management (Light / Dark Mode) ────────────────────────
+window.toggleTheme = function() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+};
 
 // ─── Modal System ───────────────────────────────────────────────
 window.CModal = {

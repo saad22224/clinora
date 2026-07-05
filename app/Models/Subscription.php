@@ -9,6 +9,7 @@ class Subscription extends Model
 {
     protected $fillable = [
         'clinic_id',
+        'plan_id',
         'plan',
         'starts_at',
         'ends_at',

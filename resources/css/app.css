@@ -4,6 +4,8 @@
 @source '../../storage/framework/views/*.php';
 @source '../views/**/*.blade.php';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
     --color-brand-50:  oklch(0.97 0.01 240);
     --color-brand-100: oklch(0.94 0.03 240);

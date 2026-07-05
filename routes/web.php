@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ClinicController;
 use App\Http\Controllers\Admin\MarketerController;
 use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\WhatsAppController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Clinic\AppointmentController;
@@ -169,10 +170,9 @@ Route::middleware(['auth'])
         Route::put('/marketers/{marketer}', [MarketerController::class, 'update'])->name('marketers.update');
         Route::delete('/marketers/{marketer}', [MarketerController::class, 'destroy'])->name('marketers.destroy');
 
-        // Plans CRUD
-        Route::get('/subscriptions', function () {
-            return view('admin.subscriptions');
-        })->name('subscriptions.index');
+        // Plans & Subscriptions CRUD
+        Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+        Route::post('/subscriptions/assign', [SubscriptionController::class, 'assign'])->name('subscriptions.assign');
         Route::post('/plans', [PlanController::class, 'store'])->name('plans.store');
         Route::put('/plans/{plan}', [PlanController::class, 'update'])->name('plans.update');
         Route::delete('/plans/{plan}', [PlanController::class, 'destroy'])->name('plans.destroy');
