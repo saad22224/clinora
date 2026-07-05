@@ -328,10 +328,8 @@
                 <div class="px-5 py-4 border-b border-gray-100 dark:border-white/[0.06] bg-gradient-to-r from-indigo-50 to-violet-50 dark:from-indigo-900/10 dark:to-violet-900/10 shrink-0">
                     <div class="flex items-center gap-3">
                         <div class="relative shrink-0">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2"></path>
-                                </svg>
+                            <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md shrink-0 border border-indigo-500/20 bg-white">
+                                <img src="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" alt="ClinoraAI" class="w-full h-full object-cover">
                             </div>
                             <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-white dark:border-[#0F0F1A] rounded-full" id="ai-status-dot"></span>
                         </div>
@@ -349,8 +347,8 @@
                 <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3">
                     {{-- Welcome message --}}
                     <div class="chat-msg-ai flex items-start gap-2.5">
-                        <div class="w-7 h-7 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
-                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2"></path></svg>
+                        <div class="w-7 h-7 rounded-xl overflow-hidden shrink-0 shadow-sm border border-indigo-500/20 bg-white">
+                            <img src="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" alt="AI" class="w-full h-full object-cover">
                         </div>
                         <div class="bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/[0.06] rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%]">
                             <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -365,8 +363,8 @@
                 {{-- Typing indicator (hidden) --}}
                 <div id="typing-indicator" class="hidden px-4 pb-2">
                     <div class="flex items-center gap-2.5">
-                        <div class="w-7 h-7 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0 shadow-sm">
-                            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2v10a2 2 0 01-2 2h-2"></path></svg>
+                        <div class="w-7 h-7 rounded-xl overflow-hidden shrink-0 shadow-sm border border-indigo-500/20 bg-white">
+                            <img src="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" alt="AI" class="w-full h-full object-cover">
                         </div>
                         <div class="bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/[0.06] rounded-2xl rounded-tr-sm px-4 py-3">
                             <div class="flex gap-1 items-center h-4">
@@ -589,7 +587,7 @@
             })
             .catch(() => {
                 setLoading(false);
-                appendMessage('ai', '⚠️ حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.');
+                appendMessage('ai', '⚠️ عذراً دكتور، حدث عائق مؤقت في معالجة الطلب. يرجى إعادة المحاولة خلال ثوانٍ.');
             });
         }
 
@@ -605,8 +603,8 @@
                 avatar.className = 'w-7 h-7 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shrink-0 mt-0.5 font-bold text-white text-xs shadow-sm';
                 avatar.textContent = '{{ mb_substr(Auth::user()->name ?? "D", 0, 1) }}';
             } else {
-                avatar.className = 'w-7 h-7 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0 mt-0.5 shadow-sm';
-                avatar.innerHTML = '<svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2"></path></svg>';
+                avatar.className = 'w-7 h-7 rounded-xl overflow-hidden shrink-0 mt-0.5 shadow-sm border border-indigo-500/20 bg-white';
+                avatar.innerHTML = '<img src="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" alt="AI" class="w-full h-full object-cover">';
             }
 
             // Bubble

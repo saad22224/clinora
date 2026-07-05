@@ -43,7 +43,7 @@ class PatientAIChatController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'عذراً، حدث خطأ في الاتصال بالذكاء الاصطناعي. يرجى المحاولة مرة أخرى.',
+                'message' => 'عذراً دكتور، حدث عائق مؤقت في معالجة الطلب. يرجى إعادة المحاولة خلال ثوانٍ.',
             ], 500);
         }
     }
@@ -148,10 +148,15 @@ PROMPT;
      */
     private function callGemini(Patient $patient, string $systemContext, string $userMessage, array $history): string
     {
-        $apiKey = env('GEMINI_API');
+        $apiKeys = array_filter([
+            env('GEMINI_API'),
+            env('GEMINI_API2'),
+            env('GEMINI_API3'),
+            env('GEMINI_API4'),
+        ]);
 
-        if (! $apiKey) {
-            return 'خدمة الذكاء الاصطناعي غير متاحة حالياً. يرجى التأكد من إضافة GEMINI_API في إعدادات النظام.';
+        if (empty($apiKeys)) {
+            return 'عذراً، خدمة المساعد الذكي غير مفعلة حالياً في النظام.';
         }
 
         // Build conversation history for multi-turn
@@ -191,36 +196,47 @@ PROMPT;
             'parts' => $userParts,
         ];
 
-        $response = Http::withHeaders(['Content-Type' => 'application/json'])
-            ->timeout(60)
-            ->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={$apiKey}", [
-                'system_instruction' => [
-                    'parts' => [['text' => $systemContext]],
-                ],
-                'contents' => $contents,
-                'generationConfig' => [
-                    'temperature' => 0.4,
-                    'topK' => 40,
-                    'topP' => 0.95,
-                    'maxOutputTokens' => 2000,
-                ],
-                'safetySettings' => [
-                    ['category' => 'HARM_CATEGORY_HARASSMENT',        'threshold' => 'BLOCK_MEDIUM_AND_ABOVE'],
-                    ['category' => 'HARM_CATEGORY_HATE_SPEECH',       'threshold' => 'BLOCK_MEDIUM_AND_ABOVE'],
-                    ['category' => 'HARM_CATEGORY_SEXUALLY_EXPLICIT',  'threshold' => 'BLOCK_MEDIUM_AND_ABOVE'],
-                    ['category' => 'HARM_CATEGORY_DANGEROUS_CONTENT', 'threshold' => 'BLOCK_MEDIUM_AND_ABOVE'],
-                ],
-            ]);
+        $lastError = '';
+        foreach ($apiKeys as $index => $apiKey) {
+            try {
+                $response = Http::withHeaders(['Content-Type' => 'application/json'])
+                    ->timeout(60)
+                    ->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={$apiKey}", [
+                        'system_instruction' => [
+                            'parts' => [['text' => $systemContext]],
+                        ],
+                        'contents' => $contents,
+                        'generationConfig' => [
+                            'temperature' => 0.4,
+                            'topK' => 40,
+                            'topP' => 0.95,
+                            'maxOutputTokens' => 2000,
+                        ],
+                        'safetySettings' => [
+                            ['category' => 'HARM_CATEGORY_HARASSMENT',        'threshold' => 'BLOCK_MEDIUM_AND_ABOVE'],
+                            ['category' => 'HARM_CATEGORY_HATE_SPEECH',       'threshold' => 'BLOCK_MEDIUM_AND_ABOVE'],
+                            ['category' => 'HARM_CATEGORY_SEXUALLY_EXPLICIT',  'threshold' => 'BLOCK_MEDIUM_AND_ABOVE'],
+                            ['category' => 'HARM_CATEGORY_DANGEROUS_CONTENT', 'threshold' => 'BLOCK_MEDIUM_AND_ABOVE'],
+                        ],
+                    ]);
 
-        if ($response->successful()) {
-            $data = $response->json();
-            if (isset($data['candidates'][0]['content']['parts'][0]['text'])) {
-                return $data['candidates'][0]['content']['parts'][0]['text'];
+                if ($response->successful()) {
+                    $data = $response->json();
+                    if (isset($data['candidates'][0]['content']['parts'][0]['text'])) {
+                        return $data['candidates'][0]['content']['parts'][0]['text'];
+                    }
+                }
+
+                $lastError = $response->body();
+                Log::warning("Gemini AI response failed with key index {$index}", ['status' => $response->status(), 'body' => $lastError]);
+            } catch (\Exception $e) {
+                $lastError = $e->getMessage();
+                Log::warning("Gemini AI request exception with key index {$index}", ['error' => $lastError]);
             }
         }
 
-        Log::warning('Gemini AI response failed', ['body' => $response->body()]);
+        Log::error('All Gemini AI API keys failed', ['last_error' => $lastError]);
 
-        return 'لم أتمكن من معالجة طلبك في الوقت الحالي. يرجى المحاولة مرة أخرى.';
+        return 'عذراً دكتور، المساعد الذكي يشهد ضغطاً عالياً حالياً. يرجى إعادة المحاولة خلال ثوانٍ قليلة.';
     }
 }

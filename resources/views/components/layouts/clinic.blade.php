@@ -35,8 +35,8 @@
         {{-- Brand --}}
         <div class="h-[68px] flex items-center justify-between px-5 border-b border-gray-100 dark:border-white/[0.06] shrink-0">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/30">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                <div class="w-9 h-9 rounded-xl overflow-hidden shadow-md shrink-0 border border-gray-100 dark:border-white/10 bg-white">
+                    <img src="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" alt="Clinora Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
                     <h2 class="font-black text-sm text-gray-900 dark:text-white leading-none">{{ Auth::user()->clinic->name ?? 'العيادة' }}</h2>
@@ -110,10 +110,13 @@
 
         {{-- Topbar --}}
         <header class="h-[68px] bg-white/90 dark:bg-[#0F0F14]/90 backdrop-blur-xl border-b border-gray-100 dark:border-white/[0.06] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3">
                 <button id="sidebar-toggle" class="md:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
+                <div class="md:hidden w-8 h-8 rounded-lg overflow-hidden shadow shrink-0 border border-gray-100 dark:border-white/10 bg-white">
+                    <img src="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" alt="Clinora Logo" class="w-full h-full object-cover">
+                </div>
                 <div>
                     <h1 class="text-lg font-black text-gray-900 dark:text-white leading-none">{{ $title ?? 'لوحة التحكم' }}</h1>
                     <p class="text-xs text-gray-400 mt-0.5">{{ now()->translatedFormat('l، d F Y') }}</p>

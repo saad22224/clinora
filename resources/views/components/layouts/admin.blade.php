@@ -32,8 +32,8 @@
 
         {{-- Brand --}}
         <div class="h-[68px] flex items-center px-5 border-b border-slate-200 dark:border-white/[0.06] shrink-0 gap-3">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/30 shrink-0">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <div class="w-9 h-9 rounded-xl overflow-hidden shadow-md shrink-0 border border-slate-200 dark:border-white/10 bg-white">
+                <img src="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" alt="Clinora Logo" class="w-full h-full object-cover">
             </div>
             <div>
                 <h2 class="font-black text-sm text-slate-900 dark:text-white leading-none">كلينورا</h2>
@@ -85,9 +85,14 @@
 
         {{-- Topbar --}}
         <header class="h-[68px] bg-white/80 dark:bg-[#0A0A12]/80 backdrop-blur-xl border-b border-slate-200 dark:border-white/[0.06] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
-            <div>
-                <h1 class="text-lg font-black text-slate-900 dark:text-white leading-none">{{ $title ?? 'الإدارة العليا' }}</h1>
-                <p class="text-xs text-slate-500 mt-0.5">{{ now()->translatedFormat('l، d F Y') }}</p>
+            <div class="flex items-center gap-3">
+                <div class="md:hidden w-8 h-8 rounded-lg overflow-hidden shadow shrink-0 border border-slate-200 dark:border-white/10 bg-white">
+                    <img src="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" alt="Clinora Logo" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h1 class="text-lg font-black text-slate-900 dark:text-white leading-none">{{ $title ?? 'الإدارة العليا' }}</h1>
+                    <p class="text-xs text-slate-500 mt-0.5">{{ now()->translatedFormat('l، d F Y') }}</p>
+                </div>
             </div>
             <div class="flex items-center gap-2">
                 {{-- Theme Toggle Button --}}
