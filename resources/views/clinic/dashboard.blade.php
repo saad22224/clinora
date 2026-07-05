@@ -15,7 +15,7 @@
                 {{ $clinic->name }}
             </h2>
             <p class="text-emerald-100 text-sm max-w-xl leading-relaxed">
-                اعرض هذا الباركود في استقبال العيادة أو اطبعه ليتمكن مرضاك من مسحه بهواتفهم والدخول لصفحة العيادة وحجز مواعيدهم وإدارة ملفاتهم الطبية مباشرة.
+                اعرض هذا الباركود في استقبال العيادة أو اطبعه ليتمكن مرضاك من مسحه بهواتفهم والدخول لصفحة العيادة وحجز مواعيدهم 
             </p>
             <div class="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
                 <button onclick="printClinicQR()" type="button"

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ClinicController;
 use App\Http\Controllers\Admin\MarketerController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\WhatsAppController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Clinic\AppointmentController;
 use App\Http\Controllers\Clinic\BillingController;
 use App\Http\Controllers\Clinic\DashboardController;
 use App\Http\Controllers\Clinic\MedicalFileController;
+use App\Http\Controllers\Clinic\NotificationController as ClinicNotificationController;
 use App\Http\Controllers\Clinic\PatientAIChatController;
 use App\Http\Controllers\Clinic\PatientController;
 use App\Http\Controllers\Clinic\PatientDiagnosisController;
@@ -147,6 +149,11 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
         Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
         Route::put('/staff/{user}', [StaffController::class, 'update'])->name('staff.update');
         Route::delete('/staff/{user}', [StaffController::class, 'destroy'])->name('staff.destroy');
+
+        // Notifications
+        Route::get('/notifications', [ClinicNotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/notifications/mark-all-read', [ClinicNotificationController::class, 'markAllRead'])->name('notifications.mark-all-read');
+        Route::post('/notifications/{notification}/read', [ClinicNotificationController::class, 'markRead'])->name('notifications.read');
     });
 
 // ==========================================
@@ -203,4 +210,9 @@ Route::middleware(['auth'])
         Route::get('/whatsapp/status', [WhatsAppController::class, 'status'])->name('whatsapp.status');
         Route::post('/whatsapp/logout', [WhatsAppController::class, 'logout'])->name('whatsapp.logout');
         Route::post('/whatsapp/test', [WhatsAppController::class, 'sendTest'])->name('whatsapp.test');
+
+        // Notifications
+        Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/notifications', [AdminNotificationController::class, 'store'])->name('notifications.store');
+        Route::delete('/notifications/{notification}', [AdminNotificationController::class, 'destroy'])->name('notifications.destroy');
     });

@@ -73,10 +73,10 @@
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">الإدارة والمالية</p>
             @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_billing'))
-                <x-clinic.nav-item route="clinic.billing.index" icon="credit-card" label="الفواتير" />
+                {{-- <x-clinic.nav-item route="clinic.billing.index" icon="credit-card" label="الفواتير" /> --}}
             @endif
             @if(Auth::user()->role !== 'secretary')
-                <x-clinic.nav-item route="clinic.reports.index" icon="chart-bar" label="التقارير" />
+                {{-- <x-clinic.nav-item route="clinic.reports.index" icon="chart-bar" label="التقارير" /> --}}
                 <x-clinic.nav-item route="clinic.staff.index" icon="user-group" label="فريق العمل" />
             @endif
 
@@ -109,7 +109,11 @@
     <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
 
         {{-- Topbar --}}
-        <header class="h-[68px] bg-white/90 dark:bg-[#0F0F14]/90 backdrop-blur-xl border-b border-gray-100 dark:border-white/[0.06] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
+        @php
+            $unreadNotifications = Auth::user()?->clinic ? \App\Models\ClinicNotification::where('clinic_id', Auth::user()->clinic->id)->where('is_read', false)->latest()->get() : collect();
+            $unreadCount = $unreadNotifications->count();
+        @endphp
+        <header class="h-[68px] bg-white/90 dark:bg-[#0F0F14]/90 backdrop-blur-xl border-b border-gray-100 dark:border-white/[0.06] flex items-center justify-between px-4 sm:px-6 z-[999] shrink-0 relative">
             <div class="flex items-center gap-3">
                 <button id="sidebar-toggle" class="md:hidden p-2 rounded-xl text-gray-500 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -139,11 +143,98 @@
                 </a>
                 @endif
 
-                {{-- Notifications placeholder --}}
-                <button class="relative p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                    <span class="absolute top-2 right-2 block h-1.5 w-1.5 rounded-full bg-red-500 ring-1 ring-white dark:ring-[#0A0A0F]"></span>
-                </button>
+                {{-- Notifications Dropdown (Vanilla JS) --}}
+                <div class="relative" id="notif-container">
+                    <button id="notif-toggle-btn" type="button" title="الإشعارات والتنبيهات" class="relative p-2.5 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                        @if($unreadCount > 0)
+                            <span class="absolute top-1.5 right-1.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-500 text-[8px] font-black text-white ring-2 ring-white dark:ring-[#0F0F14] animate-pulse">
+                                {{ $unreadCount > 9 ? '9+' : $unreadCount }}
+                            </span>
+                        @endif
+                    </button>
+
+                    {{-- Dropdown Menu --}}
+                    <div id="notif-dropdown-menu" 
+                         class="hidden absolute left-0 mt-2 w-80 sm:w-96 bg-white dark:bg-[#141420] rounded-2xl shadow-2xl border border-gray-100 dark:border-white/[0.08] z-[9999] overflow-hidden transition-all">
+                        
+                        <div class="p-3.5 bg-gray-50 dark:bg-white/[0.02] border-b border-gray-100 dark:border-white/[0.06] flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-black text-gray-900 dark:text-white">إشعارات المنصة</span>
+                                @if($unreadCount > 0)
+                                    <span class="px-2 py-0.5 rounded-full bg-red-500/10 text-red-500 dark:text-red-400 font-bold text-[10px]">{{ $unreadCount }} جديد</span>
+                                @endif
+                            </div>
+                            @if($unreadCount > 0)
+                                <form method="POST" action="{{ route('clinic.notifications.mark-all-read') }}">
+                                    @csrf
+                                    <button type="submit" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                                        تحديد الكل كمقروء ✔️
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+
+                        <div class="max-h-80 overflow-y-auto divide-y divide-gray-100 dark:divide-white/[0.04]">
+                            @if($unreadCount === 0)
+                                <div class="p-8 text-center">
+                                    <div class="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-white/5 flex items-center justify-center mx-auto mb-3 text-gray-400">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                                    </div>
+                                    <p class="text-xs font-bold text-gray-700 dark:text-gray-300">لا توجد إشعارات غير مقروءة</p>
+                                    <p class="text-[10px] text-gray-400 mt-0.5">أنت على علم بكل التحديثات والتنبيهات.</p>
+                                </div>
+                            @else
+                                @foreach($unreadNotifications as $notif)
+                                    <div class="p-3.5 hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors flex gap-3 items-start relative group">
+                                        <div class="shrink-0 mt-0.5">
+                                            @switch($notif->type)
+                                                @case('success')
+                                                    <div class="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 dark:text-emerald-400">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                                    </div>
+                                                    @break
+                                                @case('warning')
+                                                    <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 dark:text-amber-400">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                                    </div>
+                                                    @break
+                                                @case('danger')
+                                                    <div class="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500 dark:text-red-400">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                    </div>
+                                                    @break
+                                                @default
+                                                    <div class="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500 dark:text-blue-400">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                    </div>
+                                            @endswitch
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between gap-2 mb-1">
+                                                <h4 class="text-xs font-bold text-gray-900 dark:text-white truncate">{{ $notif->title }}</h4>
+                                                <span class="text-[10px] text-gray-400 shrink-0">{{ $notif->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed break-words">{{ $notif->message }}</p>
+                                        </div>
+                                        <form method="POST" action="{{ route('clinic.notifications.read', $notif->id) }}" class="shrink-0 self-center">
+                                            @csrf
+                                            <button type="submit" title="تحديد كمقروء وإخفاء" class="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+
+                        <div class="p-2.5 bg-gray-50 dark:bg-white/[0.02] border-t border-gray-100 dark:border-white/[0.06] text-center">
+                            <a href="{{ route('clinic.notifications.index') }}" class="text-xs font-bold text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors block py-1">
+                                عرض صفحة جميع التنبيهات ←
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -156,5 +247,24 @@
     </div>
 
     @stack('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifBtn = document.getElementById('notif-toggle-btn');
+            const notifMenu = document.getElementById('notif-dropdown-menu');
+
+            if (notifBtn && notifMenu) {
+                notifBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notifMenu.classList.toggle('hidden');
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!notifMenu.contains(e.target) && !notifBtn.contains(e.target)) {
+                        notifMenu.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

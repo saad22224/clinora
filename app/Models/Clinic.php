@@ -83,4 +83,9 @@ class Clinic extends Model
     {
         return $this->belongsTo(Marketer::class);
     }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(ClinicNotification::class);
+    }
 }
