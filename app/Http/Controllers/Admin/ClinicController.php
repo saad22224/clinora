@@ -92,4 +92,33 @@ class ClinicController extends Controller
         return redirect()->route('admin.clinics.index')
             ->with('success', 'تم حذف العيادة بنجاح.');
     }
+
+    public function impersonate(Clinic $clinic)
+    {
+        $user = $clinic->users()->first();
+        if (! $user) {
+            return back()->withErrors(['error' => 'لا يوجد مستخدم مرتبط بهذه العيادة.']);
+        }
+
+        session(['superadmin_impersonator_id' => auth()->id()]);
+        auth()->login($user);
+
+        return redirect()->route('clinic.dashboard')->with('success', 'تم الدخول إلى لوحة تحكم عيادة: '.$clinic->name);
+    }
+
+    public function leaveImpersonation()
+    {
+        $adminId = session('superadmin_impersonator_id');
+        if ($adminId) {
+            $admin = User::find($adminId);
+            if ($admin && $admin->role === 'superadmin') {
+                auth()->login($admin);
+                session()->forget('superadmin_impersonator_id');
+
+                return redirect()->route('admin.clinics.index')->with('success', 'تم العودة إلى لوحة السوبر أدمن بنجاح.');
+            }
+        }
+
+        return redirect()->route('login');
+    }
 }

@@ -74,6 +74,8 @@ Route::middleware('auth')->group(function () {
 
         return redirect()->route('clinic.dashboard');
     })->name('dashboard');
+
+    Route::get('/leave-impersonation', [ClinicController::class, 'leaveImpersonation'])->name('impersonate.leave');
 });
 
 // Subscription expired fallback
@@ -168,6 +170,7 @@ Route::middleware(['auth'])
         // Clinics CRUD
         Route::get('/clinics', [ClinicController::class, 'index'])->name('clinics.index');
         Route::post('/clinics', [ClinicController::class, 'store'])->name('clinics.store');
+        Route::get('/clinics/{clinic}/impersonate', [ClinicController::class, 'impersonate'])->name('clinics.impersonate');
         Route::patch('/clinics/{clinic}/toggle', [ClinicController::class, 'toggle'])->name('clinics.toggle');
         Route::delete('/clinics/{clinic}', [ClinicController::class, 'destroy'])->name('clinics.destroy');
 

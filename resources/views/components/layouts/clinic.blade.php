@@ -107,6 +107,17 @@
 
     {{-- ══════ MAIN CONTENT ══════ --}}
     <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+        @if(session('superadmin_impersonator_id'))
+            <div class="bg-amber-500 text-slate-950 px-4 py-2.5 text-xs font-black flex items-center justify-between gap-4 shadow-md z-[1000] shrink-0">
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 shrink-0 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    <span>أنت تتصفح حالياً لوحة تحكم عيادة: <strong class="underline">{{ Auth::user()->clinic->name ?? '' }}</strong> بصلاحية السوبر أدمن</span>
+                </div>
+                <a href="{{ route('impersonate.leave') }}" class="px-3.5 py-1.5 bg-slate-950 text-amber-400 hover:bg-slate-900 rounded-xl text-xs font-bold transition-all shadow-sm shrink-0 flex items-center gap-1.5">
+                    <span>⬅️ العودة لسوبر أدمن</span>
+                </a>
+            </div>
+        @endif
 
         {{-- Topbar --}}
         @php
