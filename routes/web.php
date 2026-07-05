@@ -164,6 +164,7 @@ Route::middleware(['auth'])
 
         // Marketers CRUD
         Route::get('/marketers', [MarketerController::class, 'index'])->name('marketers.index');
+        Route::get('/marketers/{marketer}', [MarketerController::class, 'show'])->name('marketers.show');
         Route::post('/marketers', [MarketerController::class, 'store'])->name('marketers.store');
         Route::put('/marketers/{marketer}', [MarketerController::class, 'update'])->name('marketers.update');
         Route::delete('/marketers/{marketer}', [MarketerController::class, 'destroy'])->name('marketers.destroy');

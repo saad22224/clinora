@@ -6,14 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\Marketer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class MarketerController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $marketers = Marketer::withCount('clinics')->latest()->get();
 
         return view('admin.marketers', compact('marketers'));
+    }
+
+    public function show(Marketer $marketer): View
+    {
+        $clinics = $marketer->clinics()->with(['users', 'subscription'])->latest()->paginate(15);
+
+        return view('admin.marketer-clinics', compact('marketer', 'clinics'));
     }
 
     public function store(Request $request)

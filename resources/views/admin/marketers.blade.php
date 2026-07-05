@@ -60,7 +60,7 @@
     </div>
 
     {{-- Main Table Container --}}
-    <div x-data="{ showCreateModal: false, showEditModal: false, editMarketer: {} }" class="bg-[#0f1115] border border-white/5 rounded-3xl shadow-xl overflow-hidden">
+    <div class="bg-[#0f1115] border border-white/5 rounded-3xl shadow-xl overflow-hidden">
         
         {{-- Header --}}
         <div class="px-6 py-5 border-b border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -68,7 +68,7 @@
                 <h3 class="text-lg font-black text-white">قائمة المسوقين وشركاء النجاح</h3>
                 <p class="text-xs text-slate-400 mt-0.5">قم بإضافة المسوقين وتتبع العيادات التي تم تسجيلها من خلال روابط الإحالة الخاصة بهم.</p>
             </div>
-            <button @click="showCreateModal = true" type="button" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-sm font-bold shadow-lg shadow-indigo-600/30 transition-all active:scale-95">
+            <button onclick="openCreateModal()" type="button" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-sm font-bold shadow-lg shadow-indigo-600/30 transition-all active:scale-95">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 إضافة مسوق جديد
             </button>
@@ -111,24 +111,25 @@
                                     @endif
                                 </div>
                             </td>
-                            <td class="py-4 px-6" x-data="{ copied: false }">
+                            <td class="py-4 px-6">
                                 <div class="flex items-center gap-2">
                                     <span class="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-mono font-bold text-xs">
                                         {{ $marketer->referral_code }}
                                     </span>
-                                    <button @click="navigator.clipboard.writeText('{{ url('/register?ref=' . $marketer->referral_code) }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                                    <button onclick="copyReferralLink(this, '{{ url('/register?ref=' . $marketer->referral_code) }}')"
                                         type="button" title="نسخ رابط الإحالة"
                                         class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 text-xs transition-colors">
-                                        <svg x-show="!copied" class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                        <svg x-show="copied" x-cloak class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                        <span x-text="copied ? 'تم النسخ!' : 'نسخ الرابط'"></span>
+                                        <svg class="default-icon w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                        <svg class="copied-icon hidden w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                        <span class="btn-text">نسخ الرابط</span>
                                     </button>
                                 </div>
                             </td>
                             <td class="py-4 px-6 text-center">
-                                <span class="inline-flex items-center justify-center min-w-[32px] px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 font-black text-xs">
-                                    {{ $marketer->clinics_count }}
-                                </span>
+                                <a href="{{ route('admin.marketers.show', $marketer->id) }}" title="عرض العيادات المحالة وتفاصيلها" class="inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 font-black text-xs border border-amber-500/20 hover:border-amber-500/40 transition-all hover:scale-105 shadow-sm group/link">
+                                    <span>{{ $marketer->clinics_count }}</span>
+                                    <span class="text-[10px] font-normal opacity-70 group-hover/link:opacity-100 transition-opacity">(عرض التفاصيل)</span>
+                                </a>
                             </td>
                             <td class="py-4 px-6">
                                 @if($marketer->is_active)
@@ -145,7 +146,7 @@
                             </td>
                             <td class="py-4 px-6 text-left">
                                 <div class="flex items-center justify-end gap-2">
-                                    <button @click="editMarketer = {{ json_encode($marketer) }}; showEditModal = true" type="button" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition-colors" title="تعديل">
+                                    <button onclick="openEditModal({{ json_encode($marketer) }})" type="button" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition-colors" title="تعديل">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                     </button>
                                     <form action="{{ route('admin.marketers.destroy', $marketer->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا المسوق؟');">
@@ -174,13 +175,11 @@
         </div>
 
         {{-- Create Marketer Modal --}}
-        <div x-show="showCreateModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-            <div @click.away="showCreateModal = false" class="bg-[#14171f] border border-white/10 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
+        <div id="createModal" onclick="closeCreateModal()" class="hidden fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-200">
+            <div onclick="event.stopPropagation()" class="bg-[#14171f] border border-white/10 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
                 <div class="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
                     <h3 class="text-lg font-black text-white">إضافة مسوق جديد</h3>
-                    <button @click="showCreateModal = false" type="button" class="text-slate-400 hover:text-white transition-colors">
+                    <button onclick="closeCreateModal()" type="button" class="text-slate-400 hover:text-white transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
@@ -209,7 +208,7 @@
                         <textarea name="notes" rows="2" placeholder="أية تفاصيل إضافية أو نسبة الاتفاق..." class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-indigo-500"></textarea>
                     </div>
                     <div class="pt-4 flex items-center justify-end gap-3">
-                        <button @click="showCreateModal = false" type="button" class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-sm transition-colors">إلغاء</button>
+                        <button onclick="closeCreateModal()" type="button" class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-sm transition-colors">إلغاء</button>
                         <button type="submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition-all">حفظ وإصدار الرابط</button>
                     </div>
                 </form>
@@ -217,50 +216,48 @@
         </div>
 
         {{-- Edit Marketer Modal --}}
-        <div x-show="showEditModal" x-cloak class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
-            x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-            <div @click.away="showEditModal = false" class="bg-[#14171f] border border-white/10 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
+        <div id="editModal" onclick="closeEditModal()" class="hidden fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-200">
+            <div onclick="event.stopPropagation()" class="bg-[#14171f] border border-white/10 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative">
                 <div class="flex items-center justify-between pb-4 mb-6 border-b border-white/10">
                     <h3 class="text-lg font-black text-white">تعديل بيانات المسوق</h3>
-                    <button @click="showEditModal = false" type="button" class="text-slate-400 hover:text-white transition-colors">
+                    <button onclick="closeEditModal()" type="button" class="text-slate-400 hover:text-white transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
-                <form :action="'{{ url('admin/marketers') }}/' + editMarketer.id" method="POST" class="space-y-4">
+                <form id="editMarketerForm" action="" method="POST" class="space-y-4">
                     @csrf
                     @method('PUT')
                     <div>
                         <label class="block text-xs font-bold text-slate-300 mb-1.5">اسم المسوق <span class="text-rose-500">*</span></label>
-                        <input type="text" name="name" x-model="editMarketer.name" required class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500">
+                        <input type="text" id="edit_name" name="name" required class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500">
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-300 mb-1.5">رقم الهاتف</label>
-                            <input type="text" name="phone" x-model="editMarketer.phone" dir="ltr" class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white text-right text-sm focus:outline-none focus:border-indigo-500">
+                            <input type="text" id="edit_phone" name="phone" dir="ltr" class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white text-right text-sm focus:outline-none focus:border-indigo-500">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-300 mb-1.5">البريد الإلكتروني</label>
-                            <input type="email" name="email" x-model="editMarketer.email" dir="ltr" class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white text-right text-sm focus:outline-none focus:border-indigo-500">
+                            <input type="email" id="edit_email" name="email" dir="ltr" class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white text-right text-sm focus:outline-none focus:border-indigo-500">
                         </div>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-300 mb-1.5">كود الإحالة</label>
-                        <input type="text" name="referral_code" x-model="editMarketer.referral_code" required dir="ltr" class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-indigo-300 uppercase font-mono text-right text-sm focus:outline-none focus:border-indigo-500">
+                        <input type="text" id="edit_referral_code" name="referral_code" required dir="ltr" class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-indigo-300 uppercase font-mono text-right text-sm focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-300 mb-1.5">حالة المسوق</label>
-                        <select name="is_active" :value="editMarketer.is_active ? 1 : 0" class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500">
+                        <select id="edit_is_active" name="is_active" class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500">
                             <option value="1">نشط</option>
                             <option value="0">غير نشط</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-300 mb-1.5">ملاحظات المسوق</label>
-                        <textarea name="notes" x-model="editMarketer.notes" rows="2" class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500"></textarea>
+                        <textarea id="edit_notes" name="notes" rows="2" class="w-full px-4 py-2.5 rounded-xl bg-black/40 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500"></textarea>
                     </div>
                     <div class="pt-4 flex items-center justify-end gap-3">
-                        <button @click="showEditModal = false" type="button" class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-sm transition-colors">إلغاء</button>
+                        <button onclick="closeEditModal()" type="button" class="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-sm transition-colors">إلغاء</button>
                         <button type="submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition-all">حفظ التغييرات</button>
                     </div>
                 </form>
@@ -268,4 +265,83 @@
         </div>
 
     </div>
+
+    <script>
+        function openCreateModal() {
+            const modal = document.getElementById('createModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeCreateModal() {
+            const modal = document.getElementById('createModal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function openEditModal(marketer) {
+            const modal = document.getElementById('editModal');
+            const form = document.getElementById('editMarketerForm');
+            
+            if (form && marketer) {
+                form.action = "{{ url('admin/marketers') }}/" + marketer.id;
+                
+                const nameInput = document.getElementById('edit_name');
+                const phoneInput = document.getElementById('edit_phone');
+                const emailInput = document.getElementById('edit_email');
+                const referralCodeInput = document.getElementById('edit_referral_code');
+                const isActiveSelect = document.getElementById('edit_is_active');
+                const notesInput = document.getElementById('edit_notes');
+
+                if (nameInput) nameInput.value = marketer.name || '';
+                if (phoneInput) phoneInput.value = marketer.phone || '';
+                if (emailInput) emailInput.value = marketer.email || '';
+                if (referralCodeInput) referralCodeInput.value = marketer.referral_code || '';
+                if (isActiveSelect) isActiveSelect.value = marketer.is_active ? '1' : '0';
+                if (notesInput) notesInput.value = marketer.notes || '';
+            }
+
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editModal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function copyReferralLink(btn, url) {
+            navigator.clipboard.writeText(url).then(() => {
+                const defaultIcon = btn.querySelector('.default-icon');
+                const copiedIcon = btn.querySelector('.copied-icon');
+                const textSpan = btn.querySelector('.btn-text');
+                
+                if (defaultIcon && copiedIcon && textSpan) {
+                    defaultIcon.classList.add('hidden');
+                    copiedIcon.classList.remove('hidden');
+                    textSpan.textContent = 'تم النسخ!';
+                    
+                    setTimeout(() => {
+                        defaultIcon.classList.remove('hidden');
+                        copiedIcon.classList.add('hidden');
+                        textSpan.textContent = 'نسخ الرابط';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeCreateModal();
+                closeEditModal();
+            }
+        });
+    </script>
 </x-layouts.admin>
