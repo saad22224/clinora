@@ -673,7 +673,7 @@
             </div>
             <div class="mt-16 pt-8 border-t border-outline/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-semibold text-on-surface-variant">
                 <p>© {{ date('Y') }} {{ $clinic->name }}. جميع الحقوق محفوظة.</p>
-                <p>مدعوم بواسطة <span class="text-primary font-bold">Clinora</span></p>
+                <p class="flex items-center gap-1.5">مدعوم بواسطة <a href="{{ route('home') }}" class="text-primary font-extrabold hover:underline inline-flex items-center gap-1"><img src="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" class="w-5 h-5 object-contain rounded" alt="شعار كلينورا"> Clinora</a></p>
             </div>
         </div>
     </footer>

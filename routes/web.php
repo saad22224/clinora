@@ -37,13 +37,13 @@ Route::get('/', function (Request $request) {
     return view('pages.landing');
 })->name('home');
 Route::get('/pricing', function () {
-    return view('pages.pricing');
+    return redirect()->to(url('/#pricing'));
 })->name('pricing');
 Route::get('/about', function () {
-    return view('pages.about');
+    return redirect()->to(url('/#about'));
 })->name('about');
 Route::get('/contact', function () {
-    return view('pages.contact');
+    return redirect()->to(url('/#contact'));
 })->name('contact');
 Route::get('/privacy', function () {
     return view('pages.privacy');
