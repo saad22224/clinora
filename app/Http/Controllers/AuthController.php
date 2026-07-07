@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clinic;
 use App\Models\Marketer;
+use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Services\WhatsAppService;
@@ -95,11 +96,13 @@ class AuthController extends Controller
         );
 
         // Create Free Subscription
+        $freePlan = Plan::where('name', 'free plan')->orWhere('price', 0)->first();
         Subscription::create([
             'clinic_id' => $clinic->id,
-            'plan' => 'free',
+            'plan_id' => $freePlan?->id,
+            'plan' => $freePlan?->name ?? 'free plan',
             'starts_at' => now(),
-            'ends_at' => now()->addDays(14), // 14 days trial
+            'ends_at' => $freePlan ? now()->addDays($freePlan->duration_in_days) : now()->addDays(30),
             'is_active' => true,
         ]);
 
@@ -107,6 +110,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'clinic_id' => $clinic->id,
             'role' => 'owner',

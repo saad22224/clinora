@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Subscription;
+use App\Services\SubscriptionService;
 use Illuminate\Console\Command;
 
 class CheckSubscriptions extends Command
@@ -19,17 +19,15 @@ class CheckSubscriptions extends Command
      *
      * @var string
      */
-    protected $description = 'Check and expire subscriptions that have passed their end date.';
+    protected $description = 'Check and expire subscriptions that have passed their end date or whose plans are inactive.';
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(SubscriptionService $subscriptionService): void
     {
-        $expiredCount = Subscription::where('is_active', true)
-            ->where('ends_at', '<', now())
-            ->update(['is_active' => false]);
+        $expiredCount = $subscriptionService->processExpirations();
 
-        $this->info("Checked subscriptions. Expired $expiredCount subscriptions.");
+        $this->info("Checked subscriptions. Expired {$expiredCount} subscriptions.");
     }
 }

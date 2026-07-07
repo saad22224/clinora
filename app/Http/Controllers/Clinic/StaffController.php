@@ -66,6 +66,7 @@ class StaffController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone' => ['nullable', 'string', 'max:30'],
             'password' => ['required', 'string', 'min:8'],
             'job_title' => ['nullable', 'string', 'max:100'],
             'permissions' => ['nullable', 'array'],
@@ -75,6 +76,7 @@ class StaffController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
             'password' => Hash::make($validated['password']),
             'clinic_id' => $currentUser->clinic_id,
             'role' => 'secretary',
@@ -98,6 +100,7 @@ class StaffController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'phone' => ['nullable', 'string', 'max:30'],
             'password' => ['nullable', 'string', 'min:8'],
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['string'],
@@ -106,6 +109,7 @@ class StaffController extends Controller
         $data = [
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'phone' => $validated['phone'] ?? null,
         ];
 
         if (! empty($validated['password'])) {

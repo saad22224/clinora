@@ -15,22 +15,43 @@ class SubscriptionService
 
         $subscription = Auth::user()->clinic->subscription;
 
-        if (! $subscription) {
+        if (! $subscription || ! $subscription->is_active) {
             return false;
         }
 
-        return $subscription->is_active && ($subscription->ends_at === null || $subscription->ends_at->isFuture());
+        if ($subscription->ends_at && $subscription->ends_at->endOfDay()->isPast()) {
+            return false;
+        }
+
+        if ($subscription->plan_id && (! $subscription->plan || ! $subscription->plan->is_active)) {
+            return false;
+        }
+
+        return true;
     }
 
-    public function processExpirations(): void
+    public function processExpirations(): int
     {
-        Subscription::where('ends_at', '<', now())
-            ->where('is_active', true)
-            ->chunkById(100, function ($subscriptions) {
-                foreach ($subscriptions as $subscription) {
-                    $subscription->update(['is_active' => false]);
-                    // Dispatch SubscriptionExpired event here
-                }
-            });
+        $activeSubscriptions = Subscription::with('plan')->where('is_active', true)->get();
+        $expiredCount = 0;
+
+        foreach ($activeSubscriptions as $subscription) {
+            $isExpired = false;
+
+            if ($subscription->ends_at && $subscription->ends_at->endOfDay()->isPast()) {
+                $isExpired = true;
+            }
+
+            if ($subscription->plan_id && (! $subscription->plan || ! $subscription->plan->is_active)) {
+                $isExpired = true;
+            }
+
+            if ($isExpired) {
+                $subscription->update(['is_active' => false]);
+                $expiredCount++;
+            }
+        }
+
+        return $expiredCount;
     }
 }

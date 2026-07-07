@@ -28,7 +28,7 @@
             <form class="mt-8 space-y-6" action="{{ route('password.whatsapp.send') }}" method="POST">
                 @csrf
                 <div>
-                    <label for="login_input" class="block text-sm font-extrabold text-gray-700 dark:text-gray-300 mb-2">البريد الإلكتروني أو رقم هاتف العيادة</label>
+                    <label for="login_input" class="block text-sm font-extrabold text-gray-700 dark:text-gray-300 mb-2">البريد الإلكتروني أو رقم الواتساب المسجل</label>
                     <div class="relative">
                         <input id="login_input" name="login_input" type="text" value="{{ old('login_input') }}" required dir="ltr" autofocus
                                class="appearance-none block w-full px-4 py-3.5 border border-gray-300 dark:border-gray-700 rounded-2xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-base dark:bg-gray-900/90 dark:text-white text-right font-medium transition-all" 

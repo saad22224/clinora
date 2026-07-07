@@ -28,11 +28,11 @@ class PasswordResetController extends Controller
         $request->validate([
             'login_input' => ['required', 'string'],
         ], [
-            'login_input.required' => 'يرجى إدخال البريد الإلكتروني أو رقم هاتف العيادة.',
+            'login_input.required' => 'يرجى إدخال البريد الإلكتروني أو رقم الواتساب.',
         ]);
 
         $input = trim($request->input('login_input'));
-        $user = User::where('email', $input)->first();
+        $user = User::where('email', $input)->orWhere('phone', $input)->first();
 
         if (! $user) {
             $clinic = Clinic::where('phone', $input)->first();
@@ -41,9 +41,11 @@ class PasswordResetController extends Controller
             }
         }
 
-        if (! $user || ! $user->clinic || empty($user->clinic->phone)) {
+        $targetPhone = $user?->phone ?: ($user?->clinic?->phone ?: null);
+
+        if (! $user || empty($targetPhone)) {
             return back()->withErrors([
-                'login_input' => 'لم يتم العثور على حساب مرتبط بهذا البريد الإلكتروني أو رقم هاتف العيادة.',
+                'login_input' => 'لم يتم العثور على حساب أو رقم هاتف واتساب مرتبط بهذا الحساب أو بالعيادة.',
             ])->onlyInput('login_input');
         }
 
@@ -51,13 +53,13 @@ class PasswordResetController extends Controller
         session([
             'password_reset_user_id' => $user->id,
             'password_reset_otp' => $otp,
-            'password_reset_phone' => $user->clinic->phone,
+            'password_reset_phone' => $targetPhone,
             'password_reset_otp_verified' => false,
         ]);
 
         app(WhatsAppService::class)->sendMessage(
-            $user->clinic->phone,
-            "مرحباً دكتور {$user->name} 🏥\nكود التحقق (OTP) الخاص بإعادة تعيين كلمة المرور في منصة Clinora هو: *{$otp}*\nيرجى عدم مشاركة هذا الكود مع أي شخص."
+            $targetPhone,
+            "مرحباً {$user->name} 🏥\nكود التحقق (OTP) الخاص بإعادة تعيين كلمة المرور في منصة Clinora هو: *{$otp}*\nيرجى عدم مشاركة هذا الكود مع أي شخص."
         );
 
         return redirect()->route('password.whatsapp.verify.form');

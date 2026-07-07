@@ -53,6 +53,9 @@
                             <div class="min-w-0 flex-1">
                                 <h3 class="font-black text-base text-gray-900 dark:text-white truncate">{{ $member->name }}</h3>
                                 <p class="text-xs text-gray-400 truncate">{{ $member->email }}</p>
+                                @if($member->phone)
+                                <p class="text-[11px] font-bold text-brand-600 dark:text-brand-400 mt-0.5 dir-ltr text-right">📱 {{ $member->phone }}</p>
+                                @endif
                                 <span class="inline-block mt-1 px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-white/5 text-[10px] font-bold text-gray-600 dark:text-gray-300">
                                     أضيف {{ $member->created_at->diffForHumans() }}
                                 </span>
@@ -123,6 +126,11 @@
                             </div>
 
                             <div>
+                                <label class="block text-xs font-black text-gray-700 dark:text-gray-300 mb-1.5">رقم الواتساب ( لاستعادة كلمة المرور )</label>
+                                <input type="text" name="phone" value="{{ $member->phone }}" dir="ltr" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-brand-500 text-sm font-bold text-gray-900 dark:text-white text-left" placeholder="010XXXXXXXX">
+                            </div>
+
+                            <div>
                                 <label class="block text-xs font-black text-gray-700 dark:text-gray-300 mb-1.5">تغيير كلمة المرور (اتركه فارغاً للاحتفاظ بكلمة المرور الحالية)</label>
                                 <input type="password" name="password" minlength="8" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-brand-500 text-sm font-bold text-gray-900 dark:text-white" placeholder="••••••••">
                             </div>
@@ -188,6 +196,11 @@
                             <label class="block text-xs font-black text-gray-700 dark:text-gray-300 mb-1.5">البريد الإلكتروني للدخول *</label>
                             <input type="email" name="email" value="{{ old('email') }}" required class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-brand-500 text-sm font-bold text-gray-900 dark:text-white text-left dir-ltr" placeholder="secretary@clinic.com">
                         </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-black text-gray-700 dark:text-gray-300 mb-1.5">رقم الواتساب ( لاستعادة كلمة المرور )</label>
+                        <input type="text" name="phone" value="{{ old('phone') }}" dir="ltr" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-brand-500 text-sm font-bold text-gray-900 dark:text-white text-left" placeholder="010XXXXXXXX">
                     </div>
 
                     <div>

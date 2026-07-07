@@ -26,4 +26,9 @@ class Subscription extends Model
     {
         return $this->belongsTo(Clinic::class);
     }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(Plan::class);
+    }
 }

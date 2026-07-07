@@ -13,7 +13,7 @@ class PlanSeeder extends Seeder
     public function run(): void
     {
         Plan::create([
-            'name' => 'الباقة المجانية الأساسية',
+            'name' => 'free plan',
             'price' => 0.00,
             'duration_in_days' => 30,
             'features' => [
