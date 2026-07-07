@@ -70,7 +70,7 @@ class PatientController extends Controller
 
         $patient->update($validated);
 
-        return redirect()->route('clinic.patients.index')
+        return redirect()->back()
             ->with('success', 'تم تحديث بيانات المريض بنجاح!');
     }
 

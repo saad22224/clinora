@@ -61,8 +61,14 @@
                 </div>
             </div>
 
-            {{-- Stats --}}
+            {{-- Stats & Actions --}}
             <div class="flex items-center gap-3">
+                <button type="button" data-modal-open="modal-edit-patient-{{ $patient->id }}"
+                        class="px-4 py-3 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs backdrop-blur-sm transition-all flex items-center gap-1.5 shadow-sm hover:shadow cursor-pointer"
+                        title="تعديل بيانات المريض">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <span>تعديل البيانات</span>
+                </button>
                 <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 text-center">
                     <p class="text-2xl font-black text-white">{{ $patient->medicalFiles->count() }}</p>
                     <p class="text-xs text-white/60 mt-0.5">ملف طبي</p>
@@ -141,8 +147,8 @@
                             <p class="text-xs text-gray-400">{{ $patient->medicalFiles->count() }} ملف مرفوع</p>
                         </div>
                     </div>
-                    <a href="{{ route('clinic.records.index') }}"
-                       class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">رفع ملف جديد ←</a>
+                    <button type="button" data-modal-open="modal-add-record"
+                       class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline cursor-pointer">رفع ملف جديد ←</button>
                 </div>
 
                 @if($patient->medicalFiles->isEmpty())
@@ -161,10 +167,9 @@
                                 $isPdf = $ext === 'pdf';
                                 $fileUrl = \Illuminate\Support\Facades\Storage::url($file->file_path);
                             @endphp
-                            <a href="{{ $fileUrl }}" target="_blank"
-                               class="group relative bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] rounded-xl overflow-hidden hover:border-brand-400/50 dark:hover:border-brand-500/30 hover:shadow-md transition-all">
+                            <div class="group relative bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] rounded-xl overflow-hidden hover:border-brand-400/50 dark:hover:border-brand-500/30 hover:shadow-md transition-all flex flex-col">
                                 {{-- Preview --}}
-                                <div class="h-28 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-50 dark:from-white/5 dark:to-transparent overflow-hidden">
+                                <a href="{{ $fileUrl }}" target="_blank" class="h-28 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-50 dark:from-white/5 dark:to-transparent overflow-hidden block">
                                     @if($isImage)
                                         <img src="{{ $fileUrl }}" alt="{{ $file->type }}" class="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     @elseif($isPdf)
@@ -172,19 +177,28 @@
                                     @else
                                         <svg class="w-10 h-10 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                     @endif
+                                </a>
+                                {{-- Info & Actions --}}
+                                <div class="p-3 flex items-center justify-between gap-2 bg-white/50 dark:bg-black/20">
+                                    <div class="min-w-0">
+                                        <p class="font-bold text-xs text-gray-800 dark:text-gray-200 truncate">{{ $file->type }}</p>
+                                        <p class="text-[10px] text-gray-400 mt-0.5">{{ $file->created_at->format('Y/m/d') }}</p>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 shrink-0">
+                                        <a href="{{ $fileUrl }}" target="_blank" title="عرض / تنزيل"
+                                           class="p-1.5 rounded-lg bg-brand-50 text-brand-600 hover:bg-brand-100 dark:bg-brand-900/30 dark:text-brand-400 dark:hover:bg-brand-900/50 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                        </a>
+                                        <form method="POST" action="{{ route('clinic.records.destroy', $file) }}" data-confirm="هل تريد حذف هذا الملف الطبي؟">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" title="حذف الملف"
+                                                    class="p-1.5 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40 transition-colors">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                                {{-- Info --}}
-                                <div class="p-3">
-                                    <p class="font-bold text-xs text-gray-800 dark:text-gray-200 truncate">{{ $file->type }}</p>
-                                    <p class="text-[10px] text-gray-400 mt-0.5">{{ $file->created_at->format('Y/m/d') }}</p>
-                                </div>
-                                {{-- Hover overlay --}}
-                                <div class="absolute inset-0 bg-brand-600/0 group-hover:bg-brand-600/5 transition-colors flex items-center justify-center">
-                                    <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg">
-                                        <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                                    </span>
-                                </div>
-                            </a>
+                            </div>
                         @endforeach
                     </div>
                 @endif
@@ -423,6 +437,47 @@
     </div>
 
     {{-- ══════════════════════════════════════
+         ADD RECORD / MEDICAL FILE MODAL
+    ════════════════════════════════════════ --}}
+    <div id="modal-add-record" data-modal class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-200">
+        <div data-modal-panel class="bg-white dark:bg-[#0F0F1A] w-full max-w-lg rounded-2xl shadow-2xl border border-gray-100 dark:border-white/10 overflow-hidden scale-95 opacity-0 translate-y-4 transition-all duration-200">
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-white/[0.06] flex justify-between items-center">
+                <div>
+                    <h3 class="font-black text-lg text-gray-900 dark:text-white">رفع سجل طبي جديد</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">للمريض: {{ $patient->name }}</p>
+                </div>
+                <button data-modal-close="modal-add-record" class="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <form method="POST" action="{{ route('clinic.records.store') }}" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="patient_id" value="{{ $patient->id }}">
+                <div class="p-6 space-y-4">
+                    @if($errors->any())
+                        <div class="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700/30 rounded-xl">
+                            @foreach($errors->all() as $error)<p class="text-sm text-red-700 dark:text-red-400">• {{ $error }}</p>@endforeach
+                        </div>
+                    @endif
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">نوع السجل <span class="text-red-500">*</span></label>
+                        <input type="text" name="type" value="{{ old('type') }}" required
+                               class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white"
+                               placeholder="مثال: تحليل دم، أشعة مقطعية...">
+                    </div>
+
+                    <x-clinic.file-camera-upload name="file" :required="true" />
+                </div>
+                <div class="px-6 py-4 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] flex justify-end gap-3">
+                    <button type="button" data-modal-close="modal-add-record" class="px-4 py-2 text-sm font-bold text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">إلغاء</button>
+                    <button type="submit" class="px-6 py-2 text-sm font-bold text-white bg-brand-600 hover:bg-brand-500 rounded-xl transition-all shadow-sm hover:shadow-lg active:scale-95">حفظ الملف</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- ══════════════════════════════════════
          ADD DIAGNOSIS MODAL
     ════════════════════════════════════════ --}}
     <div id="modal-add-diagnosis" data-modal class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-200">
@@ -483,9 +538,143 @@
         </div>
     </div>
 
+    {{-- ══════════════════════════════════════
+         EDIT PATIENT MODAL
+    ════════════════════════════════════════ --}}
+    <div id="modal-edit-patient-{{ $patient->id }}" data-modal class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-200">
+        <div data-modal-panel class="bg-white dark:bg-[#0F0F1A] w-full max-w-xl rounded-2xl shadow-2xl border border-gray-100 dark:border-white/10 overflow-hidden scale-95 opacity-0 translate-y-4 transition-all duration-200 max-h-[90vh] flex flex-col">
+
+            <div class="px-6 py-4 border-b border-gray-100 dark:border-white/[0.06] flex justify-between items-center shrink-0">
+                <div>
+                    <h3 class="font-black text-lg text-gray-900 dark:text-white">تعديل بيانات المريض</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">{{ $patient->name }}</p>
+                </div>
+                <button type="button" data-modal-close="modal-edit-patient-{{ $patient->id }}" class="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <form method="POST" action="{{ route('clinic.patients.update', $patient) }}" class="flex flex-col flex-1 min-h-0">
+                @csrf
+                @method('PUT')
+                <div class="p-6 space-y-5 overflow-y-auto flex-1">
+                    {{-- Name --}}
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">الاسم الكامل <span class="text-red-500">*</span></label>
+                        <input type="text" name="name" value="{{ $patient->name }}" required autocomplete="off"
+                               class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-shadow"
+                               placeholder="مثال: أحمد محمد علي">
+                    </div>
+
+                    {{-- Phone + Gender --}}
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">رقم الهاتف <span class="text-red-500">*</span></label>
+                            <input type="tel" name="phone" value="{{ $patient->phone }}" required
+                                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-shadow"
+                                   placeholder="05xxxxxxxx">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">الجنس</label>
+                            <select name="gender" class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-shadow">
+                                <option value="">— اختر —</option>
+                                <option value="male" {{ $patient->gender === 'male' ? 'selected' : '' }}>ذكر</option>
+                                <option value="female" {{ $patient->gender === 'female' ? 'selected' : '' }}>أنثى</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {{-- DOB + Age --}}
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">تاريخ الميلاد</label>
+                            <input type="date" name="dob" value="{{ $patient->dob?->format('Y-m-d') }}"
+                                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-shadow">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
+                                العمر
+                                <span class="text-xs font-normal text-gray-400">(إن لم يُعرف تاريخ الميلاد)</span>
+                            </label>
+                            <input type="number" name="age" value="{{ $patient->age }}" min="0" max="150"
+                                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-shadow"
+                                   placeholder="مثال: 45">
+                        </div>
+                    </div>
+
+                    {{-- Medical History --}}
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                            التاريخ المرضي
+                            <span class="text-xs font-normal text-gray-400 mr-1">— اختياري</span>
+                        </label>
+                        <div class="flex flex-wrap gap-2 mb-2.5">
+                            @foreach(['سكري', 'ضغط دم', 'قلب وشرايين', 'فشل كلوي', 'أمراض كبد', 'غدة درقية', 'ربو', 'حساسية'] as $cond)
+                                <button type="button" data-chip data-target="medical_history_edit_{{ $patient->id }}" data-value="{{ $cond }}"
+                                        class="chip-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-all">
+                                    {{ $cond }}
+                                </button>
+                            @endforeach
+                        </div>
+                        <textarea name="medical_history" id="medical_history_edit_{{ $patient->id }}" rows="2"
+                                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white resize-none transition-shadow"
+                                  placeholder="مثال: سكري نوع 2، ضغط دم مرتفع...">{{ $patient->medical_history }}</textarea>
+                    </div>
+
+                    {{-- Surgical History --}}
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">
+                            التاريخ الجراحي
+                            <span class="text-xs font-normal text-gray-400 mr-1">— اختياري</span>
+                        </label>
+                        <textarea name="surgical_history" rows="2"
+                                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white resize-none transition-shadow"
+                                  placeholder="مثال: استئصال زائدة 2018، عملية قلب مفتوح 2021...">{{ $patient->surgical_history }}</textarea>
+                    </div>
+
+                    {{-- Notes --}}
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">ملاحظات عامة</label>
+                        <textarea name="notes" rows="2"
+                                  class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white resize-none transition-shadow"
+                                  placeholder="أي ملاحظات خاصة بالمريض...">{{ $patient->notes }}</textarea>
+                    </div>
+                </div>
+
+                <div class="px-6 py-4 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] flex justify-end gap-3 shrink-0">
+                    <button type="button" data-modal-close="modal-edit-patient-{{ $patient->id }}"
+                            class="px-4 py-2 text-sm font-bold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                        إلغاء
+                    </button>
+                    <button type="submit"
+                            class="px-6 py-2 text-sm font-bold text-white bg-brand-600 hover:bg-brand-500 rounded-xl transition-all shadow-sm hover:shadow-brand-500/30 hover:shadow-lg active:scale-95">
+                        حفظ التعديلات
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     @push('scripts')
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Quick-select chips for medical history
+        document.querySelectorAll('[data-chip]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.dataset.target;
+                const value = btn.dataset.value;
+                const textarea = document.getElementById(targetId);
+                if (!textarea) return;
+                const current = textarea.value.trim();
+                if (current.includes(value)) {
+                    textarea.value = current.replace(new RegExp(',?\\s*' + value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*,?', 'g'), '').replace(/^,\s*|,\s*$/g, '').trim();
+                    btn.classList.remove('border-brand-400', 'text-brand-600', 'bg-brand-50', 'dark:text-brand-400', 'dark:bg-brand-900/20');
+                } else {
+                    textarea.value = current ? current + '، ' + value : value;
+                    btn.classList.add('border-brand-400', 'text-brand-600', 'bg-brand-50', 'dark:text-brand-400', 'dark:bg-brand-900/20');
+                }
+            });
+        });
         // ── Re-open modal if validation failed ──
         @if($errors->any())
         if (typeof CModal !== 'undefined') CModal.open('modal-add-diagnosis');

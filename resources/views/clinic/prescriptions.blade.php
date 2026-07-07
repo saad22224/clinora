@@ -49,15 +49,27 @@
                 @foreach($prescriptions as $pres)
                     <div class="relative bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-2xl p-5 hover:border-brand-500/30 transition-all group">
                         <div class="flex items-start justify-between mb-3">
-                            <div class="flex items-center gap-2.5">
-                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center font-bold text-white text-xs shrink-0">
-                                    {{ mb_substr($pres->patient->name ?? '؟', 0, 1) }}
+                            @if($pres->patient)
+                            <a href="{{ route('clinic.patients.medical-file', $pres->patient) }}" class="flex items-center gap-2.5 group/link">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center font-bold text-white text-xs shrink-0 group-hover/link:scale-105 transition-transform">
+                                    {{ mb_substr($pres->patient->name, 0, 1) }}
                                 </div>
                                 <div>
-                                    <h5 class="font-bold text-sm text-gray-900 dark:text-white">{{ $pres->patient->name ?? 'مريض محذوف' }}</h5>
+                                    <h5 class="font-bold text-sm text-gray-900 dark:text-white group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400 transition-colors">{{ $pres->patient->name }}</h5>
+                                    <p class="text-xs text-gray-400">{{ $pres->created_at->format('Y/m/d h:i A') }}</p>
+                                </div>
+                            </a>
+                            @else
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center font-bold text-white text-xs shrink-0">
+                                    ؟
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-sm text-gray-900 dark:text-white">مريض محذوف</h5>
                                     <p class="text-xs text-gray-400">{{ $pres->created_at->format('Y/m/d h:i A') }}</p>
                                 </div>
                             </div>
+                            @endif
                             <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <a href="{{ route('clinic.prescriptions.print', $pres) }}" target="_blank" class="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors" title="طباعة">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
@@ -131,7 +143,7 @@
                         <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">المريض <span class="text-red-500">*</span></label>
                         <input type="hidden" name="patient_id" id="hidden-patient-id" required value="{{ old('patient_id') }}">
                         <div class="relative">
-                            <input type="text" id="patient-search-input" placeholder="🔍 ابحث واقتر المريض (الاسم، رقم الهاتف)..." autocomplete="off"
+                            <input type="text" id="patient-search-input" placeholder="🔍 ابحث واختر المريض (الاسم، رقم الهاتف)..." autocomplete="off"
                                    class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 outline-none dark:text-white transition-all">
                             <button type="button" id="btn-clear-patient" style="display: none;" class="absolute left-3 top-2.5 text-gray-400 hover:text-red-500 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>

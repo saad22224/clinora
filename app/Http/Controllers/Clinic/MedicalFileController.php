@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Clinic;
 
 use App\Http\Controllers\Controller;
 use App\Models\MedicalFile;
+use App\Services\ImageOptimizationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -49,7 +50,12 @@ class MedicalFileController extends Controller
             abort(403, 'غير مصرح');
         }
 
-        $path = $request->file('file')->store('medical-records', 'public');
+        $file = $request->file('file');
+        if (str_starts_with($file->getMimeType(), 'image/') || in_array(strtolower($file->getClientOriginalExtension()), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'heic'])) {
+            $path = app(ImageOptimizationService::class)->upload($file, 'medical-records');
+        } else {
+            $path = $file->store('medical-records', 'public');
+        }
 
         MedicalFile::create([
             'clinic_id' => $clinic->id,
@@ -58,7 +64,7 @@ class MedicalFileController extends Controller
             'file_path' => $path,
         ]);
 
-        return redirect()->route('clinic.records.index')
+        return back()
             ->with('success', 'تم إضافة السجل الطبي بنجاح!');
     }
 

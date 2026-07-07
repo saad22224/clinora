@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Clinic;
 
 use App\Http\Controllers\Controller;
+use App\Services\ImageOptimizationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -42,7 +43,7 @@ class SettingsController extends Controller
             if ($clinic->doctor_image) {
                 Storage::disk('public')->delete($clinic->doctor_image);
             }
-            $validated['doctor_image'] = $request->file('doctor_image')->store('clinic-images', 'public');
+            $validated['doctor_image'] = app(ImageOptimizationService::class)->upload($request->file('doctor_image'), 'clinic-images');
         }
 
         // Format working hours

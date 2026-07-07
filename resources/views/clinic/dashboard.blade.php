@@ -149,18 +149,25 @@
                 <div class="divide-y divide-gray-100 dark:divide-white/5 overflow-y-auto max-h-[400px]">
                     @foreach($upcoming_appointments as $appointment)
                         <div class="p-4 sm:px-6 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-600 dark:bg-brand-900/50 dark:text-brand-400 flex items-center justify-center font-bold text-sm shrink-0">
+                            @if($appointment->patient)
+                            <a href="{{ route('clinic.patients.medical-file', $appointment->patient) }}" class="flex items-center gap-4 group/link">
+                                <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-600 dark:bg-brand-900/50 dark:text-brand-400 flex items-center justify-center font-bold text-sm shrink-0 group-hover/link:scale-105 transition-transform">
                                     {{ mb_substr($appointment->patient->name, 0, 1) }}
                                 </div>
                                 <div>
-                                    <p class="text-sm font-bold text-gray-900 dark:text-white">{{ $appointment->patient->name }}</p>
+                                    <p class="text-sm font-bold text-gray-900 dark:text-white group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400 transition-colors">{{ $appointment->patient->name }}</p>
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                                         {{ $appointment->scheduled_at->format('Y-m-d') }}
                                         @if($appointment->visitType) • {{ $appointment->visitType->name }} @endif
                                     </p>
                                 </div>
+                            </a>
+                            @else
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold text-sm shrink-0">؟</div>
+                                <div><p class="text-sm font-bold text-gray-900 dark:text-white">مريض محذوف</p></div>
                             </div>
+                            @endif
                             @php $s = ['pending'=>'bg-amber-100 text-amber-700','confirmed'=>'bg-blue-100 text-blue-700'][$appointment->status] ?? 'bg-gray-100 text-gray-600'; @endphp
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold {{ $s }} dark:bg-opacity-20">
                                 {{ $appointment->status === 'pending' ? 'بانتظار التأكيد' : 'مؤكد' }}
@@ -200,14 +207,22 @@
                 @else
                     <div class="space-y-3">
                         @foreach($recent_appointments as $apt)
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/20 flex items-center justify-center text-brand-600 dark:text-brand-400 font-bold text-xs shrink-0">
-                                    {{ mb_substr($apt->patient?->name ?? '?', 0, 1) }}
+                                @if($apt->patient)
+                                <a href="{{ route('clinic.patients.medical-file', $apt->patient) }}" class="flex items-center gap-3 flex-1 min-w-0 group/link">
+                                    <div class="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/20 flex items-center justify-center text-brand-600 dark:text-brand-400 font-bold text-xs shrink-0 group-hover/link:scale-105 transition-transform">
+                                        {{ mb_substr($apt->patient->name, 0, 1) }}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-bold text-gray-900 dark:text-white truncate group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400 transition-colors">{{ $apt->patient->name }}</p>
+                                        <p class="text-xs text-gray-400 truncate">{{ $apt->scheduled_at->format('Y/m/d') }} • {{ $apt->visitType?->name ?? '—' }}</p>
+                                    </div>
+                                </a>
+                                @else
+                                <div class="flex items-center gap-3 flex-1 min-w-0">
+                                    <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-xs shrink-0">؟</div>
+                                    <div class="flex-1 min-w-0"><p class="text-sm font-bold text-gray-900 dark:text-white truncate">مريض محذوف</p></div>
                                 </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-bold text-gray-900 dark:text-white truncate">{{ $apt->patient?->name ?? 'مريض' }}</p>
-                                    <p class="text-xs text-gray-400 truncate">{{ $apt->scheduled_at->format('Y/m/d') }} • {{ $apt->visitType?->name ?? '—' }}</p>
-                                </div>
+                                @endif
                                 @php $c=['pending'=>'text-amber-600','confirmed'=>'text-blue-600','completed'=>'text-emerald-600'][$apt->status]??'text-gray-400'; @endphp
                                 <span class="w-2 h-2 rounded-full bg-current {{ $c }} shrink-0"></span>
                             </div>

@@ -121,17 +121,26 @@
                             @endphp
                             <tr class="hover:bg-gray-50/70 dark:hover:bg-white/[0.02] transition-colors group">
                                 <td class="px-5 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center font-bold text-white text-sm shrink-0">
-                                            {{ mb_substr($apt->patient?->name ?? '?', 0, 1) }}
+                                    @if($apt->patient)
+                                    <a href="{{ route('clinic.patients.medical-file', $apt->patient) }}" class="flex items-center gap-3 group/link">
+                                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center font-bold text-white text-sm shrink-0 shadow-sm group-hover/link:scale-105 transition-transform">
+                                            {{ mb_substr($apt->patient->name, 0, 1) }}
                                         </div>
                                         <div>
-                                            <p class="font-bold text-gray-900 dark:text-white">{{ $apt->patient?->name ?? 'مريض محذوف' }}</p>
-                                            @if($apt->patient?->phone)
+                                            <p class="font-bold text-gray-900 dark:text-white group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400 transition-colors">{{ $apt->patient->name }}</p>
+                                            @if($apt->patient->phone)
                                                 <p class="text-xs text-gray-400 dir-ltr text-right">{{ $apt->patient->phone }}</p>
                                             @endif
                                         </div>
+                                    </a>
+                                    @else
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-9 h-9 rounded-xl bg-gray-400 flex items-center justify-center font-bold text-white text-sm shrink-0">؟</div>
+                                        <div>
+                                            <p class="font-bold text-gray-900 dark:text-white">مريض محذوف</p>
+                                        </div>
                                     </div>
+                                    @endif
                                 </td>
                                 <td class="px-5 py-4 whitespace-nowrap">
                                     <p class="font-bold text-gray-800 dark:text-gray-200">{{ $apt->scheduled_at->format('Y/m/d') }}</p>

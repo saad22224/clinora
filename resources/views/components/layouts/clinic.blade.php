@@ -29,8 +29,11 @@
 </head>
 <body class="font-sans antialiased bg-slate-50 text-gray-900 dark:bg-[#0A0A0F] dark:text-gray-100 flex min-h-screen overflow-hidden">
 
+    {{-- ══════ SIDEBAR BACKDROP ON MOBILE ══════ --}}
+    <div id="sidebar-backdrop" class="hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-xs md:hidden transition-opacity"></div>
+
     {{-- ══════ SIDEBAR ══════ --}}
-    <aside id="sidebar" class="w-[268px] bg-white dark:bg-[#0F0F14] border-l border-gray-100 dark:border-white/[0.06] flex flex-col shrink-0 z-20 hidden md:flex h-screen sticky top-0 shadow-sm">
+    <aside id="sidebar" class="w-[268px] bg-white dark:bg-[#0F0F14] border-l border-gray-100 dark:border-white/[0.06] flex flex-col shrink-0 z-20 hidden md:flex h-screen sticky top-0 shadow-sm transition-all">
 
         {{-- Brand --}}
         <div class="h-[68px] flex items-center justify-between px-5 border-b border-gray-100 dark:border-white/[0.06] shrink-0">
@@ -43,14 +46,20 @@
                     <p class="text-[10px] text-gray-400 mt-0.5">لوحة تحكم العيادة</p>
                 </div>
             </div>
-            {{-- View Public Page Button --}}
-            @if(Auth::user()->clinic?->slug)
-            <a href="{{ route('clinic.public.show', Auth::user()->clinic->slug) }}" target="_blank"
-               title="عرض الصفحة العامة"
-               class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 dark:hover:text-brand-400 transition-all" >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-            </a>
-            @endif
+            <div class="flex items-center gap-1">
+                {{-- View Public Page Button --}}
+                @if(Auth::user()->clinic?->slug)
+                <a href="{{ route('clinic.public.show', Auth::user()->clinic->slug) }}" target="_blank"
+                   title="عرض الصفحة العامة"
+                   class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 dark:hover:text-brand-400 transition-all" >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
+                @endif
+                {{-- Close Sidebar Button on Mobile --}}
+                <button id="sidebar-close" type="button" class="md:hidden w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
         </div>
 
         {{-- Navigation --}}
@@ -275,6 +284,31 @@
                     }
                 });
             }
+
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebarClose = document.getElementById('sidebar-close');
+            const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+
+            function openSidebar() {
+                if (!sidebar) return;
+                sidebar.classList.remove('hidden');
+                sidebar.classList.add('fixed', 'inset-y-0', 'right-0', 'z-50', 'shadow-2xl', 'flex');
+                if (sidebarBackdrop) sidebarBackdrop.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            }
+
+            function closeSidebar() {
+                if (!sidebar) return;
+                sidebar.classList.add('hidden');
+                sidebar.classList.remove('fixed', 'inset-y-0', 'right-0', 'z-50', 'shadow-2xl');
+                if (sidebarBackdrop) sidebarBackdrop.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+
+            if (sidebarToggle) sidebarToggle.addEventListener('click', openSidebar);
+            if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
+            if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeSidebar);
         });
     </script>
 </body>

@@ -14,6 +14,7 @@ window.CModal = {
     open(id) {
         const modal = document.getElementById(id);
         if (!modal) return;
+        modal.style.zIndex = '100000';
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
         requestAnimationFrame(() => {
