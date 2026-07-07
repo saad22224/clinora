@@ -20,6 +20,7 @@ use App\Http\Controllers\Clinic\ReportController;
 use App\Http\Controllers\Clinic\SettingsController;
 use App\Http\Controllers\Clinic\StaffController;
 use App\Http\Controllers\Clinic\VisitTypeController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PublicClinicController;
 use App\Http\Middleware\CheckSubscriptionStatus;
 use App\Http\Middleware\IdentifyTenant;
@@ -62,6 +63,13 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
     Route::get('/verify-otp', [AuthController::class, 'showVerifyOtp'])->name('otp.verify');
     Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('otp.verify.post');
+
+    Route::get('/forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('password.request');
+    Route::post('/forgot-password', [PasswordResetController::class, 'sendOtp'])->name('password.whatsapp.send');
+    Route::get('/verify-password-otp', [PasswordResetController::class, 'showVerifyForm'])->name('password.whatsapp.verify.form');
+    Route::post('/verify-password-otp', [PasswordResetController::class, 'verifyOtp'])->name('password.whatsapp.verify');
+    Route::get('/reset-password', [PasswordResetController::class, 'showResetForm'])->name('password.whatsapp.reset.form');
+    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.whatsapp.reset');
 });
 
 Route::middleware('auth')->group(function () {

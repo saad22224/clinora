@@ -21,6 +21,13 @@
                 </p>
             </div>
             
+            @if(session('success'))
+                <div class="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 p-4 rounded-2xl text-sm font-bold border border-emerald-200 dark:border-emerald-800 flex items-center gap-3 mb-4">
+                    <span class="material-symbols-outlined text-xl shrink-0">check_circle</span>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
             @if(session('error'))
                 <div class="bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 p-4 rounded-2xl text-sm font-bold border border-red-200 dark:border-red-800 flex items-center gap-3">
                     <span class="material-symbols-outlined text-xl shrink-0">error</span>
@@ -60,7 +67,7 @@
                     </div>
 
                     <div class="text-sm">
-                        <a href="#" class="font-extrabold text-brand-600 hover:text-brand-500 dark:text-brand-400 transition-colors">
+                        <a href="{{ route('password.request') }}" class="font-extrabold text-brand-600 hover:text-brand-500 dark:text-brand-400 transition-colors">
                             نسيت كلمة المرور؟
                         </a>
                     </div>
