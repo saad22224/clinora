@@ -1,6 +1,5 @@
-<x-layout>
-    <x-slot:title>سياسة الخصوصية</x-slot>
-
+@extends('components.layout')
+@section('content')
     <div class="pt-32 pb-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="prose prose-brand prose-lg dark:prose-invert mx-auto text-right">
             <h1 class="font-extrabold text-4xl mb-4 text-gray-900 dark:text-white">سياسة الخصوصية</h1>
@@ -40,4 +39,4 @@
             <p class="mt-8 text-gray-600 dark:text-gray-300 leading-relaxed">إذا قدمت طلباً، لدينا شهر واحد للرد عليك. إذا كنت ترغب في ممارسة أي من هذه الحقوق، يرجى الاتصال بنا.</p>
         </div>
     </div>
-</x-layout>
+@endsection

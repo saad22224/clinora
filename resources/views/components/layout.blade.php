@@ -11,6 +11,7 @@
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
+        <link rel="shortcut icon" href="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" type="image/x-icon">
     <!-- AOS Animation Library -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
     <script id="tailwind-config">
@@ -326,8 +327,8 @@
                     href="#ai">الذكاء الاصطناعي</a>
                 <a class="nav-link text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary transition-colors duration-300"
                     href="#how-it-works">كيف يعمل</a>
-                {{-- <a class="nav-link text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary transition-colors duration-300"
-                    href="#pricing">الأسعار</a> --}}
+                <a class="nav-link text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary transition-colors duration-300"
+                    href="#pricing">الأسعار</a>
                 <a class="nav-link text-on-surface-variant font-medium font-label-md text-label-md hover:text-primary transition-colors duration-300"
                     href="https://wa.me/201099615358">تواصل معنا</a>
             </div>

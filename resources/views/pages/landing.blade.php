@@ -519,33 +519,38 @@
         <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto" id="pricing">
             <div class="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4" data-aos="fade-up">
                 <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-on-surface">خطط أسعار تناسب عيادتك</h2>
-                <p class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium">ابدأ مجانًا وارقَ بخطتك
-                    مع نمو عيادتك. بدون عقود طويلة الأجل.</p>
+                <p class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium">تجربة مجانية لمدة 30 يومًا بجميع المميزات، وخطط سنوية مرنة تناسب نمو عيادتك أو فروعك الطبية.</p>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
-                <!-- Basic -->
+                <!-- Free Trial -->
                 <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom flex flex-col border border-white/60 shadow-md" data-aos="fade-up"
                     data-aos-delay="0">
-                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-on-surface">أساسية</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-body-md mb-6">للأطباء المستقلين وحديثي العهد.
+                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-on-surface">تجريبية مجانية</h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-body-md mb-6">لتجربة جميع مميزات النظام بدون أي التزامات.
                     </p>
                     <div class="mb-6">
-                        <span class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-primary">499</span>
-                        <span class="text-on-surface-variant font-body-md text-sm sm:text-base font-bold"> جنيه / شهريًا</span>
+                        <span class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-primary">مجاناً</span>
+                        <span class="text-on-surface-variant font-body-md text-sm sm:text-base font-bold"> / لمدة 30 يومًا</span>
                     </div>
                     <ul class="space-y-3 mb-8 flex-1">
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">حجز إلكتروني غير محدود</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">مفتوح فيها جميع مميزات النظام بالكامل</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تذكيرات واتساب أساسية</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">حجز إلكتروني وإدارة مواعيد وتقويم ذكي</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">سجل طبي إلكتروني لطبيب واحد</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">المساعد الطبي الذكي والروشتات الإلكترونية</span></li>
+                        <li class="flex items-center gap-2.5"><span
+                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تذكيرات واتساب وسجل طبي إلكتروني متقدم</span></li>
+                        <li class="flex items-center gap-2.5"><span
+                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">صلاحية كاملة لمدة 30 يومًا مجانًا</span></li>
                     </ul>
                     <a class="glass text-on-surface text-center px-6 py-3.5 rounded-xl font-bold font-label-md text-sm sm:text-base hover:bg-surface-variant/50 transition-all duration-300 border border-outline-variant/40"
-                        href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer">ابدأ مجانًا</a>
+                        href="{{ route('register') }}">ابدأ تجربتك المجانية</a>
                 </div>
                 <!-- Pro (highlighted) -->
                 <div class="bg-primary-container text-on-primary p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom flex flex-col relative sm:-translate-y-2 shadow-2xl shadow-primary/30"
@@ -554,51 +559,60 @@
                         class="absolute -top-3 right-8 bg-white text-primary text-xs font-black px-3 py-1 rounded-full shadow-md">الأكثر
                         طلبًا</span>
                     <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-white">احترافية</h3>
-                    <p class="text-white/80 font-body-md text-xs sm:text-sm md:text-body-md mb-6">للعيادات متعددة الأطباء والفروع.</p>
+                    <p class="text-white/80 font-body-md text-xs sm:text-sm md:text-body-md mb-6">مثالية للعيادات والمراكز الطبية الموحدة.</p>
                     <div class="mb-6">
-                        <span class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-white">1,299</span>
-                        <span class="text-white/80 font-body-md text-sm sm:text-base font-bold"> جنيه / شهريًا</span>
+                        <span class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-white">5,000</span>
+                        <span class="text-white/80 font-body-md text-sm sm:text-base font-bold"> جنيه / سنويًا</span>
                     </div>
                     <ul class="space-y-3 mb-8 flex-1">
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">كل مزايا الخطة الأساسية</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">مفتوح فيها جميع مميزات النظام بالكامل</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">المساعد الطبي الذكي بالكامل</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">حجز إلكتروني وإدارة مواعيد غير محدودة</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">حتى 5 أطباء وروشتات إلكترونية</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">المساعد الطبي الذكي والروشتات الإلكترونية</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">دعم فني على مدار الساعة</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">تذكيرات واتساب وسجل طبي إلكتروني متكامل</span></li>
+                        <li class="flex items-center gap-2.5"><span
+                                class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">دعم فني مستمر وتحديثات تلقائية</span></li>
                     </ul>
                     <a class="bg-white text-primary text-center px-6 py-3.5 rounded-xl font-bold font-label-md text-sm sm:text-base hover:scale-105 transition-transform shadow-lg"
-                        href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer">ابدأ تجربتك
-                        المجانية</a>
+                        href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer">اشترك الآن</a>
                 </div>
                 <!-- Enterprise -->
                 <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom flex flex-col border border-white/60 shadow-md" data-aos="fade-up"
                     data-aos-delay="300">
-                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-on-surface">المؤسسات</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-body-md mb-6">لسلاسل العيادات والمستشفيات
-                        الكبرى.</p>
+                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-on-surface">المؤسسات والفروع</h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-body-md mb-6">للأفرع المتعددة والمجمعات الطبية الكبرى.
+                    </p>
                     <div class="mb-6">
-                        <span class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-primary">اتصل بنا</span>
+                        <span class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-primary">10,000</span>
+                        <span class="text-on-surface-variant font-body-md text-sm sm:text-base font-bold"> جنيه / سنويًا</span>
                     </div>
                     <ul class="space-y-3 mb-8 flex-1">
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">كل مزايا الخطة الاحترافية</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تشمل جميع مميزات النظام بالكامل</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">أطباء وفروع غير محدودة</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-bold text-primary">ميزة إدارة أكثر من فرع وأكثر من عيادة</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">مدير حساب مخصص</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-bold text-primary">لوحة تحكم خاصة لمدير الأفرع والعيادات</span></li>
+                        <li class="flex items-center gap-2.5"><span
+                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تقارير وتحليلات مجمعة لجميع الفروع</span></li>
+                        <li class="flex items-center gap-2.5"><span
+                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">مدير حساب مخصص ودعم فني ذو أولوية</span></li>
                     </ul>
                     <a class="glass text-on-surface text-center px-6 py-3.5 rounded-xl font-bold font-label-md text-sm sm:text-base hover:bg-surface-variant/50 transition-all duration-300 border border-outline-variant/40"
-                        href="#contact">تواصل مع المبيعات</a>
+                        href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer">اشترك الآن</a>
                 </div>
             </div>
         </section>

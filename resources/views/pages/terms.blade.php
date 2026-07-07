@@ -1,6 +1,5 @@
-<x-layout>
-    <x-slot:title>شروط الاستخدام</x-slot>
-
+@extends('components.layout')
+@section('content')
     <div class="pt-32 pb-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="prose prose-brand prose-lg dark:prose-invert mx-auto text-right">
             <h1 class="font-extrabold text-4xl mb-4 text-gray-900 dark:text-white">شروط الاستخدام</h1>
@@ -34,4 +33,4 @@
             <p class="text-gray-600 dark:text-gray-300 leading-relaxed">قد تتضمن المواد التي تظهر على موقع كلينورا أخطاء فنية أو مطبعية أو فوتوغرافية. لا تتعهد كلينورا بأن أياً من المواد الموجودة على موقعها الإلكتروني دقيقة أو كاملة أو حديثة. يحق لكلينورا إجراء تغييرات على المواد الموجودة على موقعها الإلكتروني في أي وقت دون إشعار مسبق.</p>
         </div>
     </div>
-</x-layout>
+@endsection
