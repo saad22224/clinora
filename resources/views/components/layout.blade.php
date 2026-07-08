@@ -361,10 +361,10 @@
                 <a class="mobile-nav-link py-3 px-2 rounded-lg text-on-surface-variant font-medium font-label-md text-label-md hover:bg-surface-container-low transition-colors"
                     href="#contact">تواصل معنا</a>
                 <div class="flex items-center gap-3 pt-3 mt-2 border-t border-outline-variant">
-                    <button
+                    <button onclick="window.location.href = '{{ route('login') }}'"
                         class="flex-1 text-on-surface-variant font-medium font-label-md text-label-md py-3 rounded-xl border border-outline-variant">تسجيل
                         الدخول</button>
-                    <button
+                    <button onclick="window.location.href = '{{ route('register') }}'"
                         class="flex-1 bg-primary-container text-on-primary py-3 rounded-xl font-bold font-label-md text-label-md shadow-lg shadow-primary/20">ابدأ
                         الآن</button>
                 </div>
