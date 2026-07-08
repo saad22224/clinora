@@ -136,8 +136,14 @@
                 @if($prescription->patient?->dob)
                 <div>
                     <span class="text-sm font-bold text-gray-500">العمر:</span>
-                    <strong class="text-lg text-gray-900 mr-2">{{ $prescription->patient->dob->age }} سنة</strong>
+                    <strong class="text-lg text-gray-900 mr-2">{{ $prescription->patient?->dob->age }} سنة</strong>
                 </div>
+                @else
+                <div>
+                    <span class="text-sm font-bold text-gray-500">العمر:</span>
+                    <strong class="text-lg text-gray-900 mr-2">{{ $prescription->patient?->age }} سنة</strong>
+                </div>
+
                 @endif
                 
                 <div>
