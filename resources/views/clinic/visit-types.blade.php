@@ -171,7 +171,7 @@
                                   placeholder="وصف موجز للخدمة يشرح ما تتضمنه للمريض...">{{ old('description') }}</textarea>
                     </div>
 
-                    <div class="icon-dropdown-wrap" data-icon-input="icon-add" data-initial="">
+                    {{-- <div class="icon-dropdown-wrap" data-icon-input="icon-add" data-initial="">
                         <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5">أيقونة الخدمة <span class="text-xs text-gray-400 font-normal">(اختياري)</span></label>
                         <input type="hidden" name="icon" id="icon-add">
                         <div class="icon-dropdown relative">
@@ -187,7 +187,7 @@
                                 <div class="icon-list max-h-56 overflow-y-auto p-2 space-y-0.5"></div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="px-6 py-4 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02] flex justify-end gap-3">
                     <button type="button" data-modal-close="modal-add-visit-type" class="px-4 py-2 text-sm font-bold text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">إلغاء</button>

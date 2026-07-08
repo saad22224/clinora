@@ -11,15 +11,17 @@ class SendAppointmentReminders extends Command
 {
     protected $signature = 'appointments:remind';
 
-    protected $description = 'إرسال تنبيهات وتذكيرات الواتساب تلقائياً للمرضى قبل موعدهم بيوم واحد';
+    protected $description = 'Send automatic WhatsApp appointment reminders to patients one day before their appointment';
 
     public function handle(WhatsAppService $whatsApp): int
     {
-        $this->info('البحث عن المواعيد المحجوزة ليوم غد...');
+        $this->info('Searching for appointments scheduled for tomorrow...');
 
         $tomorrowStart = Carbon::tomorrow()->startOfDay();
         $tomorrowEnd = Carbon::tomorrow()->endOfDay();
 
+        
+        $remindingDate =   now()->subdays(1);
         $appointments = Appointment::with(['patient', 'clinic', 'visitType'])
             ->whereBetween('scheduled_at', [$tomorrowStart, $tomorrowEnd])
             ->whereIn('status', ['pending', 'confirmed'])
@@ -46,7 +48,7 @@ class SendAppointmentReminders extends Command
             }
         }
 
-        $this->info("تم إرسال {$count} تنبيه عبر الواتساب بنجاح.");
+        $this->info("Successfully sent {$count} WhatsApp reminder(s).");
 
         return self::SUCCESS;
     }

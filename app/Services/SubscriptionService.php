@@ -23,7 +23,7 @@ class SubscriptionService
             return false;
         }
 
-        if ($subscription->plan_id && (! $subscription->plan || ! $subscription->plan->is_active)) {
+        if ($subscription->plan_id && (! $subscription->planDetails || ! $subscription->planDetails->is_active)) {
             return false;
         }
 
@@ -32,7 +32,7 @@ class SubscriptionService
 
     public function processExpirations(): int
     {
-        $activeSubscriptions = Subscription::with('plan')->where('is_active', true)->get();
+        $activeSubscriptions = Subscription::with('planDetails')->where('is_active', true)->get();
         $expiredCount = 0;
 
         foreach ($activeSubscriptions as $subscription) {
@@ -42,7 +42,7 @@ class SubscriptionService
                 $isExpired = true;
             }
 
-            if ($subscription->plan_id && (! $subscription->plan || ! $subscription->plan->is_active)) {
+            if ($subscription->plan_id && (! $subscription->planDetails || ! $subscription->planDetails->is_active)) {
                 $isExpired = true;
             }
 

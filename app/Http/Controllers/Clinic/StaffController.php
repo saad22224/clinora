@@ -32,11 +32,11 @@ class StaffController extends Controller
             'label' => 'إدارة السجلات والملفات الطبية',
             'desc' => 'رفع وإدارة التحاليل والأشعة والتقارير المرفقة في ملف المريض',
         ],
-        'manage_billing' => [
-            'name' => 'manage_billing',
-            'label' => 'إدارة الفواتير والمالية',
-            'desc' => 'إنشاء الفواتير وعرض المدفوعات والحسابات الخاصة بالعيادة',
-        ],
+        // 'manage_billing' => [
+        //     'name' => 'manage_billing',
+        //     'label' => 'إدارة الفواتير والمالية',
+        //     'desc' => 'إنشاء الفواتير وعرض المدفوعات والحسابات الخاصة بالعيادة',
+        // ],
         'manage_settings' => [
             'name' => 'manage_settings',
             'label' => 'إدارة إعدادات العيادة',

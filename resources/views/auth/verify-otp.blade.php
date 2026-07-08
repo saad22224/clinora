@@ -25,7 +25,7 @@
                 </p>
             </div>
 
-            @if (config('app.debug') && session('whatsapp_otp'))
+            {{-- @if (config('app.debug') && session('whatsapp_otp'))
                 <div
                     class="bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 p-4 rounded-2xl text-sm border border-amber-200/80 dark:border-amber-800/80 text-center font-mono font-bold select-all shadow-sm">
                     <span class="block text-xs font-sans text-amber-600 dark:text-amber-400 mb-1">🛠️ [وضع التطوير
@@ -33,7 +33,7 @@
                     كود التفعيل: <span
                         class="text-base font-black bg-amber-100 dark:bg-amber-900/80 px-3 py-1 rounded-lg">{{ session('whatsapp_otp') }}</span>
                 </div>
-            @endif
+            @endif --}}
 
             @if ($errors->any())
                 <div

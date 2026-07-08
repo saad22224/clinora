@@ -15,6 +15,10 @@
     <!-- AOS Animation Library CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
+    <!-- Toastify CSS & JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @php
@@ -82,6 +86,26 @@
             mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
+        }
+
+        .toastify {
+            backdrop-filter: blur(16px);
+            z-index: 99999 !important;
+            direction: rtl;
+            font-family: var(--font-cairo) !important;
+        }
+        .toastify .toast-close {
+            opacity: 0.85;
+            padding-right: 14px;
+            font-size: 22px;
+            color: #ffffff;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        .toastify .toast-close:hover {
+            opacity: 1;
+            transform: scale(1.1);
         }
     </style>
     <script>
@@ -504,7 +528,7 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('clinic.public.book', $clinic->slug) }}" class="space-y-6">
+                        <form method="POST" action="{{ route('clinic.public.book', $clinic->slug) }}#contact" class="space-y-6">
                             @csrf
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div class="relative floating-label-input group">
@@ -774,6 +798,77 @@
                 }
             }
         });
+
+        // Toastify Notifications
+        @if(session('booking_success'))
+            window.addEventListener('DOMContentLoaded', () => {
+                if (typeof Toastify !== 'undefined') {
+                    Toastify({
+                        text: "🎉 {{ session('booking_success') }}",
+                        duration: 8000,
+                        close: true,
+                        gravity: "top",
+                        position: "center",
+                        stopOnFocus: true,
+                        offset: {
+                            y: 110
+                        },
+                        style: {
+                            background: "linear-gradient(135deg, #0f766e 0%, #005c55 100%)",
+                            boxShadow: "0 20px 40px rgba(15, 118, 110, 0.35)",
+                            borderRadius: "22px",
+                            padding: "18px 28px",
+                            fontFamily: "'Cairo', sans-serif",
+                            fontWeight: "700",
+                            fontSize: "16px",
+                            color: "#ffffff",
+                            border: "1px solid rgba(255, 255, 255, 0.25)",
+                            direction: "rtl",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "12px",
+                            lineHeight: "1.6"
+                        }
+                    }).showToast();
+                }
+            });
+        @endif
+
+        @if($errors->any())
+            window.addEventListener('DOMContentLoaded', () => {
+                if (typeof Toastify !== 'undefined') {
+                    @foreach($errors->all() as $error)
+                        Toastify({
+                            text: "⚠️ {{ $error }}",
+                            duration: 6000,
+                            close: true,
+                            gravity: "top",
+                            position: "center",
+                            stopOnFocus: true,
+                            offset: {
+                                y: {{ 110 + ($loop->index * 75) }}
+                            },
+                            style: {
+                                background: "linear-gradient(135deg, #e11d48 0%, #be123c 100%)",
+                                boxShadow: "0 20px 40px rgba(225, 29, 72, 0.35)",
+                                borderRadius: "22px",
+                                padding: "16px 24px",
+                                fontFamily: "'Cairo', sans-serif",
+                                fontWeight: "700",
+                                fontSize: "15px",
+                                color: "#ffffff",
+                                border: "1px solid rgba(255, 255, 255, 0.25)",
+                                direction: "rtl",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "10px",
+                                lineHeight: "1.6"
+                            }
+                        }).showToast();
+                    @endforeach
+                }
+            });
+        @endif
     </script>
 </body>
 </html>
