@@ -481,9 +481,9 @@
                     
                     item.addEventListener('click', () => {
                         let nameToSet = drug.commercial_name_en;
-                        if (drug.commercial_name_ar) {
-                            nameToSet += ` (${drug.commercial_name_ar})`;
-                        }
+                        // if (drug.commercial_name_ar) {
+                        //     nameToSet += ` (${drug.commercial_name_ar})`;
+                        // }
                         medNameInput.value = nameToSet;
                         dropdown.style.display = 'none';
                         searchInput.value = '';
