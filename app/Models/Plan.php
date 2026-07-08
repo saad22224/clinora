@@ -18,6 +18,8 @@ class Plan extends Model
     protected $casts = [
         'features' => 'array',
         'is_active' => 'boolean',
+        'duration_in_days' => 'integer',
+
     ];
 
     public function subscriptions(): HasMany

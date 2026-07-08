@@ -7,7 +7,13 @@ use Illuminate\Support\Facades\Log;
 
 class WhatsAppService
 {
-    protected string $baseUrl = 'http://127.0.0.1:3000/api';
+    protected string $baseUrl;
+
+    public function __construct()
+    {
+        $serverUrl = rtrim(config('services.whatsapp.url', 'http://127.0.0.1:3000'), '/');
+        $this->baseUrl = str_ends_with($serverUrl, '/api') ? $serverUrl : "{$serverUrl}/api";
+    }
 
     /**
      * Get the live status of the Node.js WhatsApp microservice.

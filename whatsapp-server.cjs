@@ -28,7 +28,23 @@ function createClient() {
     status = 'initializing';
 
     const newClient = new Client({
-        authStrategy: new LocalAuth()
+        authStrategy: new LocalAuth(),
+        puppeteer: {
+            headless: true,
+
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--disable-software-rasterizer',
+                '--disable-features=UseDBus',
+                '--no-zygote',
+                '--single-process',
+                '--disable-threaded-animation',
+                '--disable-threaded-scrolling'
+            ]
+        }
     });
 
     newClient.on('qr', async (qr) => {
@@ -72,7 +88,7 @@ function createClient() {
             // console.log('🚀 [Test] Sending immediate auto-ping on ready...');
             // await newClient.sendMessage('201556477029@c.us', 'Hello from Clinora Ready Event!');
             // console.log('✅ [Test] Auto-ping sent!');
-        } catch(e) {
+        } catch (e) {
             console.error('❌ [Test] Auto-ping failed:', e);
         }
     });
@@ -82,17 +98,23 @@ function createClient() {
         status = 'disconnected';
         currentQR = null;
         clientInfo = null;
-        
+
         try {
             await newClient.destroy();
-        } catch (e) {}
+        } catch (e) { }
 
         setTimeout(() => {
             client = createClient();
         }, 4000);
     });
 
-    newClient.initialize();
+    newClient.initialize()
+        .then(() => {
+            console.log('✅ WhatsApp initialize completed');
+        })
+        .catch(err => {
+            console.error('❌ Initialize error:', err);
+        });
 
     return newClient;
 }
@@ -150,8 +172,8 @@ app.post('/api/logout', async (req, res) => {
         clientInfo = null;
 
         if (client) {
-            await client.logout().catch(() => {});
-            await client.destroy().catch(() => {});
+            await client.logout().catch(() => { });
+            await client.destroy().catch(() => { });
         }
 
         setTimeout(() => {
@@ -166,5 +188,5 @@ app.post('/api/logout', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 WhatsApp Microservice API running on http://127.0.0.1:${PORT}`);
+    console.log(`🚀 WhatsApp Microservice API running on port ${PORT}`);
 });
