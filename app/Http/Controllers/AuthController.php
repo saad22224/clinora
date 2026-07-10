@@ -139,7 +139,7 @@ class AuthController extends Controller
         $userId = session('pending_verification_user_id');
         $savedOtp = session('whatsapp_otp');
 
-        if (! $userId || ! $savedOtp || trim($request->otp) !== (string) $savedOtp) {
+        if (! $userId || ! $savedOtp || trim($request->otp) != (string) $savedOtp) {
             return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
         }
 

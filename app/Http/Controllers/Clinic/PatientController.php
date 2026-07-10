@@ -20,7 +20,7 @@ class PatientController extends Controller
 
     public function medicalFile(Patient $patient)
     {
-        abort_if($patient->clinic_id !== Auth::user()->clinic_id, 403);
+        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
 
         $patient->load([
             'medicalFiles' => fn ($q) => $q->latest(),
@@ -85,6 +85,6 @@ class PatientController extends Controller
 
     private function authorizePatient(Patient $patient): void
     {
-        abort_if($patient->clinic_id !== Auth::user()->clinic_id, 403);
+        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
     }
 }

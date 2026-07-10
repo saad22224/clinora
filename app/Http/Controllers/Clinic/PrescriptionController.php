@@ -102,7 +102,7 @@ class PrescriptionController extends Controller
 
     public function destroy(Prescription $prescription)
     {
-        if ($prescription->clinic_id !== Auth::user()->clinic_id) {
+        if ($prescription->clinic_id != Auth::user()->clinic_id) {
             abort(403);
         }
 
@@ -113,7 +113,7 @@ class PrescriptionController extends Controller
 
     public function print(Prescription $prescription)
     {
-        if ($prescription->clinic_id !== Auth::user()->clinic_id) {
+        if ($prescription->clinic_id != Auth::user()->clinic_id) {
             abort(403);
         }
 

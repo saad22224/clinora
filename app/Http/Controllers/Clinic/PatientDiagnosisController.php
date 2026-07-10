@@ -12,7 +12,7 @@ class PatientDiagnosisController extends Controller
 {
     public function store(Request $request, Patient $patient)
     {
-        abort_if($patient->clinic_id !== Auth::user()->clinic_id, 403);
+        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
 
         $validated = $request->validate([
             'diagnosis' => ['required', 'string', 'max:2000'],
@@ -31,8 +31,8 @@ class PatientDiagnosisController extends Controller
 
     public function destroy(Patient $patient, PatientDiagnosis $diagnosis)
     {
-        abort_if($patient->clinic_id !== Auth::user()->clinic_id, 403);
-        abort_if($diagnosis->patient_id !== $patient->id, 404);
+        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
+        abort_if($diagnosis->patient_id != $patient->id, 404);
 
         $diagnosis->delete();
 

@@ -14,7 +14,7 @@ class PatientAIChatController extends Controller
 {
     public function chat(Request $request, Patient $patient)
     {
-        abort_if($patient->clinic_id !== Auth::user()->clinic_id, 403);
+        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
 
         $request->validate([
             'message' => ['required', 'string', 'max:2000'],

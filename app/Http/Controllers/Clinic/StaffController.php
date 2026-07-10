@@ -95,7 +95,7 @@ class StaffController extends Controller
     public function update(Request $request, User $user)
     {
         $currentUser = Auth::user();
-        abort_if($user->clinic_id !== $currentUser->clinic_id, 403);
+        abort_if($user->clinic_id != $currentUser->clinic_id, 403);
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -127,8 +127,8 @@ class StaffController extends Controller
     public function destroy(User $user)
     {
         $currentUser = Auth::user();
-        abort_if($user->clinic_id !== $currentUser->clinic_id, 403);
-        abort_if($user->id === $currentUser->id, 403, 'لا يمكنك حذف حسابك الشخصي.');
+        abort_if($user->clinic_id != $currentUser->clinic_id, 403);
+        abort_if($user->id == $currentUser->id, 403, 'لا يمكنك حذف حسابك الشخصي.');
 
         $user->delete();
 

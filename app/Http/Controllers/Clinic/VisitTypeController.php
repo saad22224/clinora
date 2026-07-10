@@ -36,7 +36,7 @@ class VisitTypeController extends Controller
 
     public function update(Request $request, VisitType $visitType)
     {
-        if ($visitType->clinic_id !== Auth::user()->clinic_id) {
+        if ($visitType->clinic_id != Auth::user()->clinic_id) {
             abort(403);
         }
 
@@ -55,7 +55,7 @@ class VisitTypeController extends Controller
 
     public function destroy(VisitType $visitType)
     {
-        if ($visitType->clinic_id !== Auth::user()->clinic_id) {
+        if ($visitType->clinic_id != Auth::user()->clinic_id) {
             abort(403);
         }
 

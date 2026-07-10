@@ -70,7 +70,7 @@ class MedicalFileController extends Controller
 
     public function destroy(MedicalFile $medicalFile)
     {
-        if ($medicalFile->clinic_id !== Auth::user()->clinic_id) {
+        if ($medicalFile->clinic_id != Auth::user()->clinic_id) {
             abort(403);
         }
 

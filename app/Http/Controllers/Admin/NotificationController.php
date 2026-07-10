@@ -26,7 +26,7 @@ class NotificationController extends Controller
             'clinic_id' => 'nullable',
         ]);
 
-        if (empty($validated['clinic_id']) || $validated['clinic_id'] === 'all') {
+        if (empty($validated['clinic_id']) || $validated['clinic_id'] == 'all') {
             $clinics = Clinic::all();
             foreach ($clinics as $clinic) {
                 ClinicNotification::create([

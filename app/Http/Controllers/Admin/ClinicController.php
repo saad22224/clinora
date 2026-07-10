@@ -111,7 +111,7 @@ class ClinicController extends Controller
         $adminId = session('superadmin_impersonator_id');
         if ($adminId) {
             $admin = User::find($adminId);
-            if ($admin && $admin->role === 'superadmin') {
+            if ($admin && $admin->role == 'superadmin') {
                 auth()->login($admin);
                 session()->forget('superadmin_impersonator_id');
 

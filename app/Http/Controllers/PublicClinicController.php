@@ -33,7 +33,7 @@ class PublicClinicController extends Controller
         ]);
 
         $visitType = VisitType::findOrFail($validated['visit_type_id']);
-        abort_if($visitType->clinic_id !== $clinic->id, 403);
+        abort_if($visitType->clinic_id != $clinic->id, 403);
 
         $patient = Patient::firstOrCreate(
             [
@@ -46,7 +46,7 @@ class PublicClinicController extends Controller
             ],
         );
 
-        if ($patient->wasRecentlyCreated === false && blank($patient->name)) {
+        if ($patient->wasRecentlyCreated == false && blank($patient->name)) {
             $patient->update(['name' => $validated['patient_name']]);
         }
 

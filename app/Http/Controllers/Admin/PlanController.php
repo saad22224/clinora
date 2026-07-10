@@ -21,7 +21,7 @@ class PlanController extends Controller
         $features = null;
         if (! empty($validated['features'])) {
             $decoded = json_decode($validated['features'], true);
-            $features = json_last_error() === JSON_ERROR_NONE ? $decoded : null;
+            $features = json_last_error() == JSON_ERROR_NONE ? $decoded : null;
         }
 
         Plan::create([
@@ -48,7 +48,7 @@ class PlanController extends Controller
         $features = null;
         if (! empty($validated['features'])) {
             $decoded = json_decode($validated['features'], true);
-            $features = json_last_error() === JSON_ERROR_NONE ? $decoded : null;
+            $features = json_last_error() == JSON_ERROR_NONE ? $decoded : null;
         }
 
         $plan->update([

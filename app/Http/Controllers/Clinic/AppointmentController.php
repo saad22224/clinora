@@ -70,10 +70,10 @@ class AppointmentController extends Controller
         ]);
 
         $visitType = VisitType::findOrFail($validated['visit_type_id']);
-        abort_if($visitType->clinic_id !== Auth::user()->clinic_id, 403);
+        abort_if($visitType->clinic_id != Auth::user()->clinic_id, 403);
 
         $patient = Patient::findOrFail($validated['patient_id']);
-        abort_if($patient->clinic_id !== Auth::user()->clinic_id, 403);
+        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
 
         // Normalize date-only to start of day
         $validated['scheduled_at'] = Carbon::parse($validated['scheduled_at'])->startOfDay();
@@ -93,7 +93,7 @@ class AppointmentController extends Controller
 
     public function updateStatus(Request $request, Appointment $appointment)
     {
-        abort_if($appointment->clinic_id !== Auth::user()->clinic_id, 403);
+        abort_if($appointment->clinic_id != Auth::user()->clinic_id, 403);
 
         $validated = $request->validate([
             'status' => ['required', 'in:pending,confirmed,rejected,cancelled,completed'],
@@ -114,7 +114,7 @@ class AppointmentController extends Controller
 
     public function destroy(Appointment $appointment)
     {
-        abort_if($appointment->clinic_id !== Auth::user()->clinic_id, 403);
+        abort_if($appointment->clinic_id != Auth::user()->clinic_id, 403);
         $appointment->delete();
 
         return redirect()->route('clinic.appointments.index')
