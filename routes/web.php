@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ClinicController;
 use App\Http\Controllers\Admin\MarketerController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\WhatsAppController;
 use App\Http\Controllers\AuthController;
@@ -209,9 +210,8 @@ Route::middleware(['auth'])
         Route::get('/roles', function () {
             return view('admin.roles');
         })->name('roles.index');
-        Route::get('/settings', function () {
-            return view('admin.settings');
-        })->name('settings.index');
+        Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
+        Route::put('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
         Route::get('/logs', function () {
             return view('admin.logs');
         })->name('logs.index');
@@ -221,6 +221,7 @@ Route::middleware(['auth'])
         Route::get('/whatsapp/status', [WhatsAppController::class, 'status'])->name('whatsapp.status');
         Route::post('/whatsapp/logout', [WhatsAppController::class, 'logout'])->name('whatsapp.logout');
         Route::post('/whatsapp/test', [WhatsAppController::class, 'sendTest'])->name('whatsapp.test');
+        Route::post('/whatsapp/toggle-setting', [AdminSettingController::class, 'update'])->name('whatsapp.toggle-setting');
 
         // Notifications
         Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('notifications.index');

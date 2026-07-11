@@ -15,6 +15,35 @@
         </div>
     @endif
 
+    {{-- GLOBAL PLATFORM WHATSAPP SWITCH --}}
+    <div class="bg-[#0A0A12] border border-white/[0.08] rounded-3xl p-6 sm:p-7 shadow-2xl mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-2xl {{ $whatsappEnabled ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' : 'bg-red-500/10 border border-red-500/30 text-red-400' }} flex items-center justify-center shrink-0">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <div>
+                <div class="flex items-center gap-3">
+                    <h3 class="text-base sm:text-lg font-black text-white">حالة تفعيل إشعارات الواتساب في المنصة ككل</h3>
+                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold {{ $whatsappEnabled ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20' }}">
+                        {{ $whatsappEnabled ? 'مفعل وتعمل الرسائل تلقائياً 🟢' : 'معطل ومُتوقف كلياً 🔴' }}
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed max-w-2xl">
+                    عند التعطيل تتوقف فوراً رسائل الترحيب وكود التفعيل عند إنشاء عيادة (ويدخل المنشئ مباشرة دون كود)، وتكون استعادة كلمة المرور عبر الإيميل فقط، وتتوقف تذكيرات المواعيد.
+                </p>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ route('whatsapp.toggle-setting') }}" class="shrink-0">
+            @csrf
+            <input type="hidden" name="whatsapp_enabled" value="{{ $whatsappEnabled ? '0' : '1' }}">
+            <button type="submit" class="w-full md:w-auto px-6 py-3 rounded-xl {{ $whatsappEnabled ? 'bg-red-500/15 hover:bg-red-500/25 text-red-400 border border-red-500/30' : 'bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30' }} font-extrabold text-xs shadow-lg transition-all hover:scale-[1.02] active:scale-98 cursor-pointer flex items-center justify-center gap-2">
+                <span class="w-2 h-2 rounded-full {{ $whatsappEnabled ? 'bg-red-400' : 'bg-emerald-400' }}"></span>
+                {{ $whatsappEnabled ? 'إيقاف وتعطيل خدمة الواتساب كلياً' : 'تفعيل خدمة الواتساب كلياً الآن' }}
+            </button>
+        </form>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         {{-- STATUS & QR CARD --}}

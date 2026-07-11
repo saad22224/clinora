@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\SystemSetting;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -41,6 +42,12 @@ class WhatsAppService
      */
     public function sendMessage(string $number, string $message): bool
     {
+        if (! SystemSetting::isWhatsAppEnabled()) {
+            Log::info('WhatsApp message skipped because WhatsApp service is globally disabled.');
+
+            return false;
+        }
+
         try {
             $response = Http::timeout(8)->post("{$this->baseUrl}/send", [
                 'number' => $number,

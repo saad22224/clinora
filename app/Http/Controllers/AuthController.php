@@ -6,6 +6,7 @@ use App\Models\Clinic;
 use App\Models\Marketer;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Models\SystemSetting;
 use App\Models\User;
 use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
@@ -87,13 +88,15 @@ class AuthController extends Controller
             'is_active' => true,
         ]);
 
-        // Send WhatsApp Registration OTP
-        $otp = rand(100000, 999999);
-        session(['whatsapp_otp' => $otp]);
-        app(WhatsAppService::class)->sendMessage(
-            $request->phone,
-            "مرحباً بك في منصة Clinora SaaS 🏥\nكود التحقق (OTP) الخاص بتفعيل حساب عيادتك هو: *{$otp}*"
-        );
+        // Send WhatsApp Registration OTP if enabled
+        if (SystemSetting::isWhatsAppEnabled()) {
+            $otp = rand(100000, 999999);
+            session(['whatsapp_otp' => $otp]);
+            app(WhatsAppService::class)->sendMessage(
+                $request->phone,
+                "مرحباً بك في منصة Clinora SaaS 🏥\nكود التحقق (OTP) الخاص بتفعيل حساب عيادتك هو: *{$otp}*"
+            );
+        }
 
         // Create Free Subscription
         $freePlan = Plan::where('name', 'free plan')->orWhere('price', 0)->first();
@@ -116,6 +119,12 @@ class AuthController extends Controller
             'role' => 'owner',
         ]);
 
+        if (! SystemSetting::isWhatsAppEnabled()) {
+            Auth::login($user);
+
+            return redirect()->route('dashboard');
+        }
+
         session(['pending_verification_user_id' => $user->id]);
 
         return redirect()->route('otp.verify');
@@ -125,6 +134,14 @@ class AuthController extends Controller
     {
         if (! session('pending_verification_user_id')) {
             return redirect()->route('register');
+        }
+
+        if (! SystemSetting::isWhatsAppEnabled()) {
+            $user = User::findOrFail(session('pending_verification_user_id'));
+            Auth::login($user);
+            session()->forget(['pending_verification_user_id', 'whatsapp_otp']);
+
+            return redirect()->route('dashboard');
         }
 
         return view('auth.verify-otp');

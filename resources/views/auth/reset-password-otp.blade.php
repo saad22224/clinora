@@ -8,23 +8,26 @@
 
         <div class="max-w-md w-full space-y-8 glass dark:glass-dark p-8 sm:p-12 rounded-[2.5rem] shadow-2xl border border-gray-200/80 dark:border-gray-800/80 relative z-10"
             data-aos="zoom-in" data-aos-duration="600">
+            @php
+                $isWhatsApp = isset($isWhatsAppEnabled) ? $isWhatsAppEnabled : \App\Models\SystemSetting::isWhatsAppEnabled();
+            @endphp
             <div class="text-center">
                 <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 text-xs font-extrabold mb-3 border border-emerald-200/60 dark:border-emerald-800/60">
                     <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                    <span>التحقق عبر الواتساب</span>
+                    <span>{{ $isWhatsApp ? 'التحقق عبر الواتساب' : 'التحقق عبر البريد الإلكتروني' }}</span>
                 </div>
                 <h2 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">تأكيد كود التحقق</h2>
                 <p class="mt-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
-                    أدخل كود التحقق (OTP) المرسل لواتساب العيادة للمتابعة لتغيير كلمة المرور
+                    {{ $isWhatsApp ? 'أدخل كود التحقق (OTP) المرسل لواتساب العيادة للمتابعة لتغيير كلمة المرور' : 'أدخل كود التحقق (OTP) المرسل إلى بريدك الإلكتروني للمتابعة لتغيير كلمة المرور' }}
                 </p>
             </div>
 
-            @if (config('app.debug') && session('password_reset_otp'))
+            {{-- @if (config('app.debug') && session('password_reset_otp'))
                 <div class="bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 p-4 rounded-2xl text-sm border border-amber-200/80 dark:border-amber-800/80 text-center font-mono font-bold select-all shadow-sm">
                     <span class="block text-xs font-sans text-amber-600 dark:text-amber-400 mb-1">🛠️ [وضع التطوير السريع]</span>
                     كود التحقق: <span class="text-base font-black bg-amber-100 dark:bg-amber-900/80 px-3 py-1 rounded-lg">{{ session('password_reset_otp') }}</span>
                 </div>
-            @endif
+            @endif --}}
 
             @if ($errors->any())
                 <div class="bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 p-4 rounded-2xl text-sm font-bold border border-red-200 dark:border-red-800 text-center flex items-center justify-center gap-2">

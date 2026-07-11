@@ -577,7 +577,8 @@
                         class="lg:col-span-5 p-8 sm:p-12 lg:p-16 bg-primary text-white space-y-8 flex flex-col justify-between">
                         <div class="space-y-6">
                             <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight">ابدأ رحلة
-                                <br />التعافي اليوم</h2>
+                                <br />التعافي اليوم
+                            </h2>
                             <p class="text-on-primary-container leading-relaxed opacity-90 text-sm md:text-base">
                                 احجز استشارتك مع نخبة من أفضل الأطباء. نقوم بمراجعة طلبك وتأكيد الموعد عبر التواصل
                                 المباشر في أسرع وقت.

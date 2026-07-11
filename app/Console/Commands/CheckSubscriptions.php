@@ -26,6 +26,7 @@ class CheckSubscriptions extends Command
      */
     public function handle(SubscriptionService $subscriptionService): void
     {
+        \Log::info('Checking subscriptions');
         $expiredCount = $subscriptionService->processExpirations();
 
         $this->info("Checked subscriptions. Expired {$expiredCount} subscriptions.");

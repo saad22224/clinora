@@ -11,7 +11,8 @@
         rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
-        <link rel="shortcut icon" href="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}"
+        type="image/x-icon">
     <!-- AOS Animation Library -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
     <script id="tailwind-config">
@@ -374,9 +375,9 @@
     @yield('content')
     <style>
         @media (max-width: 768px) {
-            .footer_content{
+            .footer_content {
                 flex-direction: column;
-                
+
             }
         }
     </style>
@@ -384,7 +385,8 @@
     <footer class="full-width bg-surface-container-low border-t border-outline-variant" id="contact">
         <div
             class="flex flex-col md:flex-row justify-between items-start w-full px-4 sm:px-6 md:px-margin-desktop pt-16 pb-12 max-w-container-max mx-auto gap-12">
-            <div class="footer_content" style="display: flex; align-items:center; justify-content: space-between; width:100%">
+            <div class="footer_content"
+                style="display: flex; align-items:center; justify-content: space-between; width:100%">
                 <div>
                     <span class="font-display-lg text-headline-lg text-primary">
                         <img style="width: 100px; height:100px; border-radius:20%;"

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clinic;
+use App\Models\SystemSetting;
 use App\Models\User;
 use App\Services\WhatsAppService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class PasswordResetController extends Controller
@@ -17,7 +20,9 @@ class PasswordResetController extends Controller
      */
     public function showForgotForm(): View
     {
-        return view('auth.forgot-password');
+        $isWhatsAppEnabled = SystemSetting::isWhatsAppEnabled();
+
+        return view('auth.forgot-password', compact('isWhatsAppEnabled'));
     }
 
     /**
@@ -25,42 +30,79 @@ class PasswordResetController extends Controller
      */
     public function sendOtp(Request $request): RedirectResponse
     {
-        $request->validate([
-            'login_input' => ['required', 'string'],
-        ], [
-            'login_input.required' => 'يرجى إدخال البريد الإلكتروني أو رقم الواتساب.',
-        ]);
+        $isWhatsAppEnabled = SystemSetting::isWhatsAppEnabled();
 
-        $input = trim($request->input('login_input'));
-        $user = User::where('email', $input)->orWhere('phone', $input)->first();
-
-        if (! $user) {
-            $clinic = Clinic::where('phone', $input)->first();
-            if ($clinic) {
-                $user = $clinic->users()->where('role', 'owner')->first() ?? $clinic->users()->first();
-            }
+        if (! $isWhatsAppEnabled) {
+            $request->validate([
+                'login_input' => ['required', 'email'],
+            ], [
+                'login_input.required' => 'يرجى إدخال البريد الإلكتروني.',
+                'login_input.email' => 'يرجى إدخال بريد إلكتروني صحيح لأن استعادة كلمة المرور تتم عبر البريد فقط حالياً.',
+            ]);
+        } else {
+            $request->validate([
+                'login_input' => ['required', 'string'],
+            ], [
+                'login_input.required' => 'يرجى إدخال البريد الإلكتروني أو رقم الواتساب.',
+            ]);
         }
 
-        $targetPhone = $user?->phone ?: ($user?->clinic?->phone ?: null);
+        $input = trim($request->input('login_input'));
 
-        if (! $user || empty($targetPhone)) {
-            return back()->withErrors([
-                'login_input' => 'لم يتم العثور على حساب أو رقم هاتف واتساب مرتبط بهذا الحساب أو بالعيادة.',
-            ])->onlyInput('login_input');
+        if (! $isWhatsAppEnabled) {
+            $user = User::where('email', $input)->first();
+            if (! $user) {
+                return back()->withErrors([
+                    'login_input' => 'لم يتم العثور على حساب مسجل بهذا البريد الإلكتروني.',
+                ])->onlyInput('login_input');
+            }
+            $targetContact = $user->email;
+        } else {
+            $user = User::where('email', $input)->orWhere('phone', $input)->first();
+
+            if (! $user) {
+                $clinic = Clinic::where('phone', $input)->first();
+                if ($clinic) {
+                    $user = $clinic->users()->where('role', 'owner')->first() ?? $clinic->users()->first();
+                }
+            }
+
+            $targetPhone = $user?->phone ?: ($user?->clinic?->phone ?: null);
+
+            if (! $user || empty($targetPhone)) {
+                return back()->withErrors([
+                    'login_input' => 'لم يتم العثور على حساب أو رقم هاتف واتساب مرتبط بهذا الحساب أو بالعيادة.',
+                ])->onlyInput('login_input');
+            }
+            $targetContact = $targetPhone;
         }
 
         $otp = rand(100000, 999999);
         session([
             'password_reset_user_id' => $user->id,
             'password_reset_otp' => $otp,
-            'password_reset_phone' => $targetPhone,
+            'password_reset_phone' => $targetContact,
             'password_reset_otp_verified' => false,
         ]);
 
-        app(WhatsAppService::class)->sendMessage(
-            $targetPhone,
-            "مرحباً {$user->name} 🏥\nكود التحقق (OTP) الخاص بإعادة تعيين كلمة المرور في منصة Clinora هو: *{$otp}*\nيرجى عدم مشاركة هذا الكود مع أي شخص."
-        );
+        if ($isWhatsAppEnabled) {
+            app(WhatsAppService::class)->sendMessage(
+                $targetContact,
+                "مرحباً {$user->name} 🏥\nكود التحقق (OTP) الخاص بإعادة تعيين كلمة المرور في منصة Clinora هو: *{$otp}*\nيرجى عدم مشاركة هذا الكود مع أي شخص."
+            );
+        } else {
+            try {
+                Mail::raw(
+                    "مرحباً {$user->name} 🏥\n\nكود التحقق (OTP) الخاص بإعادة تعيين كلمة المرور في منصة Clinora هو:\n{$otp}\n\nيرجى عدم مشاركة هذا الكود مع أي شخص.\n\nفريق دعم Clinora SaaS",
+                    function ($message) use ($user) {
+                        $message->to($user->email, $user->name)
+                            ->subject('كود التحقق لاستعادة كلمة المرور - Clinora');
+                    }
+                );
+            } catch (\Exception $e) {
+                Log::error('Password reset email sending error: '.$e->getMessage());
+            }
+        }
 
         return redirect()->route('password.whatsapp.verify.form');
     }
@@ -74,7 +116,9 @@ class PasswordResetController extends Controller
             return redirect()->route('password.request');
         }
 
-        return view('auth.reset-password-otp');
+        $isWhatsAppEnabled = SystemSetting::isWhatsAppEnabled();
+
+        return view('auth.reset-password-otp', compact('isWhatsAppEnabled'));
     }
 
     /**

@@ -18,18 +18,23 @@
         <!-- Section 2: Hero -->
         <section
             class="px-4 sm:px-6 md:px-margin-desktop py-8 sm:py-12 md:py-section-gap max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12 overflow-hidden">
-            <div class="w-full md:w-1/2 space-y-4 sm:space-y-6 text-center md:text-right" data-aos="fade-up" data-aos-duration="800">
+            <div class="w-full md:w-1/2 space-y-4 sm:space-y-6 text-center md:text-right" data-aos="fade-up"
+                data-aos-duration="800">
                 <span
                     class="inline-block px-4 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-xs sm:text-sm font-bold shadow-sm">
                     الإصدار 2.0 الآن مع الذكاء الاصطناعي الطبي
                 </span>
-                <h1 class="font-display-lg text-3xl sm:text-4xl md:text-5xl lg:text-display-lg gradient-text leading-tight font-black">نمِّ عيادتك<br />بالذكاء
+                <h1
+                    class="font-display-lg text-3xl sm:text-4xl md:text-5xl lg:text-display-lg gradient-text leading-tight font-black">
+                    نمِّ عيادتك<br />بالذكاء
                     الاصطناعي</h1>
-                <p class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-lg mx-auto md:mx-0 leading-relaxed font-medium">
+                <p
+                    class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-lg mx-auto md:mx-0 leading-relaxed font-medium">
                     كلينورا هي منصة متكاملة لإدارة العيادات تجمع بين إدارة المرضى، الحجز الإلكتروني، أتمتة واتساب،
                     الذكاء الاصطناعي الطبي، الروشتات، المواعيد، والتحليلات في لوحة تحكم واحدة أنيقة.
                 </p>
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center md:justify-start gap-3 sm:gap-4 pt-4 w-full sm:w-auto">
+                <div
+                    class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center md:justify-start gap-3 sm:gap-4 pt-4 w-full sm:w-auto">
                     <a href="{{ route('register') }}"
                         class="bg-primary-container text-on-primary px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold font-label-md text-sm sm:text-base shadow-xl shadow-primary/30 hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto text-center inline-block">ابدأ
                         الآن مجانًا</a>
@@ -38,11 +43,13 @@
                         عرضًا تجريبيًا</a>
                 </div>
             </div>
-            <div class="w-full md:w-1/2 relative min-h-[350px] sm:min-h-[450px] md:min-h-[500px] mt-6 md:mt-0" data-aos="fade-up" data-aos-duration="900"
-                data-aos-delay="150">
+            <div class="w-full md:w-1/2 relative min-h-[350px] sm:min-h-[450px] md:min-h-[500px] mt-6 md:mt-0"
+                data-aos="fade-up" data-aos-duration="900" data-aos-delay="150">
                 <!-- Dashboard Mockup -->
-                <div class="glass rounded-2xl sm:rounded-3xl w-full aspect-video soft-bloom p-4 sm:p-6 relative overflow-hidden border border-white/60 shadow-xl">
-                    <div class="flex items-center justify-between border-b border-outline-variant pb-3 sm:pb-4 mb-3 sm:mb-4">
+                <div
+                    class="glass rounded-2xl sm:rounded-3xl w-full aspect-video soft-bloom p-4 sm:p-6 relative overflow-hidden border border-white/60 shadow-xl">
+                    <div
+                        class="flex items-center justify-between border-b border-outline-variant pb-3 sm:pb-4 mb-3 sm:mb-4">
                         <div class="flex gap-1.5 sm:gap-2">
                             <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-error"></div>
                             <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-secondary-container"></div>
@@ -72,7 +79,8 @@
                             <span class="material-symbols-outlined text-sm sm:text-base">calendar_today</span>
                         </div>
                         <div>
-                            <p class="text-[10px] sm:text-label-sm font-label-sm text-on-surface-variant font-bold">المواعيد</p>
+                            <p class="text-[10px] sm:text-label-sm font-label-sm text-on-surface-variant font-bold">المواعيد
+                            </p>
                             <p class="text-sm sm:text-headline-md font-headline-md font-extrabold text-primary">24</p>
                         </div>
                     </div>
@@ -85,8 +93,10 @@
                             <span class="material-symbols-outlined text-sm sm:text-base">payments</span>
                         </div>
                         <div>
-                            <p class="text-[10px] sm:text-label-sm font-label-sm text-on-surface-variant font-bold">إيرادات اليوم</p>
-                            <p class="text-sm sm:text-headline-md font-headline-md font-extrabold text-tertiary-container">1.2 ألف $</p>
+                            <p class="text-[10px] sm:text-label-sm font-label-sm text-on-surface-variant font-bold">إيرادات
+                                اليوم</p>
+                            <p class="text-sm sm:text-headline-md font-headline-md font-extrabold text-tertiary-container">
+                                1.2 ألف $</p>
                         </div>
                     </div>
                 </div>
@@ -111,7 +121,8 @@
         <!-- Section 3: Trust Bar -->
         <section class="bg-surface-container-low py-8 sm:py-12 border-y border-outline-variant/30">
             <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop text-center">
-                <p class="font-label-md text-xs sm:text-label-md text-on-surface-variant mb-6 sm:mb-8 font-bold" data-aos="fade-up">كل ما تحتاجه
+                <p class="font-label-md text-xs sm:text-label-md text-on-surface-variant mb-6 sm:mb-8 font-bold"
+                    data-aos="fade-up">كل ما تحتاجه
                     عيادتك في منصة واحدة</p>
                 <div class="flex flex-wrap justify-center gap-6 sm:gap-10 md:gap-16 lg:gap-24 items-center opacity-75">
                     <div class="flex items-center gap-2" data-aos="zoom-in" data-aos-delay="0">
@@ -135,10 +146,14 @@
         </section>
 
         <!-- Section 4: Features Grid -->
-        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto" id="features">
+        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto"
+            id="features">
             <div class="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4" data-aos="fade-up">
-                <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-on-surface">أدوات قوية للعيادات الحديثة</h2>
-                <p class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium">ركّز على رعاية مرضاك ودع
+                <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-on-surface">أدوات
+                    قوية للعيادات الحديثة</h2>
+                <p
+                    class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium">
+                    ركّز على رعاية مرضاك ودع
                     كلينورا تتولى الباقي بأتمتة ذكية ورؤى تحليلية دقيقة.</p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-gutter">
@@ -150,8 +165,10 @@
                         <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl"
                             style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">المساعد الذكي</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">لخّص تاريخ المريض وحلّل ملفات PDF
+                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">المساعد الذكي
+                    </h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">لخّص تاريخ المريض
+                        وحلّل ملفات PDF
                         ونتائج التحاليل فورًا بالذكاء الاصطناعي الطبي.</p>
                 </div>
                 <!-- Online Booking -->
@@ -161,8 +178,10 @@
                         class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-surface-container-high flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
                         <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">event</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">الحجز الإلكتروني</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">امنح عيادتك رابط حجز خاص بها ليتمكن
+                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">الحجز الإلكتروني
+                    </h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">امنح عيادتك رابط حجز
+                        خاص بها ليتمكن
                         المرضى من حجز المواعيد على مدار الساعة.</p>
                 </div>
                 <!-- WhatsApp Automation -->
@@ -172,8 +191,10 @@
                         class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-tertiary-fixed flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
                         <span class="material-symbols-outlined text-tertiary text-2xl sm:text-3xl">chat</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">مزامنة واتساب</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">تأكيدات وتذكيرات مواعيد آلية تُرسل
+                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">مزامنة واتساب
+                    </h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">تأكيدات وتذكيرات
+                        مواعيد آلية تُرسل
                         مباشرة إلى المرضى.</p>
                 </div>
                 <!-- EMR -->
@@ -183,8 +204,10 @@
                         class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-surface-container-high flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
                         <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">folder_shared</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">سجل طبي إلكتروني متقدم</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">تاريخ المريض الكامل والسجلات والوسائط
+                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">سجل طبي إلكتروني
+                        متقدم</h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">تاريخ المريض الكامل
+                        والسجلات والوسائط
                         منظمة في جدول زمني أنيق.</p>
                 </div>
                 <!-- Appointments -->
@@ -195,7 +218,8 @@
                         <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">calendar_month</span>
                     </div>
                     <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">تقويم ذكي</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">إدارة مرئية لجميع الأطباء والغرف، مع
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">إدارة مرئية لجميع
+                        الأطباء والغرف، مع
                         إعادة جدولة بالسحب والإفلات في ثوانٍ.</p>
                 </div>
                 <!-- Digital Prescriptions -->
@@ -205,8 +229,10 @@
                         class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-secondary-fixed flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
                         <span class="material-symbols-outlined text-secondary text-2xl sm:text-3xl">description</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">روشتات إلكترونية</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">أنشئ روشتات رقمية مميزة باسم عيادتك
+                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">روشتات إلكترونية
+                    </h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">أنشئ روشتات رقمية
+                        مميزة باسم عيادتك
                         يمكن مشاركتها عبر QR أو واتساب.</p>
                 </div>
                 <!-- Reception Dashboard -->
@@ -216,8 +242,10 @@
                         class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-surface-container-high flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
                         <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">monitoring</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">مركز الاستقبال</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">حالة لحظية لغرف الانتظار، تسجيل دخول
+                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">مركز الاستقبال
+                    </h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">حالة لحظية لغرف
+                        الانتظار، تسجيل دخول
                         المرضى، والمدفوعات المعلّقة.</p>
                 </div>
                 <!-- Marketing System -->
@@ -227,8 +255,10 @@
                         class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-surface-container-high flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
                         <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">campaign</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">نظام تسويق CRM</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">تتبّع إحالات المرضى والحملات ومعدلات
+                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">نظام تسويق CRM
+                    </h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">تتبّع إحالات المرضى
+                        والحملات ومعدلات
                         الاحتفاظ بهم في لوحة تحكم واحدة.</p>
                 </div>
             </div>
@@ -236,57 +266,84 @@
 
         <!-- Section 5: Comparison Table -->
         <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-4xl mx-auto">
-            <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-center mb-8 sm:mb-12 text-on-surface" data-aos="fade-up">ميزة كلينورا التنافسية</h2>
-            <div class="overflow-x-auto w-full rounded-2xl sm:rounded-3xl border border-outline-variant/60 glass soft-bloom shadow-xl" data-aos="fade-up"
-                data-aos-delay="100">
+            <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-center mb-8 sm:mb-12 text-on-surface"
+                data-aos="fade-up">ميزة كلينورا التنافسية</h2>
+            <div class="overflow-x-auto w-full rounded-2xl sm:rounded-3xl border border-outline-variant/60 glass soft-bloom shadow-xl"
+                data-aos="fade-up" data-aos-delay="100">
                 <table class="min-w-[500px] w-full border-collapse text-right">
                     <thead>
                         <tr class="bg-surface-container/80">
                             <th class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">الميزة</th>
-                            <th class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface-variant opacity-60">العيادة
+                            <th
+                                class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface-variant opacity-60">
+                                العيادة
                                 التقليدية</th>
                             <th class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-primary">كلينورا SaaS</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-outline-variant/40">
                         <tr>
-                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">حجز المرضى</td>
-                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span> عبر الهاتف
+                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">حجز المرضى
+                            </td>
+                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span
+                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span>
+                                عبر الهاتف
                                 فقط</td>
-                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold"><span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span> إلكترونيًا على
+                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold">
+                                <span
+                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span>
+                                إلكترونيًا على
                                 مدار الساعة</td>
                         </tr>
                         <tr>
-                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">الملخصات الطبية</td>
-                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span> كتابة
+                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">الملخصات
+                                الطبية</td>
+                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span
+                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span>
+                                كتابة
                                 يدوية</td>
-                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold"><span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span> إنشاء فوري
+                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold">
+                                <span
+                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span>
+                                إنشاء فوري
                                 بالذكاء الاصطناعي</td>
                         </tr>
                         <tr>
                             <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">الإشعارات</td>
-                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span> رسائل SMS
+                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span
+                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span>
+                                رسائل SMS
                                 يدوية</td>
-                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold"><span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span> واتساب تلقائي
+                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold">
+                                <span
+                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span>
+                                واتساب تلقائي
                             </td>
                         </tr>
                         <tr>
-                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">الوصول إلى البيانات</td>
-                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span> سيرفر محلي
+                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">الوصول إلى
+                                البيانات</td>
+                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span
+                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span>
+                                سيرفر محلي
                                 فقط</td>
-                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold"><span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span> سحابي من أي جهاز
+                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold">
+                                <span
+                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span>
+                                سحابي من أي جهاز
                             </td>
                         </tr>
                         <tr>
-                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">سرعة الروشتة</td>
-                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span> كتابة
+                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">سرعة الروشتة
+                            </td>
+                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span
+                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span>
+                                كتابة
                                 يدوية</td>
-                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold"><span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span> قالب رقمي</td>
+                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold">
+                                <span
+                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span>
+                                قالب رقمي</td>
                         </tr>
                     </tbody>
                 </table>
@@ -310,9 +367,12 @@
                         <span class="font-label-md text-xs sm:text-label-md tracking-widest uppercase">الجيل القادم من
                             الذكاء</span>
                     </div>
-                    <h2 class="font-display-lg text-2xl sm:text-3xl md:text-4xl lg:text-display-lg text-white leading-tight font-black">تعرّف على مساعدك الطبي الذكي
+                    <h2
+                        class="font-display-lg text-2xl sm:text-3xl md:text-4xl lg:text-display-lg text-white leading-tight font-black">
+                        تعرّف على مساعدك الطبي الذكي
                     </h2>
-                    <p class="font-body-lg text-sm sm:text-base md:text-body-lg text-outline-variant font-medium leading-relaxed">
+                    <p
+                        class="font-body-lg text-sm sm:text-base md:text-body-lg text-outline-variant font-medium leading-relaxed">
                         يفهم الذكاء الاصطناعي المتخصص لدينا المصطلحات الطبية. يمكنه معالجة سنوات من تاريخ المريض ونتائج
                         التحاليل وقوائم الأدوية لتقديم ملخصات دقيقة وتحديد المخاطر المحتملة في ثوانٍ.
                     </p>
@@ -342,7 +402,8 @@
                                     <span class="material-symbols-outlined text-white text-xs sm:text-sm">person</span>
                                 </div>
                                 <div class="bg-white/10 p-3 sm:p-4 rounded-2xl rounded-tr-none max-w-[90%] sm:max-w-[80%]">
-                                    <p class="text-white text-xs sm:text-sm md:text-body-md font-medium leading-relaxed">هل يمكنك تلخيص تاريخ السيد أحمد مع التركيز على
+                                    <p class="text-white text-xs sm:text-sm md:text-body-md font-medium leading-relaxed">هل
+                                        يمكنك تلخيص تاريخ السيد أحمد مع التركيز على
                                         عوامل خطر القلب؟</p>
                                 </div>
                             </div>
@@ -353,20 +414,26 @@
                                     <div class="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3 text-cyan-400">
                                         <span class="material-symbols-outlined text-[10px] sm:text-xs"
                                             style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-                                        <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-tighter">كلينورا AI</span>
+                                        <span
+                                            class="text-[10px] sm:text-xs font-extrabold uppercase tracking-tighter">كلينورا
+                                            AI</span>
                                     </div>
-                                    <p class="text-white text-xs sm:text-sm md:text-body-md mb-2 sm:mb-3 font-bold">استنادًا إلى السجلات من 2021 إلى 2024:</p>
-                                    <ul class="space-y-1 sm:space-y-2 text-outline-variant text-xs sm:text-sm list-disc pr-4 sm:pr-5 font-medium leading-relaxed">
+                                    <p class="text-white text-xs sm:text-sm md:text-body-md mb-2 sm:mb-3 font-bold">
+                                        استنادًا إلى السجلات من 2021 إلى 2024:</p>
+                                    <ul
+                                        class="space-y-1 sm:space-y-2 text-outline-variant text-xs sm:text-sm list-disc pr-4 sm:pr-5 font-medium leading-relaxed">
                                         <li>ارتفاع ضغط الدم المزمن (آخر قراءة 145/95)</li>
                                         <li>تاريخ من فرط شحميات الدم (LDL بمعدل 160 في أكتوبر 2023)</li>
                                         <li>تاريخ عائلي: والده أصيب بنوبة قلبية في عمر 52</li>
                                         <li>مدخّن حاليًا (حوالي 10 سجائر يوميًا)</li>
                                     </ul>
-                                    <div class="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-white/10 flex items-center gap-2 sm:gap-3">
+                                    <div
+                                        class="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-white/10 flex items-center gap-2 sm:gap-3">
                                         <div
                                             class="px-2 py-0.5 sm:py-1 bg-yellow-500/20 text-yellow-400 text-[9px] sm:text-[11px] rounded uppercase font-extrabold shrink-0">
                                             تنبيه حرج</div>
-                                        <p class="text-[11px] sm:text-xs text-yellow-400 font-bold leading-tight">المريض لم يصرف روشتة أتورفاستاتين منذ 45
+                                        <p class="text-[11px] sm:text-xs text-yellow-400 font-bold leading-tight">المريض لم
+                                            يصرف روشتة أتورفاستاتين منذ 45
                                             يومًا.</p>
                                     </div>
                                 </div>
@@ -383,15 +450,19 @@
         </section>
 
         <!-- Section 7: How it Works -->
-        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto" id="how-it-works">
-            <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-center mb-12 sm:mb-16 text-on-surface" data-aos="fade-up">ابدأ خلال دقائق</h2>
+        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto"
+            id="how-it-works">
+            <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-center mb-12 sm:mb-16 text-on-surface"
+                data-aos="fade-up">ابدأ خلال دقائق</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 text-center">
                 <div class="space-y-4 sm:space-y-6" data-aos="fade-up" data-aos-delay="0">
                     <div
                         class="w-14 h-14 sm:w-16 sm:h-16 bg-primary-fixed rounded-full flex items-center justify-center mx-auto text-primary text-xl sm:text-2xl font-black shadow-lg">
                         1</div>
                     <h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface">أنشئ حسابك</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-base leading-relaxed max-w-xs mx-auto">سجّل واضبط ملف عيادتك، وساعات العمل، والخدمات
+                    <p
+                        class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-base leading-relaxed max-w-xs mx-auto">
+                        سجّل واضبط ملف عيادتك، وساعات العمل، والخدمات
                         التخصصية.</p>
                 </div>
                 <div class="space-y-4 sm:space-y-6" data-aos="fade-up" data-aos-delay="150">
@@ -399,7 +470,9 @@
                         class="w-14 h-14 sm:w-16 sm:h-16 bg-secondary-fixed rounded-full flex items-center justify-center mx-auto text-secondary text-xl sm:text-2xl font-black shadow-lg">
                         2</div>
                     <h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface">شارك رابطك</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-base leading-relaxed max-w-xs mx-auto">ضع رابط الحجز على جوجل أو إنستغرام أو واتساب. يحجز
+                    <p
+                        class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-base leading-relaxed max-w-xs mx-auto">
+                        ضع رابط الحجز على جوجل أو إنستغرام أو واتساب. يحجز
                         المرضى مباشرة دون اتصال.</p>
                 </div>
                 <div class="space-y-4 sm:space-y-6" data-aos="fade-up" data-aos-delay="300">
@@ -407,7 +480,9 @@
                         class="w-14 h-14 sm:w-16 sm:h-16 bg-tertiary-fixed rounded-full flex items-center justify-center mx-auto text-tertiary text-xl sm:text-2xl font-black shadow-lg">
                         3</div>
                     <h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface">أدر كل شيء</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-base leading-relaxed max-w-xs mx-auto">ادخل إلى لوحة التحكم لعرض المواعيد وإدارة المرضى
+                    <p
+                        class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-base leading-relaxed max-w-xs mx-auto">
+                        ادخل إلى لوحة التحكم لعرض المواعيد وإدارة المرضى
                         والاستفادة من رؤى الذكاء الاصطناعي.</p>
                 </div>
             </div>
@@ -417,31 +492,43 @@
         <section class="bg-primary/5 py-12 md:py-section-gap border-y border-primary/10">
             <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md" data-aos="zoom-in"
-                        data-aos-delay="0">
-                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-primary mb-2 font-black">40%</p>
-                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">تقليل حالات عدم
+                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md"
+                        data-aos="zoom-in" data-aos-delay="0">
+                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-primary mb-2 font-black">40%
+                        </p>
+                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">تقليل حالات
+                            عدم
                             الحضور</p>
-                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">من خلال تذكيرات واتساب الآلية.</p>
+                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">من خلال تذكيرات واتساب
+                            الآلية.</p>
                     </div>
-                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md" data-aos="zoom-in"
-                        data-aos-delay="100">
-                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-secondary mb-2 font-black">+10 ساعات</p>
-                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">توفير أسبوعي</p>
-                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">تقليل الأعمال الإدارية والرد على
+                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md"
+                        data-aos="zoom-in" data-aos-delay="100">
+                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-secondary mb-2 font-black">
+                            +10 ساعات</p>
+                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">توفير أسبوعي
+                        </p>
+                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">تقليل الأعمال الإدارية
+                            والرد على
                             المكالمات.</p>
                     </div>
-                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md" data-aos="zoom-in"
-                        data-aos-delay="200">
-                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-tertiary mb-2 font-black">2x</p>
-                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">سرعة الحجز</p>
-                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">يحب المرضى تجربة الحجز السلسة.</p>
+                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md"
+                        data-aos="zoom-in" data-aos-delay="200">
+                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-tertiary mb-2 font-black">2x
+                        </p>
+                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">سرعة الحجز
+                        </p>
+                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">يحب المرضى تجربة الحجز
+                            السلسة.</p>
                     </div>
-                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md" data-aos="zoom-in"
-                        data-aos-delay="300">
-                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-primary mb-2 font-black">100%</p>
-                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">بلا أوراق</p>
-                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">تحوّل رقمي كامل للعيادات.</p>
+                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md"
+                        data-aos="zoom-in" data-aos-delay="300">
+                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-primary mb-2 font-black">
+                            100%</p>
+                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">بلا أوراق
+                        </p>
+                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">تحوّل رقمي كامل
+                            للعيادات.</p>
                     </div>
                 </div>
             </div>
@@ -449,66 +536,76 @@
 
         <!-- Section 9: Testimonials -->
         <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto">
-            <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-center mb-12 sm:mb-16 text-on-surface" data-aos="fade-up">موثوق به من أكثر من 500
+            <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-center mb-12 sm:mb-16 text-on-surface"
+                data-aos="fade-up">موثوق به من أكثر من 500
                 طبيب</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom relative border border-white/60 shadow-lg flex flex-col justify-between" data-aos="fade-up"
-                    data-aos-delay="0">
+                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom relative border border-white/60 shadow-lg flex flex-col justify-between"
+                    data-aos="fade-up" data-aos-delay="0">
                     <div
                         class="absolute -top-4 -right-4 w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-md">
                         <span class="material-symbols-outlined text-lg sm:text-xl">format_quote</span>
                     </div>
-                    <p class="font-body-lg text-xs sm:text-sm md:text-body-lg mb-6 sm:mb-8 italic text-on-surface leading-relaxed font-medium">"غيّرت كلينورا عيادتي بالكامل. ميزة الملخص بالذكاء
+                    <p
+                        class="font-body-lg text-xs sm:text-sm md:text-body-lg mb-6 sm:mb-8 italic text-on-surface leading-relaxed font-medium">
+                        "غيّرت كلينورا عيادتي بالكامل. ميزة الملخص بالذكاء
                         الاصطناعي وحدها توفر لي 15 دقيقة لكل زيارة مريض. سهلة الاستخدام جدًا."</p>
                     <div class="flex items-center gap-3 sm:gap-4 pt-4 border-t border-outline-variant/30">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 border border-primary/20">
-                            <img class="w-full h-full object-cover"
-                                alt="د. سارة ميتشل"
+                        <div
+                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 border border-primary/20">
+                            <img class="w-full h-full object-cover" alt="د. سارة ميتشل"
                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrdkouHM7TdJh4UH6260UODTLJOhVcpyyKP1YStk0LwW2rWVCkgEYLJrCZrNlSm1Ayu2Ge5PLhEGLMFpKn6uJ1LYksjMsJCfKuOgC-AEMOniOsDBdn8T6o0osAEI3t0Pp6udPhw-NIlSHE9J2naIofCEn3GN-rGVJ08EEIIoY_74KGJybsbcqLo6x3h5sIpVz2MlOK3dYnrZHELFuYlLwrjDC2D5zjsxpVpQQc87T8tdlVyyWOMv-eGfdcG2BQGmKF9-uN6jYSzY8" />
                         </div>
                         <div>
                             <p class="font-bold text-xs sm:text-base text-on-surface">د. سارة منصور</p>
-                            <p class="text-[10px] sm:text-label-sm text-on-surface-variant uppercase font-semibold">استشارية قلب</p>
+                            <p class="text-[10px] sm:text-label-sm text-on-surface-variant uppercase font-semibold">
+                                استشارية قلب</p>
                         </div>
                     </div>
                 </div>
-                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom relative border border-white/60 shadow-lg flex flex-col justify-between" data-aos="fade-up"
-                    data-aos-delay="150">
+                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom relative border border-white/60 shadow-lg flex flex-col justify-between"
+                    data-aos="fade-up" data-aos-delay="150">
                     <div
                         class="absolute -top-4 -right-4 w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-md">
                         <span class="material-symbols-outlined text-lg sm:text-xl">format_quote</span>
                     </div>
-                    <p class="font-body-lg text-xs sm:text-sm md:text-body-lg mb-6 sm:mb-8 italic text-on-surface leading-relaxed font-medium">"تذكيرات واتساب الآلية قضت تقريبًا على حالات عدم
+                    <p
+                        class="font-body-lg text-xs sm:text-sm md:text-body-lg mb-6 sm:mb-8 italic text-on-surface leading-relaxed font-medium">
+                        "تذكيرات واتساب الآلية قضت تقريبًا على حالات عدم
                         الحضور. ارتفعت إيراداتنا بنسبة 20% خلال أول شهرين."</p>
                     <div class="flex items-center gap-3 sm:gap-4 pt-4 border-t border-outline-variant/30">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 border border-primary/20">
-                            <img class="w-full h-full object-cover"
-                                alt="طارق حداد"
+                        <div
+                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 border border-primary/20">
+                            <img class="w-full h-full object-cover" alt="طارق حداد"
                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHOh6nXhk4q7EGgnbF1jO1Y2659-eQaMNEKoIWrs1mz1x64QuTK3YDxy1ht4xFhWc6zme-eNJ2M4HkUnEFhbvVWUHlM_Wa4DQjHIz2KiGfeLJIIaiJ8HGThznDJiiK4m0x-EVo-I01EEY-Japh8QVbx9Crnm58_zdWU_OHymGEel3krfp_DVCV0NIKtHlHWi5uzNbN1O-sSfLAtNcLC3wuu1DHmtLo704-4wtrtC0M22P7yo5evWEdVakgiGLRfjWJHQA1VupKydI" />
                         </div>
                         <div>
                             <p class="font-bold text-xs sm:text-base text-on-surface">د. طارق حداد</p>
-                            <p class="text-[10px] sm:text-label-sm text-on-surface-variant uppercase font-semibold">مدير مجمع طبي</p>
+                            <p class="text-[10px] sm:text-label-sm text-on-surface-variant uppercase font-semibold">مدير
+                                مجمع طبي</p>
                         </div>
                     </div>
                 </div>
-                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom relative border border-white/60 shadow-lg flex flex-col justify-between" data-aos="fade-up"
-                    data-aos-delay="300">
+                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom relative border border-white/60 shadow-lg flex flex-col justify-between"
+                    data-aos="fade-up" data-aos-delay="300">
                     <div
                         class="absolute -top-4 -right-4 w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-md">
                         <span class="material-symbols-outlined text-lg sm:text-xl">format_quote</span>
                     </div>
-                    <p class="font-body-lg text-xs sm:text-sm md:text-body-lg mb-6 sm:mb-8 italic text-on-surface leading-relaxed font-medium">"يمكنني الوصول إلى سجلات مرضاي من جهاز الآيباد في
+                    <p
+                        class="font-body-lg text-xs sm:text-sm md:text-body-lg mb-6 sm:mb-8 italic text-on-surface leading-relaxed font-medium">
+                        "يمكنني الوصول إلى سجلات مرضاي من جهاز الآيباد في
                         المنزل أو هاتفي أثناء السفر. استقرار النظام السحابي رائع."</p>
                     <div class="flex items-center gap-3 sm:gap-4 pt-4 border-t border-outline-variant/30">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 border border-primary/20">
-                            <img class="w-full h-full object-cover"
-                                alt="د. جلال شهاب"
+                        <div
+                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 border border-primary/20">
+                            <img class="w-full h-full object-cover" alt="د. جلال شهاب"
                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDirJ_2jGUl-4haRXMvI1CC6HaBwmhzlBwvmKdchIangPXr1Qc8wM3WGxbXLCr0i_XuxB3LoLZ62wUOVnUD11Az1KyzWhcuxkV_tJr-fNGUzQU7BYvF8Mu4jILWBr5ORlb3MF5x2yflm7rSKTWXKxFUnTLYadqQfOWobv2HAeYFoB9CL5dOQWEJjnlAFdcXj_L30WjmT-yTOuxtBZIp0YRs0j56IVukYc4EqTJ7Moiq5Jk1hfRZifseBGpsqP4hToA9wsORuJ_Pldw" />
                         </div>
                         <div>
                             <p class="font-bold text-xs sm:text-base text-on-surface">د. جلال شهاب</p>
-                            <p class="text-[10px] sm:text-label-sm text-on-surface-variant uppercase font-semibold">استشاري طب أطفال</p>
+                            <p class="text-[10px] sm:text-label-sm text-on-surface-variant uppercase font-semibold">استشاري
+                                طب أطفال</p>
                         </div>
                     </div>
                 </div>
@@ -516,38 +613,51 @@
         </section>
 
         <!-- Section 9.5: Pricing -->
-        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto" id="pricing">
+        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto"
+            id="pricing">
             <div class="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4" data-aos="fade-up">
-                <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-on-surface">خطط أسعار تناسب عيادتك</h2>
-                <p class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium">تجربة مجانية لمدة 30 يومًا بجميع المميزات، وخطط سنوية مرنة تناسب نمو عيادتك أو فروعك الطبية.</p>
+                <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-on-surface">خطط
+                    أسعار تناسب عيادتك</h2>
+                <p
+                    class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium">
+                    تجربة مجانية لمدة 30 يومًا بجميع المميزات، وخطط سنوية مرنة تناسب نمو عيادتك أو فروعك الطبية.</p>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
                 <!-- Free Trial -->
-                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom flex flex-col border border-white/60 shadow-md" data-aos="fade-up"
-                    data-aos-delay="0">
-                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-on-surface">تجريبية مجانية</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-body-md mb-6">لتجربة جميع مميزات النظام بدون أي التزامات.
+                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom flex flex-col border border-white/60 shadow-md"
+                    data-aos="fade-up" data-aos-delay="0">
+                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-on-surface">تجريبية مجانية
+                    </h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-body-md mb-6">لتجربة جميع
+                        مميزات النظام بدون أي التزامات.
                     </p>
                     <div class="mb-6">
-                        <span class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-primary">مجاناً</span>
-                        <span class="text-on-surface-variant font-body-md text-sm sm:text-base font-bold"> / لمدة 30 يومًا</span>
+                        <span
+                            class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-primary">مجاناً</span>
+                        <span class="text-on-surface-variant font-body-md text-sm sm:text-base font-bold"> / لمدة 30
+                            يومًا</span>
                     </div>
                     <ul class="space-y-3 mb-8 flex-1">
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">مفتوح فيها جميع مميزات النظام بالكامل</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">مفتوح فيها جميع
+                                مميزات النظام بالكامل</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">حجز إلكتروني وإدارة مواعيد وتقويم ذكي</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">حجز إلكتروني وإدارة
+                                مواعيد وتقويم ذكي</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">المساعد الطبي الذكي والروشتات الإلكترونية</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">المساعد الطبي الذكي
+                                والروشتات الإلكترونية</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تذكيرات واتساب وسجل طبي إلكتروني متقدم</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تذكيرات واتساب وسجل
+                                طبي إلكتروني متقدم</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">صلاحية كاملة لمدة 30 يومًا مجانًا</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">صلاحية كاملة لمدة 30
+                                يومًا مجانًا</span></li>
                     </ul>
                     <a class="glass text-on-surface text-center px-6 py-3.5 rounded-xl font-bold font-label-md text-sm sm:text-base hover:bg-surface-variant/50 transition-all duration-300 border border-outline-variant/40"
                         href="{{ route('register') }}">ابدأ تجربتك المجانية</a>
@@ -559,57 +669,73 @@
                         class="absolute -top-3 right-8 bg-white text-primary text-xs font-black px-3 py-1 rounded-full shadow-md">الأكثر
                         طلبًا</span>
                     <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-white">احترافية</h3>
-                    <p class="text-white/80 font-body-md text-xs sm:text-sm md:text-body-md mb-6">مثالية للعيادات والمراكز الطبية الموحدة.</p>
+                    <p class="text-white/80 font-body-md text-xs sm:text-sm md:text-body-md mb-6">مثالية للعيادات والمراكز
+                        الطبية الموحدة.</p>
                     <div class="mb-6">
-                        <span class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-white">5,000</span>
+                        <span
+                            class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-white">5,000</span>
                         <span class="text-white/80 font-body-md text-sm sm:text-base font-bold"> جنيه / سنويًا</span>
                     </div>
                     <ul class="space-y-3 mb-8 flex-1">
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">مفتوح فيها جميع مميزات النظام بالكامل</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">مفتوح فيها جميع مميزات
+                                النظام بالكامل</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">حجز إلكتروني وإدارة مواعيد غير محدودة</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">حجز إلكتروني وإدارة
+                                مواعيد غير محدودة</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">المساعد الطبي الذكي والروشتات الإلكترونية</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">المساعد الطبي الذكي
+                                والروشتات الإلكترونية</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">تذكيرات واتساب وسجل طبي إلكتروني متكامل</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">تذكيرات واتساب وسجل طبي
+                                إلكتروني متكامل</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">دعم فني مستمر وتحديثات تلقائية</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">دعم فني مستمر وتحديثات
+                                تلقائية</span></li>
                     </ul>
                     <a class="bg-white text-primary text-center px-6 py-3.5 rounded-xl font-bold font-label-md text-sm sm:text-base hover:scale-105 transition-transform shadow-lg"
                         href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer">اشترك الآن</a>
                 </div>
                 <!-- Enterprise -->
-                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom flex flex-col border border-white/60 shadow-md" data-aos="fade-up"
-                    data-aos-delay="300">
-                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-on-surface">المؤسسات والفروع</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-body-md mb-6">للأفرع المتعددة والمجمعات الطبية الكبرى.
+                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom flex flex-col border border-white/60 shadow-md"
+                    data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-on-surface">المؤسسات
+                        والفروع</h3>
+                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-body-md mb-6">للأفرع المتعددة
+                        والمجمعات الطبية الكبرى.
                     </p>
                     <div class="mb-6">
-                        <span class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-primary">10,000</span>
-                        <span class="text-on-surface-variant font-body-md text-sm sm:text-base font-bold"> جنيه / سنويًا</span>
+                        <span
+                            class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-primary">10,000</span>
+                        <span class="text-on-surface-variant font-body-md text-sm sm:text-base font-bold"> جنيه /
+                            سنويًا</span>
                     </div>
                     <ul class="space-y-3 mb-8 flex-1">
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تشمل جميع مميزات النظام بالكامل</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تشمل جميع مميزات
+                                النظام بالكامل</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-bold text-primary">ميزة إدارة أكثر من فرع وأكثر من عيادة</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-bold text-primary">ميزة إدارة أكثر من فرع
+                                وأكثر من عيادة</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-bold text-primary">لوحة تحكم خاصة لمدير الأفرع والعيادات</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-bold text-primary">لوحة تحكم خاصة لمدير
+                                الأفرع والعيادات</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تقارير وتحليلات مجمعة لجميع الفروع</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تقارير وتحليلات
+                                مجمعة لجميع الفروع</span></li>
                         <li class="flex items-center gap-2.5"><span
                                 class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">مدير حساب مخصص ودعم فني ذو أولوية</span></li>
+                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">مدير حساب مخصص ودعم
+                                فني ذو أولوية</span></li>
                     </ul>
                     <a class="glass text-on-surface text-center px-6 py-3.5 rounded-xl font-bold font-label-md text-sm sm:text-base hover:bg-surface-variant/50 transition-all duration-300 border border-outline-variant/40"
                         href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer">اشترك الآن</a>
@@ -627,17 +753,23 @@
                 <div
                     class="absolute bottom-0 right-0 w-64 h-64 bg-cyan-500/20 rounded-full translate-y-1/2 translate-x-1/2 blur-[80px]">
                 </div>
-                <h2 class="font-display-lg text-2xl sm:text-3xl md:text-4xl lg:text-display-lg mb-4 sm:mb-6 relative z-10 font-black">جاهز لتنمية عيادتك؟</h2>
-                <p class="font-body-lg text-xs sm:text-base md:text-body-lg mb-8 sm:mb-10 max-w-2xl mx-auto opacity-90 relative z-10 font-medium leading-relaxed">انضم إلى مئات
+                <h2
+                    class="font-display-lg text-2xl sm:text-3xl md:text-4xl lg:text-display-lg mb-4 sm:mb-6 relative z-10 font-black">
+                    جاهز لتنمية عيادتك؟</h2>
+                <p
+                    class="font-body-lg text-xs sm:text-base md:text-body-lg mb-8 sm:mb-10 max-w-2xl mx-auto opacity-90 relative z-10 font-medium leading-relaxed">
+                    انضم إلى مئات
                     العيادات حول العالم التي تعمل على تحديث رعاية مرضاها بمنصة كلينورا الذكية.</p>
-                <div class="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 sm:gap-4 relative z-10 w-full sm:w-auto max-w-md mx-auto sm:max-w-none">
+                <div
+                    class="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 sm:gap-4 relative z-10 w-full sm:w-auto max-w-md mx-auto sm:max-w-none">
                     <a class="bg-white text-primary px-6 sm:px-8 md:px-10 py-3.5 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg md:text-headline-md hover:scale-105 transition-transform inline-block w-full sm:w-auto text-center shadow-lg"
                         href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer">ابدأ تجربتك
                         المجانية</a>
                     <a class="bg-white/10 backdrop-blur-md border border-white/20 text-white px-6 sm:px-8 md:px-10 py-3.5 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg md:text-headline-md hover:bg-white/20 transition-all inline-block w-full sm:w-auto text-center"
                         href="#contact">اطلب عرضًا تجريبيًا</a>
                 </div>
-                <p class="mt-6 sm:mt-8 text-xs sm:text-sm opacity-75 font-medium">لا حاجة لبطاقة ائتمان. يمكنك الإلغاء في أي وقت.</p>
+                <p class="mt-6 sm:mt-8 text-xs sm:text-sm opacity-75 font-medium">لا حاجة لبطاقة ائتمان. يمكنك الإلغاء في
+                    أي وقت.</p>
             </div>
         </section>
     </main>

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Appointment;
+use App\Models\SystemSetting;
 use App\Services\WhatsAppService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -15,13 +16,18 @@ class SendAppointmentReminders extends Command
 
     public function handle(WhatsAppService $whatsApp): int
     {
+        if (! SystemSetting::isWhatsAppEnabled()) {
+            $this->warn('WhatsApp service is globally disabled in platform settings. Skipping appointment reminders.');
+
+            return self::SUCCESS;
+        }
+
         $this->info('Searching for appointments scheduled for tomorrow...');
 
         $tomorrowStart = Carbon::tomorrow()->startOfDay();
         $tomorrowEnd = Carbon::tomorrow()->endOfDay();
 
-        
-        $remindingDate =   now()->subdays(1);
+        $remindingDate = now()->subdays(1);
         $appointments = Appointment::with(['patient', 'clinic', 'visitType'])
             ->whereBetween('scheduled_at', [$tomorrowStart, $tomorrowEnd])
             ->whereIn('status', ['pending', 'confirmed'])
