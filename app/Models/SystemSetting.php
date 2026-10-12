@@ -35,12 +35,21 @@ class SystemSetting extends Model
 
     /**
      * Check if WhatsApp service is globally enabled across the platform.
-     * Defaults to true if not set yet.
+     * Master kill-switch: config/clinora.php features.whatsapp_enabled.
      */
     public static function isWhatsAppEnabled(): bool
     {
-        $val = static::get('whatsapp_enabled', '1');
+        if (! config('clinora.features.whatsapp_enabled', false)) {
+            return false;
+        }
+
+        $val = static::get('whatsapp_enabled', '0');
 
         return $val === '1' || $val === 'true' || $val === true || $val === 1;
+    }
+
+    public static function isAiEnabled(): bool
+    {
+        return (bool) config('clinora.features.ai_enabled', false);
     }
 }

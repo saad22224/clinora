@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Clinic;
 
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
+use App\Models\SystemSetting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +14,9 @@ class PatientAIChatController extends Controller
 {
     public function chat(Request $request, Patient $patient)
     {
-        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
+        abort_unless(SystemSetting::isAiEnabled(), 404);
+
+        abort_if($patient->clinic_id != $this->currentClinicId(), 403);
 
         $request->validate([
             'message' => ['required', 'string', 'max:2000'],

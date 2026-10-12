@@ -6,13 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Drug;
 use App\Models\Prescription;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PrescriptionController extends Controller
 {
     public function index(Request $request)
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
         $query = trim($request->query('search', ''));
 
         $prescriptions = $clinic->prescriptions()
@@ -58,7 +57,7 @@ class PrescriptionController extends Controller
 
     public function store(Request $request)
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
 
         $validated = $request->validate([
             'patient_id' => ['required', 'exists:patients,id'],
@@ -102,7 +101,7 @@ class PrescriptionController extends Controller
 
     public function destroy(Prescription $prescription)
     {
-        if ($prescription->clinic_id != Auth::user()->clinic_id) {
+        if ($prescription->clinic_id != $this->currentClinicId()) {
             abort(403);
         }
 
@@ -113,12 +112,12 @@ class PrescriptionController extends Controller
 
     public function print(Prescription $prescription)
     {
-        if ($prescription->clinic_id != Auth::user()->clinic_id) {
+        if ($prescription->clinic_id != $this->currentClinicId()) {
             abort(403);
         }
 
         $prescription->load(['patient', 'items']);
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
 
         return view('clinic.prescriptions-print', compact('prescription', 'clinic'));
     }

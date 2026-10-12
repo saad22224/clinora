@@ -77,10 +77,11 @@ class PasswordResetController extends Controller
             $targetContact = $targetPhone;
         }
 
-        $otp = rand(100000, 999999);
+        $otp = (string) random_int(100000, 999999);
         session([
             'password_reset_user_id' => $user->id,
             'password_reset_otp' => $otp,
+            'password_reset_otp_expires_at' => now()->addMinutes(10)->timestamp,
             'password_reset_phone' => $targetContact,
             'password_reset_otp_verified' => false,
         ]);
@@ -134,8 +135,13 @@ class PasswordResetController extends Controller
 
         $userId = session('password_reset_user_id');
         $savedOtp = session('password_reset_otp');
+        $expiresAt = session('password_reset_otp_expires_at');
 
-        if (! $userId || ! $savedOtp || trim($request->otp) != (string) $savedOtp) {
+        if (! $userId || ! $savedOtp || ($expiresAt && now()->timestamp > (int) $expiresAt)) {
+            return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
+        }
+
+        if (trim($request->otp) != (string) $savedOtp) {
             return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
         }
 

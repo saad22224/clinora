@@ -23,7 +23,7 @@ class AppointmentController extends Controller
             'date_to' => ['nullable', 'date'],
         ]);
 
-        $clinicId = Auth::user()->clinic_id;
+        $clinicId = $this->currentClinicId();
 
         $query = Appointment::with(['patient', 'visitType'])
             ->where('clinic_id', $clinicId)
@@ -70,10 +70,10 @@ class AppointmentController extends Controller
         ]);
 
         $visitType = VisitType::findOrFail($validated['visit_type_id']);
-        abort_if($visitType->clinic_id != Auth::user()->clinic_id, 403);
+        abort_if($visitType->clinic_id != $this->currentClinicId(), 403);
 
         $patient = Patient::findOrFail($validated['patient_id']);
-        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
+        abort_if($patient->clinic_id != $this->currentClinicId(), 403);
 
         // Normalize date-only to start of day
         $validated['scheduled_at'] = Carbon::parse($validated['scheduled_at'])->startOfDay();
@@ -81,7 +81,7 @@ class AppointmentController extends Controller
         Appointment::create([
             ...$validated,
             'price' => $visitType->price,
-            'clinic_id' => Auth::user()->clinic_id,
+            'clinic_id' => $this->currentClinicId(),
             'doctor_id' => Auth::id(),
             'status' => 'confirmed',
             'source' => 'reception_manual_entry',
@@ -93,7 +93,7 @@ class AppointmentController extends Controller
 
     public function updateStatus(Request $request, Appointment $appointment)
     {
-        abort_if($appointment->clinic_id != Auth::user()->clinic_id, 403);
+        abort_if($appointment->clinic_id != $this->currentClinicId(), 403);
 
         $validated = $request->validate([
             'status' => ['required', 'in:pending,confirmed,rejected,cancelled,completed'],
@@ -114,7 +114,7 @@ class AppointmentController extends Controller
 
     public function destroy(Appointment $appointment)
     {
-        abort_if($appointment->clinic_id != Auth::user()->clinic_id, 403);
+        abort_if($appointment->clinic_id != $this->currentClinicId(), 403);
         $appointment->delete();
 
         return redirect()->route('clinic.appointments.index')

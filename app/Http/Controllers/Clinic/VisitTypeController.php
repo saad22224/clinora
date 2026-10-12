@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Clinic;
 use App\Http\Controllers\Controller;
 use App\Models\VisitType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class VisitTypeController extends Controller
 {
     public function index()
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
         $visitTypes = $clinic->visitTypes()->latest()->paginate(15);
 
         return view('clinic.visit-types', compact('visitTypes'));
@@ -19,7 +18,7 @@ class VisitTypeController extends Controller
 
     public function store(Request $request)
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -36,7 +35,7 @@ class VisitTypeController extends Controller
 
     public function update(Request $request, VisitType $visitType)
     {
-        if ($visitType->clinic_id != Auth::user()->clinic_id) {
+        if ($visitType->clinic_id != $this->currentClinicId()) {
             abort(403);
         }
 
@@ -55,7 +54,7 @@ class VisitTypeController extends Controller
 
     public function destroy(VisitType $visitType)
     {
-        if ($visitType->clinic_id != Auth::user()->clinic_id) {
+        if ($visitType->clinic_id != $this->currentClinicId()) {
             abort(403);
         }
 

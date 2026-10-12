@@ -5,21 +5,20 @@ namespace App\Http\Controllers\Clinic;
 use App\Http\Controllers\Controller;
 use App\Services\ImageOptimizationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
     public function index()
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
 
         return view('clinic.settings', compact('clinic'));
     }
 
     public function update(Request $request)
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],

@@ -6,6 +6,8 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -55,5 +57,55 @@ class User extends Authenticatable
     public function clinic(): BelongsTo
     {
         return $this->belongsTo(Clinic::class);
+    }
+
+    public function organizations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class, 'organization_users')
+            ->withPivot(['role', 'permissions'])
+            ->withTimestamps();
+    }
+
+    public function organizationMemberships(): HasMany
+    {
+        return $this->hasMany(OrganizationUser::class);
+    }
+
+    public function primaryOrganization(): ?Organization
+    {
+        return $this->organizations()->first();
+    }
+
+    public function belongsToOrganization(): bool
+    {
+        return $this->organizations()->exists();
+    }
+
+    /**
+     * Home URL after login /dashboard for this user.
+     */
+    public function homeRouteName(): string
+    {
+        if ($this->role === 'superadmin') {
+            return 'admin.dashboard';
+        }
+
+        if ($this->belongsToOrganization()) {
+            return 'organization.dashboard';
+        }
+
+        return 'clinic.dashboard';
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    public function homeRouteParameters(): array
+    {
+        if ($this->belongsToOrganization()) {
+            return [$this->primaryOrganization()];
+        }
+
+        return [];
     }
 }

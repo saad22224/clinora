@@ -173,19 +173,19 @@
                 </div>
                 <form method="POST" action="{{ route('admin.subscriptions.assign') }}">
                     @csrf
+                    <input type="hidden" name="target_type" value="clinic">
                     <input type="hidden" name="clinic_id" value="{{ $c->id }}">
                     <div class="p-6 space-y-4">
                         <div>
                             <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">اختر الباقة الجديدة <span class="text-red-500">*</span></label>
-                            <select name="plan_id" class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white">
-                                {{-- <option value="">باقة تجريبية / مجانية (14 يوم)</option> --}}
+                            <select name="plan_id" class="form-control">
                                 @foreach($plans as $p)
                                     <option value="{{ $p->id }}" {{ ($c->subscription?->plan_id == $p->id || $c->subscription?->plan == $p->name) ? 'selected' : '' }}>
                                         {{ $p->name }} — ${{ $p->price }} ({{ $p->duration_in_days }} يوم)
                                     </option>
                                 @endforeach
                             </select>
-                            <p class="text-xs text-slate-500 mt-1.5">💡 سيتم حساب تاريخ الانتهاء تلقائياً بناءً على مدة الباقة المختارة.</p>
+                            <p class="text-xs text-slate-500 mt-1.5">باقات العيادات المنفردة فقط. لباقات السلاسل استخدم صفحة «سلاسل العيادات».</p>
                         </div>
 
                         <div class="flex items-center gap-3 pt-2">
@@ -210,14 +210,14 @@
         <div data-modal-panel class="bg-white dark:bg-[#0A0A12] w-full max-w-lg rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden scale-95 opacity-0 translate-y-4 transition-all duration-200">
             <div class="px-6 py-4 border-b border-slate-200 dark:border-white/[0.06] flex justify-between items-center bg-slate-50 dark:bg-white/[0.02]">
                 <div>
-                    <h3 class="font-black text-lg text-slate-900 dark:text-white">إضافة عيادة جديدة</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">سيتم إنشاء حساب المالك تلقائياً</p>
+                    <h3 class="font-black text-lg text-slate-900 dark:text-white">إضافة عيادة منفردة</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">للسلاسل: أنشئ من «سلاسل العيادات» ثم أضف الفروع من لوحة السلسلة</p>
                 </div>
                 <button data-modal-close="modal-add-clinic" class="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <form method="POST" action="{{ route('admin.clinics.store') }}">
+            <form method="POST" action="{{ route('admin.clinics.store') }}" autocomplete="off">
                 @csrf
                 <div class="p-6 space-y-4">
                     @if($errors->any())
@@ -227,22 +227,18 @@
                     @endif
 
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">اسم العيادة <span class="text-red-500">*</span></label>
-                        <input type="text" name="clinic_name" value="{{ old('clinic_name') }}" required
-                               class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600"
-                               placeholder="مثال: عيادة الأمل الطبية">
+                        <label class="form-label">اسم العيادة <span class="text-red-500">*</span></label>
+                        <input type="text" name="clinic_name" value="{{ old('clinic_name') }}" required class="form-control" placeholder="مثال: عيادة الأمل الطبية" autocomplete="organization">
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">اسم المالك <span class="text-red-500">*</span></label>
-                            <input type="text" name="owner_name" value="{{ old('owner_name') }}" required
-                                   class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600"
-                                   placeholder="د. أحمد محمد">
+                            <label class="form-label">اسم المالك <span class="text-red-500">*</span></label>
+                            <input type="text" name="owner_name" value="{{ old('owner_name') }}" required class="form-control" placeholder="د. أحمد محمد" autocomplete="name">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">الباقة</label>
-                            <select name="plan_id" class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white">
+                            <label class="form-label">الباقة</label>
+                            <select name="plan_id" class="form-control">
                                 <option value="">تجريبي مجاني (14 يوم)</option>
                                 @foreach($plans as $plan)
                                     <option value="{{ $plan->id }}" {{ old('plan_id') == $plan->id ? 'selected' : '' }}>{{ $plan->name }} — ${{ $plan->price }}</option>
@@ -253,8 +249,8 @@
 
                     @if(isset($marketers) && $marketers->isNotEmpty())
                         <div>
-                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">المسوق المحيل (اختياري)</label>
-                            <select name="marketer_id" class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white">
+                            <label class="form-label">المسوق المحيل (اختياري)</label>
+                            <select name="marketer_id" class="form-control">
                                 <option value="">بدون إحالة</option>
                                 @foreach($marketers as $marketer)
                                     <option value="{{ $marketer->id }}" {{ old('marketer_id') == $marketer->id ? 'selected' : '' }}>{{ $marketer->name }} ({{ $marketer->referral_code }})</option>
@@ -264,17 +260,13 @@
                     @endif
 
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">البريد الإلكتروني <span class="text-red-500">*</span></label>
-                        <input type="email" name="owner_email" value="{{ old('owner_email') }}" required
-                               class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600"
-                               placeholder="doctor@clinic.com">
+                        <label class="form-label">البريد الإلكتروني <span class="text-red-500">*</span></label>
+                        <input type="email" name="owner_email" value="{{ old('owner_email') }}" required class="form-control" placeholder="doctor@clinic.com" autocomplete="off">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">كلمة المرور <span class="text-red-500">*</span></label>
-                        <input type="password" name="owner_password" required minlength="8"
-                               class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600"
-                               placeholder="8 أحرف على الأقل">
+                        <label class="form-label">كلمة المرور <span class="text-red-500">*</span></label>
+                        <input type="password" name="owner_password" required minlength="8" class="form-control" placeholder="8 أحرف على الأقل" autocomplete="new-password">
                     </div>
                 </div>
                 <div class="px-6 py-4 border-t border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.02] flex justify-end gap-3">

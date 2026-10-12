@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
+use Database\Factories\SubscriptionFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Subscription extends Model
 {
+    /** @use HasFactory<SubscriptionFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'clinic_id',
+        'organization_id',
         'plan_id',
         'plan',
         'starts_at',
@@ -16,15 +22,23 @@ class Subscription extends Model
         'is_active',
     ];
 
-    protected $casts = [
-        'starts_at' => 'date',
-        'ends_at' => 'date',
-        'is_active' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'starts_at' => 'date',
+            'ends_at' => 'date',
+            'is_active' => 'boolean',
+        ];
+    }
 
     public function clinic(): BelongsTo
     {
         return $this->belongsTo(Clinic::class);
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
     }
 
     public function plan(): BelongsTo

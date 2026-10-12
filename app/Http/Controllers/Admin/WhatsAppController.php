@@ -13,6 +13,8 @@ class WhatsAppController extends Controller
 
     public function index()
     {
+        abort_unless(config('clinora.features.whatsapp_enabled', false), 404);
+
         $whatsappEnabled = SystemSetting::isWhatsAppEnabled();
 
         return view('admin.whatsapp', compact('whatsappEnabled'));
@@ -20,11 +22,15 @@ class WhatsAppController extends Controller
 
     public function status()
     {
+        abort_unless(config('clinora.features.whatsapp_enabled', false), 404);
+
         return response()->json($this->whatsApp->getStatus());
     }
 
     public function logout()
     {
+        abort_unless(config('clinora.features.whatsapp_enabled', false), 404);
+
         $res = $this->whatsApp->logout();
 
         return redirect()->route('admin.whatsapp.index')
@@ -33,6 +39,8 @@ class WhatsAppController extends Controller
 
     public function sendTest(Request $request)
     {
+        abort_unless(config('clinora.features.whatsapp_enabled', false), 404);
+
         $validated = $request->validate([
             'phone' => 'required|string',
             'message' => 'required|string',

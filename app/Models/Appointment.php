@@ -17,6 +17,8 @@ class Appointment extends Model
     protected $casts = [
         'scheduled_at' => 'datetime',
         'price' => 'decimal:2',
+        'amount_paid' => 'decimal:2',
+        'reminder_sent' => 'boolean',
     ];
 
     public function patient()

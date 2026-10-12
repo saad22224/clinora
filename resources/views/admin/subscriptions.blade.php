@@ -203,6 +203,7 @@
             </div>
             <form method="POST" action="{{ route('admin.subscriptions.assign') }}">
                 @csrf
+                <input type="hidden" name="target_type" value="clinic">
                 <div class="p-6 space-y-4">
                     <div>
                         <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">اختر العيادة <span class="text-red-500">*</span></label>
@@ -218,7 +219,7 @@
                         <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">اختر الباقة <span class="text-red-500">*</span></label>
                         <select name="plan_id" class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white">
                             <option value="">باقة تجريبية / مجانية (14 يوم)</option>
-                            @foreach($plans as $p)
+                            @foreach($plans->where('type', 'single') as $p)
                                 <option value="{{ $p->id }}">{{ $p->name }} — ${{ $p->price }} ({{ $p->duration_in_days }} يوم)</option>
                             @endforeach
                         </select>
@@ -256,13 +257,14 @@
                 </div>
                 <form method="POST" action="{{ route('admin.subscriptions.assign') }}">
                     @csrf
+                    <input type="hidden" name="target_type" value="clinic">
                     <input type="hidden" name="clinic_id" value="{{ $c->id }}">
                     <div class="p-6 space-y-4">
                         <div>
                             <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">اختر الباقة الجديدة <span class="text-red-500">*</span></label>
                             <select name="plan_id" class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white">
                                 <option value="">باقة تجريبية / مجانية (14 يوم)</option>
-                                @foreach($plans as $p)
+                                @foreach($plans->where('type', 'single') as $p)
                                     <option value="{{ $p->id }}" {{ ($c->subscription?->plan_id == $p->id || $c->subscription?->plan == $p->name) ? 'selected' : '' }}>
                                         {{ $p->name }} — ${{ $p->price }} ({{ $p->duration_in_days }} يوم)
                                     </option>
@@ -305,6 +307,26 @@
                         <input type="text" name="name" value="{{ old('name') }}" required
                                class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600"
                                placeholder="مثال: الباقة المتقدمة">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">نوع الباقة <span class="text-red-500">*</span></label>
+                            <select name="type" required class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white">
+                                <option value="single">عيادة واحدة</option>
+                                <option value="chain">سلسلة عيادات</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">الحد الأقصى للعيادات <span class="text-red-500">*</span></label>
+                            <input type="number" name="max_clinics" value="{{ old('max_clinics', '1') }}" required min="1"
+                                   class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">الوصف</label>
+                        <textarea name="description" rows="2" class="w-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none text-slate-900 dark:text-white">{{ old('description') }}</textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">

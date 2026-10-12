@@ -132,7 +132,7 @@
                                         {{ $record->created_at->format('Y/m/d') }}</td>
                                     <td class="px-6 py-4 text-left">
                                         <div class="flex items-center justify-end gap-2">
-                                            <a href="{{ Storage::url($record->file_path) }}" download target="_blank"
+                                            <a href="{{ route('clinic.records.download', $record) }}"
                                                 class="p-1.5 rounded-lg text-gray-500 hover:text-brand-600 hover:bg-brand-50 dark:text-gray-400 dark:hover:bg-brand-900/20 transition-colors"
                                                 title="عرض/تحميل">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"

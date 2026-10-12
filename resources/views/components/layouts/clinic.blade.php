@@ -42,7 +42,7 @@
                     <img src="{{ asset('assets/Gemini_Generated_Image_7rtamw7rtamw7rta.png') }}" alt="Clinora Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h2 class="font-black text-sm text-gray-900 dark:text-white leading-none">{{ Auth::user()->clinic->name ?? 'العيادة' }}</h2>
+                    <h2 class="font-black text-sm text-gray-900 dark:text-white leading-none">{{ optional(app()->bound('tenant') ? app('tenant') : Auth::user()->clinic)->name ?? 'العيادة' }}</h2>
                     <p class="text-[10px] text-gray-400 mt-0.5">لوحة تحكم العيادة</p>
                 </div>
             </div>
@@ -64,6 +64,17 @@
 
         {{-- Navigation --}}
         <nav class="flex-1 px-3 py-5 space-y-0.5 overflow-y-auto">
+            @php
+                $orgForNav = Auth::user()->primaryOrganization();
+            @endphp
+            @if($orgForNav)
+                <a href="{{ route('organization.dashboard', $orgForNav) }}"
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-brand-700 bg-brand-50 dark:bg-brand-900/20 dark:text-brand-300 mb-2">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    لوحة سلسلة العيادات
+                </a>
+            @endif
+
             <x-clinic.nav-item route="clinic.dashboard" icon="home" label="الرئيسية" />
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">العمليات الطبية</p>
@@ -82,10 +93,10 @@
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">الإدارة والمالية</p>
             @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_billing'))
-                {{-- <x-clinic.nav-item route="clinic.billing.index" icon="credit-card" label="الفواتير" /> --}}
+                <x-clinic.nav-item route="clinic.billing.index" icon="credit-card" label="المالية" />
+                <x-clinic.nav-item route="clinic.reports.index" icon="chart-bar" label="التقارير" />
             @endif
             @if(Auth::user()->role !== 'secretary')
-                {{-- <x-clinic.nav-item route="clinic.reports.index" icon="chart-bar" label="التقارير" /> --}}
                 <x-clinic.nav-item route="clinic.staff.index" icon="user-group" label="فريق العمل" />
             @endif
 
@@ -120,11 +131,19 @@
             <div class="bg-amber-500 text-slate-950 px-4 py-2.5 text-xs font-black flex items-center justify-between gap-4 shadow-md z-[1000] shrink-0">
                 <div class="flex items-center gap-2">
                     <svg class="w-4 h-4 shrink-0 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                    <span>أنت تتصفح حالياً لوحة تحكم عيادة: <strong class="underline">{{ Auth::user()->clinic->name ?? '' }}</strong> بصلاحية السوبر أدمن</span>
+                    <span>أنت تتصفح حالياً لوحة تحكم عيادة: <strong class="underline">{{ optional(app()->bound('tenant') ? app('tenant') : Auth::user()->clinic)->name }}</strong> بصلاحية السوبر أدمن</span>
                 </div>
                 <a href="{{ route('impersonate.leave') }}" class="px-3.5 py-1.5 bg-slate-950 text-amber-400 hover:bg-slate-900 rounded-xl text-xs font-bold transition-all shadow-sm shrink-0 flex items-center gap-1.5">
                     <span>⬅️ العودة لسوبر أدمن</span>
                 </a>
+            </div>
+        @elseif(session('active_organization_id') && session('active_clinic_id'))
+            <div class="bg-brand-600 text-white px-4 py-2.5 text-xs font-black flex items-center justify-between gap-4 shadow-md z-[1000] shrink-0">
+                <span>أنت تدير عيادة ضمن سلسلة العيادات</span>
+                <form method="POST" action="{{ route('organization.clinics.leave', session('active_organization_id')) }}">
+                    @csrf
+                    <button class="px-3.5 py-1.5 bg-white text-brand-700 rounded-xl text-xs font-bold">العودة للوحة السلسلة</button>
+                </form>
             </div>
         @endif
 

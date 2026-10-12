@@ -2,14 +2,39 @@
 
 namespace App\Models;
 
+use Database\Factories\ClinicFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Clinic extends Model
 {
+    /** @use HasFactory<ClinicFactory> */
+    use HasFactory, SoftDeletes;
+
+    /**
+     * Generate a unique slug, including soft-deleted clinics that still occupy the unique index.
+     */
+    public static function uniqueSlug(string $name): string
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug !== '' ? $slug : 'clinic';
+        $slug = $originalSlug;
+        $count = 1;
+
+        while (static::withTrashed()->where('slug', $slug)->exists()) {
+            $slug = $originalSlug.'-'.$count++;
+        }
+
+        return $slug;
+    }
+
     protected $fillable = [
+        'organization_id',
         'marketer_id',
         'slug',
         'name',
@@ -38,6 +63,11 @@ class Clinic extends Model
         'working_hours' => 'array',
         'social_links' => 'array',
     ];
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
+    }
 
     public function users(): HasMany
     {

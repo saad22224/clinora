@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Clinic;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
     public function index()
     {
-        $patients = Patient::where('clinic_id', Auth::user()->clinic_id)
+        $patients = Patient::where('clinic_id', $this->currentClinicId())
             ->latest()
             ->paginate(20);
 
@@ -20,7 +19,7 @@ class PatientController extends Controller
 
     public function medicalFile(Patient $patient)
     {
-        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
+        abort_if($patient->clinic_id != $this->currentClinicId(), 403);
 
         $patient->load([
             'medicalFiles' => fn ($q) => $q->latest(),
@@ -46,7 +45,7 @@ class PatientController extends Controller
 
         Patient::create([
             ...$validated,
-            'clinic_id' => Auth::user()->clinic_id,
+            'clinic_id' => $this->currentClinicId(),
         ]);
 
         return redirect()->route('clinic.patients.index')
@@ -85,6 +84,6 @@ class PatientController extends Controller
 
     private function authorizePatient(Patient $patient): void
     {
-        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
+        abort_if($patient->clinic_id != $this->currentClinicId(), 403);
     }
 }

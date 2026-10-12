@@ -16,16 +16,13 @@ class RolesAndAdminSeeder extends Seeder
      */
     public function run(): void
     {
-        // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Create Roles
-        Role::firstOrCreate(['name' => 'superadmin']);
-        Role::firstOrCreate(['name' => 'clinic_owner']);
-        Role::firstOrCreate(['name' => 'doctor']);
-        Role::firstOrCreate(['name' => 'secretary']);
+        Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'clinic_owner', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'doctor', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'secretary', 'guard_name' => 'web']);
 
-        // Create Permissions
         $permissions = [
             'manage_appointments',
             'manage_patients',
@@ -39,7 +36,6 @@ class RolesAndAdminSeeder extends Seeder
             Permission::firstOrCreate(['name' => $perm, 'guard_name' => 'web']);
         }
 
-        // Assign all clinic permissions to clinic_owner and doctor roles
         $ownerRole = Role::where('name', 'clinic_owner')->first();
         $doctorRole = Role::where('name', 'doctor')->first();
         if ($ownerRole) {
@@ -49,16 +45,24 @@ class RolesAndAdminSeeder extends Seeder
             $doctorRole->syncPermissions($permissions);
         }
 
-        // Create Super Admin
-        $admin = User::firstOrCreate(
-            ['email' => 'saadharera781@gmail.com'],
-            [
-                'name' => 'مدير النظام',
-                'password' => Hash::make('11922172Asd.mass360'),
-                'role' => 'superadmin',
-            ]
-        );
+        $email = env('SUPERADMIN_EMAIL');
+        $password = env('SUPERADMIN_PASSWORD');
 
-        $admin->assignRole('superadmin');
+        if (! empty($email) && ! empty($password)) {
+            $admin = User::firstOrCreate(
+                ['email' => $email],
+                [
+                    'name' => env('SUPERADMIN_NAME', 'مدير النظام'),
+                    'password' => Hash::make($password),
+                    'role' => 'superadmin',
+                ]
+            );
+
+            if ($admin->role !== 'superadmin') {
+                $admin->update(['role' => 'superadmin']);
+            }
+
+            $admin->assignRole('superadmin');
+        }
     }
 }

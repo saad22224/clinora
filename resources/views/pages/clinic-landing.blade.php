@@ -164,8 +164,8 @@
 
 <body class="bg-background text-on-surface overflow-x-hidden max-w-[100vw]">
     @php
-        $doctorName = $clinic->users()->where('role', 'owner')->first();
-        // dd($doctorName);
+        $doctorUser = $clinic->users()->where('role', 'owner')->first();
+        $displayName = $doctorUser?->name ?? $clinic->name;
     @endphp
     <!-- TopNavBar -->
     <header id="navbar"
@@ -180,8 +180,8 @@
                     </div>
                     <div class="min-w-0 flex-1 lg:flex-initial">
                         <h1 class="font-extrabold text-xl md:text-[24px] tracking-tight text-primary leading-tight truncate lg:overflow-visible lg:whitespace-normal"
-                            title="{{ $doctorName->name }}">
-                            {{ $doctorName->name }}</h1>
+                            title="{{ $displayName }}">
+                            {{ $displayName }}</h1>
                         @if ($clinic->doctor_title)
                             <span
                                 class="text-xs text-on-surface-variant block font-semibold truncate lg:overflow-visible lg:whitespace-normal"

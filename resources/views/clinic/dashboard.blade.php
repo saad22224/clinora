@@ -80,7 +80,8 @@
                 </form>
             </div>
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ $stats['revenue_label'] }}</p>
-            <h3 class="text-2xl font-black text-gray-900 dark:text-white mt-1">{{ number_format($stats['revenue_amount'], 0) }} <span class="text-sm font-normal text-gray-400">ج.م</span></h3>
+            <h3 class="text-2xl font-black text-gray-900 dark:text-white mt-1">{{ number_format($stats['collected_income'], 0) }} <span class="text-sm font-normal text-gray-400">ج.م محصلة</span></h3>
+            <p class="text-[11px] text-gray-400 mt-2">قيمة الخدمات المكتملة: {{ number_format($stats['completed_service_value'], 0) }} | المستحق: {{ number_format($stats['outstanding'], 0) }}</p>
         </div>
 
         {{-- Pending --}}

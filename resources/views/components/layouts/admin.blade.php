@@ -47,6 +47,7 @@
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">إدارة المنصة</p>
             <x-admin.nav-item route="admin.clinics.index" icon="office-building" label="العيادات" />
+            <x-admin.nav-item route="admin.organizations.index" icon="office-building" label="سلاسل العيادات" />
             <x-admin.nav-item route="admin.notifications.index" icon="bell" label="إشعارات العيادات" badge="جديد" />
             <x-admin.nav-item route="admin.marketers.index" icon="users" label="المسوقون والإحالات" badge="جديد" />
             <x-admin.nav-item route="admin.subscriptions.index" icon="credit-card" label="الباقات والاشتراكات" />
@@ -58,7 +59,9 @@
             <x-admin.nav-item route="admin.roles.index" icon="shield-check" label="الصلاحيات" />
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">إعدادات النظام</p>
-            <x-admin.nav-item route="admin.whatsapp.index" icon="whatsapp" label="اتصال الواتساب (سريع)" badge="Live" />
+            @if(config('clinora.features.whatsapp_enabled'))
+                <x-admin.nav-item route="admin.whatsapp.index" icon="whatsapp" label="اتصال الواتساب (سريع)" badge="Live" />
+            @endif
             <x-admin.nav-item route="admin.settings.index" icon="cog" label="إعدادات المنصة" />
             <x-admin.nav-item route="admin.logs.index" icon="clipboard-list" label="سجلات النظام" />
         </nav>

@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Role;
 uses(RefreshDatabase::class);
 
 test('super admin can assign any clinic to any subscription plan and calculate duration automatically', function () {
-    Role::firstOrCreate(['name' => 'superadmin']);
+    Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
 
     $admin = User::factory()->create(['role' => 'superadmin']);
     $admin->assignRole('superadmin');
@@ -23,12 +23,15 @@ test('super admin can assign any clinic to any subscription plan and calculate d
 
     $plan = Plan::create([
         'name' => 'الباقة السنوية',
+        'type' => 'single',
         'price' => 299.99,
         'duration_in_days' => 365,
+        'max_clinics' => 1,
         'is_active' => true,
     ]);
 
     $response = $this->actingAs($admin)->post(route('admin.subscriptions.assign'), [
+        'target_type' => 'clinic',
         'clinic_id' => $clinic->id,
         'plan_id' => $plan->id,
         'is_active' => 1,
@@ -51,7 +54,7 @@ test('super admin can assign any clinic to any subscription plan and calculate d
 });
 
 test('super admin can assign a free trial plan when plan_id is null', function () {
-    Role::firstOrCreate(['name' => 'superadmin']);
+    Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
 
     $admin = User::factory()->create(['role' => 'superadmin']);
     $admin->assignRole('superadmin');
@@ -63,6 +66,7 @@ test('super admin can assign a free trial plan when plan_id is null', function (
     ]);
 
     $response = $this->actingAs($admin)->post(route('admin.subscriptions.assign'), [
+        'target_type' => 'clinic',
         'clinic_id' => $clinic->id,
         'plan_id' => null,
         'is_active' => 1,
@@ -80,4 +84,22 @@ test('super admin can assign a free trial plan when plan_id is null', function (
 
     $subscription = Subscription::where('clinic_id', $clinic->id)->first();
     expect($subscription->ends_at->toDateString())->toBe(now()->addDays(14)->toDateString());
+});
+
+test('clinic user cannot access admin routes', function () {
+    Role::firstOrCreate(['name' => 'clinic_owner', 'guard_name' => 'web']);
+
+    $clinic = Clinic::create([
+        'name' => 'عيادة',
+        'slug' => 'clinic-owner-test',
+        'is_active' => true,
+    ]);
+
+    $owner = User::factory()->create([
+        'role' => 'owner',
+        'clinic_id' => $clinic->id,
+    ]);
+    $owner->assignRole('clinic_owner');
+
+    $this->actingAs($owner)->get(route('admin.dashboard'))->assertForbidden();
 });

@@ -14,8 +14,18 @@ trait BelongsToClinic
         static::addGlobalScope(new TenantScope);
 
         static::creating(function ($model) {
-            if (Auth::hasUser() && Auth::user()->clinic_id) {
-                $model->clinic_id = Auth::user()->clinic_id;
+            if (! blank($model->clinic_id)) {
+                return;
+            }
+
+            if (! Auth::hasUser()) {
+                return;
+            }
+
+            $clinicId = session('active_clinic_id') ?: Auth::user()->clinic_id;
+
+            if ($clinicId) {
+                $model->clinic_id = $clinicId;
             }
         });
     }

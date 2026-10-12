@@ -10,7 +10,7 @@ use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ClinicController extends Controller
 {
@@ -20,7 +20,13 @@ class ClinicController extends Controller
             ->latest()
             ->paginate(15);
 
-        $plans = Plan::where('is_active', true)->get();
+        // Chain plans belong to organizations — never offer them on standalone clinics.
+        $plans = Plan::query()
+            ->where('is_active', true)
+            ->where(function ($q) {
+                $q->where('type', 'single')->orWhereNull('type');
+            })
+            ->get();
         $marketers = Marketer::where('is_active', true)->get();
 
         return view('admin.clinics', compact('clinics', 'plans', 'marketers'));
@@ -33,27 +39,30 @@ class ClinicController extends Controller
             'owner_name' => ['required', 'string', 'max:255'],
             'owner_email' => ['required', 'email', 'unique:users,email'],
             'owner_password' => ['required', 'string', 'min:8'],
-            'plan_id' => ['nullable', 'exists:plans,id'],
+            'plan_id' => [
+                'nullable',
+                Rule::exists('plans', 'id')->where(function ($q) {
+                    $q->where(function ($inner) {
+                        $inner->where('type', 'single')->orWhereNull('type');
+                    });
+                }),
+            ],
             'marketer_id' => ['nullable', 'exists:marketers,id'],
+        ], [
+            'plan_id.exists' => 'باقات السلاسل تُنشأ من صفحة «سلاسل العيادات» وليس من إضافة عيادة منفردة.',
         ]);
-
-        // Generate unique slug
-        $slug = Str::slug($validated['clinic_name']);
-        $originalSlug = $slug;
-        $count = 1;
-        while (Clinic::where('slug', $slug)->exists()) {
-            $slug = $originalSlug.'-'.$count++;
-        }
 
         $clinic = Clinic::create([
             'name' => $validated['clinic_name'],
-            'slug' => $slug,
+            'slug' => Clinic::uniqueSlug($validated['clinic_name']),
             'marketer_id' => $validated['marketer_id'] ?? null,
             'is_active' => true,
         ]);
 
         // Determine subscription plan
         $plan = $validated['plan_id'] ? Plan::find($validated['plan_id']) : null;
+        abort_if($plan && $plan->type === 'chain', 422, 'لا يمكن تعيين باقة سلسلة لعيادة مستقلة.');
+
         Subscription::create([
             'clinic_id' => $clinic->id,
             'plan' => $plan?->name ?? 'free',
@@ -64,13 +73,14 @@ class ClinicController extends Controller
         ]);
 
         // Create owner user
-        User::create([
+        $owner = User::create([
             'name' => $validated['owner_name'],
             'email' => $validated['owner_email'],
             'password' => Hash::make($validated['owner_password']),
             'clinic_id' => $clinic->id,
             'role' => 'owner',
         ]);
+        $owner->assignRole('clinic_owner');
 
         return redirect()->route('admin.clinics.index')
             ->with('success', 'تم إنشاء العيادة بنجاح!');
@@ -87,14 +97,17 @@ class ClinicController extends Controller
 
     public function destroy(Clinic $clinic)
     {
+        $clinic->update(['is_active' => false]);
         $clinic->delete();
 
         return redirect()->route('admin.clinics.index')
-            ->with('success', 'تم حذف العيادة بنجاح.');
+            ->with('success', 'تم تعطيل وأرشفة العيادة بنجاح. البيانات محفوظة ويمكن استرجاعها عند الحاجة.');
     }
 
     public function impersonate(Clinic $clinic)
     {
+        abort_if(auth()->user()?->role !== 'superadmin', 403);
+
         $user = $clinic->users()->first();
         if (! $user) {
             return back()->withErrors(['error' => 'لا يوجد مستخدم مرتبط بهذه العيادة.']);

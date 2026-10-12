@@ -11,8 +11,14 @@ class TenantScope implements Scope
 {
     public function apply(Builder $builder, Model $model): void
     {
-        if (Auth::hasUser() && Auth::user()->clinic_id) {
-            $builder->where($model->getTable().'.clinic_id', Auth::user()->clinic_id);
+        if (! Auth::hasUser()) {
+            return;
+        }
+
+        $clinicId = session('active_clinic_id') ?: Auth::user()->clinic_id;
+
+        if ($clinicId) {
+            $builder->where($model->getTable().'.clinic_id', $clinicId);
         }
     }
 }

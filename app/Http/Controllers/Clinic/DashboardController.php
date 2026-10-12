@@ -5,30 +5,28 @@ namespace App\Http\Controllers\Clinic;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Patient;
+use App\Services\FinanceReportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    public function __construct(protected FinanceReportService $financeReportService) {}
+
     public function index(Request $request)
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
         $clinicId = $clinic->id;
 
         $filter = $request->query('filter', '1');
         [$startDate, $label] = match ($filter) {
-            '3' => [Carbon::now()->subMonths(3)->startOfMonth(), 'إيرادات آخر 3 أشهر'],
-            '2' => [Carbon::now()->subMonths(2)->startOfMonth(), 'إيرادات آخر شهرين'],
-            default => [Carbon::now()->startOfMonth(), 'إيرادات هذا الشهر'],
+            '3' => [Carbon::now()->subMonths(3)->startOfMonth(), 'الملخص المالي لآخر 3 أشهر'],
+            '2' => [Carbon::now()->subMonths(2)->startOfMonth(), 'الملخص المالي لآخر شهرين'],
+            default => [Carbon::now()->startOfMonth(), 'الملخص المالي لهذا الشهر'],
         };
-        $filter = in_array($filter, ['1', '2', '3']) ? $filter : '1';
+        $filter = in_array($filter, ['1', '2', '3'], true) ? $filter : '1';
 
-        // Revenue from completed appointments in date range
-        $revenue = Appointment::where('clinic_id', $clinicId)
-            ->where('status', 'completed')
-            ->where('scheduled_at', '>=', $startDate)
-            ->sum('price');
+        $metrics = $this->financeReportService->forClinic($clinic, $startDate, now()->endOfDay());
 
         $base = Appointment::where('clinic_id', $clinicId);
 
@@ -40,7 +38,11 @@ class DashboardController extends Controller
             'completed_appointments' => (clone $base)->where('status', 'completed')->count(),
             'cancelled_appointments' => (clone $base)->whereIn('status', ['cancelled', 'rejected'])->whereMonth('scheduled_at', Carbon::now()->month)->count(),
             'revenue_label' => $label,
-            'revenue_amount' => $revenue,
+            'collected_income' => $metrics['collected_income'],
+            'expenses' => $metrics['expenses'],
+            'net_cash' => $metrics['net_cash'],
+            'completed_service_value' => $metrics['completed_service_value'],
+            'outstanding' => $metrics['outstanding'],
             'current_filter' => $filter,
         ];
 
@@ -52,7 +54,6 @@ class DashboardController extends Controller
             ->take(6)
             ->get();
 
-        // Recent activity: last 5 created appointments
         $recent_appointments = Appointment::with(['patient', 'visitType'])
             ->where('clinic_id', $clinicId)
             ->latest()

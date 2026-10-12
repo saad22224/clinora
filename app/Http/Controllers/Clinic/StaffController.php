@@ -32,11 +32,11 @@ class StaffController extends Controller
             'label' => 'إدارة السجلات والملفات الطبية',
             'desc' => 'رفع وإدارة التحاليل والأشعة والتقارير المرفقة في ملف المريض',
         ],
-        // 'manage_billing' => [
-        //     'name' => 'manage_billing',
-        //     'label' => 'إدارة الفواتير والمالية',
-        //     'desc' => 'إنشاء الفواتير وعرض المدفوعات والحسابات الخاصة بالعيادة',
-        // ],
+        'manage_billing' => [
+            'name' => 'manage_billing',
+            'label' => 'إدارة المالية والتقارير',
+            'desc' => 'تسجيل الإيرادات والمصروفات وعرض تقارير العيادة المالية',
+        ],
         'manage_settings' => [
             'name' => 'manage_settings',
             'label' => 'إدارة إعدادات العيادة',
@@ -47,7 +47,9 @@ class StaffController extends Controller
     public function index()
     {
         $currentUser = Auth::user();
-        $staff = User::where('clinic_id', $currentUser->clinic_id)
+        abort_unless(in_array($currentUser->role, ['owner', 'doctor', 'superadmin'], true), 403);
+
+        $staff = User::where('clinic_id', $this->currentClinicId())
             ->where('id', '!=', $currentUser->id)
             ->with('permissions', 'roles')
             ->latest()
@@ -62,6 +64,7 @@ class StaffController extends Controller
     public function store(Request $request)
     {
         $currentUser = Auth::user();
+        abort_unless(in_array($currentUser->role, ['owner', 'doctor', 'superadmin'], true), 403);
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -78,7 +81,7 @@ class StaffController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
             'password' => Hash::make($validated['password']),
-            'clinic_id' => $currentUser->clinic_id,
+            'clinic_id' => $this->currentClinicId(),
             'role' => 'secretary',
         ]);
 
@@ -95,7 +98,8 @@ class StaffController extends Controller
     public function update(Request $request, User $user)
     {
         $currentUser = Auth::user();
-        abort_if($user->clinic_id != $currentUser->clinic_id, 403);
+        abort_unless(in_array($currentUser->role, ['owner', 'doctor', 'superadmin'], true), 403);
+        abort_if((int) $user->clinic_id !== $this->currentClinicId(), 403);
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -127,7 +131,8 @@ class StaffController extends Controller
     public function destroy(User $user)
     {
         $currentUser = Auth::user();
-        abort_if($user->clinic_id != $currentUser->clinic_id, 403);
+        abort_unless(in_array($currentUser->role, ['owner', 'doctor', 'superadmin'], true), 403);
+        abort_if((int) $user->clinic_id !== $this->currentClinicId(), 403);
         abort_if($user->id == $currentUser->id, 403, 'لا يمكنك حذف حسابك الشخصي.');
 
         $user->delete();

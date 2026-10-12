@@ -11,8 +11,9 @@ use App\Models\User;
 use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -30,8 +31,19 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+            session()->forget(['active_clinic_id', 'active_organization_id']);
 
-            return redirect()->intended('dashboard');
+            $user = Auth::user();
+
+            // Organization owners must land on the chain dashboard, not a clinic URL.
+            if ($user->belongsToOrganization()) {
+                return redirect()->route(
+                    $user->homeRouteName(),
+                    $user->homeRouteParameters()
+                );
+            }
+
+            return redirect()->intended(route('dashboard'));
         }
 
         return back()->withErrors([
@@ -70,64 +82,66 @@ class AuthController extends Controller
             }
         }
 
-        // Create Clinic
-        $slug = Str::slug($request->clinic_name);
-        // Ensure slug is unique
-        $originalSlug = $slug;
-        $count = 1;
-        while (Clinic::where('slug', $slug)->exists()) {
-            $slug = $originalSlug.'-'.$count;
-            $count++;
-        }
+        $user = DB::transaction(function () use ($request, $marketerId) {
+            $clinic = Clinic::create([
+                'name' => $request->clinic_name,
+                'slug' => Clinic::uniqueSlug($request->clinic_name),
+                'phone' => $request->phone,
+                'marketer_id' => $marketerId,
+                'is_active' => true,
+            ]);
 
-        $clinic = Clinic::create([
-            'name' => $request->clinic_name,
-            'slug' => $slug,
-            'phone' => $request->phone,
-            'marketer_id' => $marketerId,
-            'is_active' => true,
-        ]);
+            $freePlan = Plan::query()
+                ->where(function ($q) {
+                    $q->where('name', 'free plan')->orWhere('price', 0);
+                })
+                ->where(function ($q) {
+                    $q->where('type', 'single')->orWhereNull('type');
+                })
+                ->first();
 
-        // Send WhatsApp Registration OTP if enabled
+            Subscription::create([
+                'clinic_id' => $clinic->id,
+                'plan_id' => $freePlan?->id,
+                'plan' => $freePlan?->name ?? 'free plan',
+                'starts_at' => now(),
+                'ends_at' => $freePlan ? now()->addDays($freePlan->duration_in_days) : now()->addDays(30),
+                'is_active' => true,
+            ]);
+
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => Hash::make($request->password),
+                'clinic_id' => $clinic->id,
+                'role' => 'owner',
+            ]);
+
+            Role::firstOrCreate(['name' => 'clinic_owner', 'guard_name' => 'web']);
+            $user->assignRole('clinic_owner');
+
+            return $user;
+        });
+
         if (SystemSetting::isWhatsAppEnabled()) {
-            $otp = rand(100000, 999999);
-            session(['whatsapp_otp' => $otp]);
+            $otp = (string) random_int(100000, 999999);
+            session([
+                'whatsapp_otp' => $otp,
+                'whatsapp_otp_expires_at' => now()->addMinutes(10)->timestamp,
+                'pending_verification_user_id' => $user->id,
+            ]);
             app(WhatsAppService::class)->sendMessage(
                 $request->phone,
                 "مرحباً بك في منصة Clinora SaaS 🏥\nكود التحقق (OTP) الخاص بتفعيل حساب عيادتك هو: *{$otp}*"
             );
+
+            return redirect()->route('otp.verify');
         }
 
-        // Create Free Subscription
-        $freePlan = Plan::where('name', 'free plan')->orWhere('price', 0)->first();
-        Subscription::create([
-            'clinic_id' => $clinic->id,
-            'plan_id' => $freePlan?->id,
-            'plan' => $freePlan?->name ?? 'free plan',
-            'starts_at' => now(),
-            'ends_at' => $freePlan ? now()->addDays($freePlan->duration_in_days) : now()->addDays(30),
-            'is_active' => true,
-        ]);
+        Auth::login($user);
 
-        // Create User (Owner)
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password),
-            'clinic_id' => $clinic->id,
-            'role' => 'owner',
-        ]);
-
-        if (! SystemSetting::isWhatsAppEnabled()) {
-            Auth::login($user);
-
-            return redirect()->route('dashboard');
-        }
-
-        session(['pending_verification_user_id' => $user->id]);
-
-        return redirect()->route('otp.verify');
+        return redirect()->route('dashboard');
     }
 
     public function showVerifyOtp()
@@ -139,7 +153,7 @@ class AuthController extends Controller
         if (! SystemSetting::isWhatsAppEnabled()) {
             $user = User::findOrFail(session('pending_verification_user_id'));
             Auth::login($user);
-            session()->forget(['pending_verification_user_id', 'whatsapp_otp']);
+            session()->forget(['pending_verification_user_id', 'whatsapp_otp', 'whatsapp_otp_expires_at']);
 
             return redirect()->route('dashboard');
         }
@@ -155,15 +169,20 @@ class AuthController extends Controller
 
         $userId = session('pending_verification_user_id');
         $savedOtp = session('whatsapp_otp');
+        $expiresAt = session('whatsapp_otp_expires_at');
 
-        if (! $userId || ! $savedOtp || trim($request->otp) != (string) $savedOtp) {
+        if (! $userId || ! $savedOtp || ($expiresAt && now()->timestamp > (int) $expiresAt)) {
+            return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
+        }
+
+        if (trim($request->otp) != (string) $savedOtp) {
             return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
         }
 
         $user = User::findOrFail($userId);
         Auth::login($user);
 
-        session()->forget(['pending_verification_user_id', 'whatsapp_otp']);
+        session()->forget(['pending_verification_user_id', 'whatsapp_otp', 'whatsapp_otp_expires_at']);
 
         return redirect()->route('dashboard');
     }

@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Clinic;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClinicNotification;
-use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
     public function index()
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
 
         $notifications = ClinicNotification::where('clinic_id', $clinic->id)
             ->latest()
@@ -21,7 +20,7 @@ class NotificationController extends Controller
 
     public function markAllRead()
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
         if ($clinic) {
             ClinicNotification::where('clinic_id', $clinic->id)
                 ->where('is_read', false)
@@ -33,7 +32,7 @@ class NotificationController extends Controller
 
     public function markRead(ClinicNotification $notification)
     {
-        if ($notification->clinic_id === Auth::user()->clinic_id) {
+        if ($notification->clinic_id === $this->currentClinicId()) {
             $notification->update(['is_read' => true]);
         }
 

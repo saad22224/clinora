@@ -6,13 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\PatientDiagnosis;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PatientDiagnosisController extends Controller
 {
     public function store(Request $request, Patient $patient)
     {
-        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
+        abort_if($patient->clinic_id != $this->currentClinicId(), 403);
 
         $validated = $request->validate([
             'diagnosis' => ['required', 'string', 'max:2000'],
@@ -22,7 +21,7 @@ class PatientDiagnosisController extends Controller
 
         PatientDiagnosis::create([
             ...$validated,
-            'clinic_id' => Auth::user()->clinic_id,
+            'clinic_id' => $this->currentClinicId(),
             'patient_id' => $patient->id,
         ]);
 
@@ -31,7 +30,7 @@ class PatientDiagnosisController extends Controller
 
     public function destroy(Patient $patient, PatientDiagnosis $diagnosis)
     {
-        abort_if($patient->clinic_id != Auth::user()->clinic_id, 403);
+        abort_if($patient->clinic_id != $this->currentClinicId(), 403);
         abort_if($diagnosis->patient_id != $patient->id, 404);
 
         $diagnosis->delete();

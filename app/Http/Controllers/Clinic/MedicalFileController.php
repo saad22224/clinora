@@ -6,14 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\MedicalFile;
 use App\Services\ImageOptimizationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MedicalFileController extends Controller
 {
+    private const DISK = 'local';
+
     public function index(Request $request)
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
         $query = trim($request->query('search', ''));
 
         $records = $clinic->medicalFiles()
@@ -37,24 +39,23 @@ class MedicalFileController extends Controller
 
     public function store(Request $request)
     {
-        $clinic = Auth::user()->clinic;
+        $clinic = $this->currentClinic();
 
         $validated = $request->validate([
             'patient_id' => ['required', 'exists:patients,id'],
             'type' => ['required', 'string', 'max:255'],
-            'file' => ['required', 'file', 'max:10240'], // Max 10MB
+            'file' => ['required', 'file', 'max:10240', 'mimes:jpg,jpeg,png,gif,webp,bmp,pdf,heic'],
         ]);
 
-        // Verify patient belongs to this clinic
         if ($clinic->patients()->where('id', $validated['patient_id'])->doesntExist()) {
             abort(403, 'غير مصرح');
         }
 
         $file = $request->file('file');
-        if (str_starts_with($file->getMimeType(), 'image/') || in_array(strtolower($file->getClientOriginalExtension()), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'heic'])) {
-            $path = app(ImageOptimizationService::class)->upload($file, 'medical-records');
+        if (str_starts_with((string) $file->getMimeType(), 'image/') || in_array(strtolower($file->getClientOriginalExtension()), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'heic'], true)) {
+            $path = app(ImageOptimizationService::class)->upload($file, 'medical-records', null, null, self::DISK);
         } else {
-            $path = $file->store('medical-records', 'public');
+            $path = $file->store('medical-records', self::DISK);
         }
 
         MedicalFile::create([
@@ -64,19 +65,61 @@ class MedicalFileController extends Controller
             'file_path' => $path,
         ]);
 
-        return back()
-            ->with('success', 'تم إضافة السجل الطبي بنجاح!');
+        return back()->with('success', 'تم إضافة السجل الطبي بنجاح!');
+    }
+
+    public function download(MedicalFile $medicalFile): StreamedResponse
+    {
+        $this->authorizeMedicalFile($medicalFile);
+
+        $disk = $this->resolveDisk($medicalFile->file_path);
+
+        abort_unless(Storage::disk($disk)->exists($medicalFile->file_path), 404);
+
+        return Storage::disk($disk)->download($medicalFile->file_path);
+    }
+
+    public function preview(MedicalFile $medicalFile): StreamedResponse
+    {
+        $this->authorizeMedicalFile($medicalFile);
+
+        $disk = $this->resolveDisk($medicalFile->file_path);
+
+        abort_unless(Storage::disk($disk)->exists($medicalFile->file_path), 404);
+
+        return Storage::disk($disk)->response($medicalFile->file_path);
     }
 
     public function destroy(MedicalFile $medicalFile)
     {
-        if ($medicalFile->clinic_id != Auth::user()->clinic_id) {
-            abort(403);
+        $this->authorizeMedicalFile($medicalFile);
+
+        foreach (['local', 'public'] as $disk) {
+            if (Storage::disk($disk)->exists($medicalFile->file_path)) {
+                Storage::disk($disk)->delete($medicalFile->file_path);
+            }
         }
 
-        Storage::disk('public')->delete($medicalFile->file_path);
         $medicalFile->delete();
 
         return back()->with('success', 'تم حذف السجل الطبي بنجاح.');
+    }
+
+    private function authorizeMedicalFile(MedicalFile $medicalFile): void
+    {
+        abort_if((int) $medicalFile->clinic_id !== $this->currentClinicId(), 403);
+    }
+
+    private function resolveDisk(string $path): string
+    {
+        if (Storage::disk('local')->exists($path)) {
+            return 'local';
+        }
+
+        if (Storage::disk('public')->exists($path)) {
+            return 'public';
+        }
+
+        return 'local';
     }
 }

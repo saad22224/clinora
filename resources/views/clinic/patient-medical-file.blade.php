@@ -165,7 +165,8 @@
                                 $ext = strtolower(pathinfo($file->file_path, PATHINFO_EXTENSION));
                                 $isImage = in_array($ext, ['jpg','jpeg','png','gif','webp','svg']);
                                 $isPdf = $ext === 'pdf';
-                                $fileUrl = \Illuminate\Support\Facades\Storage::url($file->file_path);
+                                $fileUrl = route('clinic.records.preview', $file);
+                                $downloadUrl = route('clinic.records.download', $file);
                             @endphp
                             <div class="group relative bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/[0.06] rounded-xl overflow-hidden hover:border-brand-400/50 dark:hover:border-brand-500/30 hover:shadow-md transition-all flex flex-col">
                                 {{-- Preview --}}
@@ -185,7 +186,7 @@
                                         <p class="text-[10px] text-gray-400 mt-0.5">{{ $file->created_at->format('Y/m/d') }}</p>
                                     </div>
                                     <div class="flex items-center gap-1.5 shrink-0">
-                                        <a href="{{ $fileUrl }}" target="_blank" title="عرض / تنزيل"
+                                        <a href="{{ $downloadUrl }}" title="تنزيل"
                                            class="p-1.5 rounded-lg bg-brand-50 text-brand-600 hover:bg-brand-100 dark:bg-brand-900/30 dark:text-brand-400 dark:hover:bg-brand-900/50 transition-colors">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                         </a>
@@ -335,6 +336,7 @@
         </div>{{-- end left column --}}
 
         {{-- ─── RIGHT COLUMN: AI Chatbot ─── --}}
+        @if(config('clinora.features.ai_enabled'))
         <div class="xl:sticky xl:top-6 xl:self-start">
             <div class="bg-white dark:bg-[#0F0F1A] border border-gray-100 dark:border-white/[0.06] rounded-2xl shadow-sm overflow-hidden flex flex-col" style="height: calc(100vh - 120px); min-height: 560px;">
 
@@ -424,6 +426,7 @@
                 </div>
             </div>
         </div>{{-- end right column --}}
+        @endif
 
     </div>{{-- end grid --}}
 
@@ -683,6 +686,7 @@
         // ══════════════════════════════════
         //  AI CHATBOT LOGIC
         // ══════════════════════════════════
+        @if(config('clinora.features.ai_enabled'))
         const chatMessages  = document.getElementById('chat-messages');
         const chatInput     = document.getElementById('chat-input');
         const chatForm      = document.getElementById('chat-form');
@@ -838,6 +842,7 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
         }
+        @endif
     });
     </script>
     @endpush
