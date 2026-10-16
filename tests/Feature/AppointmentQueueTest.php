@@ -154,3 +154,41 @@ test('reschedule assigns a new queue number for the new day', function () {
         ->and($updated->queue_date->toDateString())->toBe($newDate->timezone(config('clinora.clinic_timezone'))->toDateString())
         ->and($updated->queue_status)->toBe('waiting');
 });
+
+test('skip moves appointment out of the waiting queue', function () {
+    ['clinic' => $clinic, 'doctorA' => $doctor, 'owner' => $owner] = seedQueueClinic();
+    $queue = app(AppointmentQueueService::class);
+
+    $appointment = $queue->assignOnCreate(Appointment::factory()->forClinic($clinic)->create([
+        'doctor_id' => $doctor->id,
+        'scheduled_at' => now(),
+        'status' => 'confirmed',
+    ]));
+
+    $this->actingAs($owner)
+        ->post(route('clinic.appointments.queue-action', $appointment), ['action' => 'skip'])
+        ->assertRedirect()
+        ->assertSessionHas('success');
+
+    expect($appointment->fresh()->queue_status)->toBe('skipped')
+        ->and($queue->daySummary($clinic->id, $doctor->id, now())['next'])->toBeNull();
+});
+
+test('cancelling an appointment removes it from the day queue list', function () {
+    ['clinic' => $clinic, 'doctorA' => $doctor, 'owner' => $owner] = seedQueueClinic();
+    $queue = app(AppointmentQueueService::class);
+
+    $appointment = $queue->assignOnCreate(Appointment::factory()->forClinic($clinic)->create([
+        'doctor_id' => $doctor->id,
+        'scheduled_at' => now(),
+        'status' => 'confirmed',
+    ]));
+
+    $this->actingAs($owner)
+        ->patch(route('clinic.appointments.update-status', $appointment), ['status' => 'cancelled'])
+        ->assertRedirect()
+        ->assertSessionHas('success');
+
+    expect($appointment->fresh()->status)->toBe('cancelled')
+        ->and($queue->dayQueue($clinic->id, $doctor->id, now())->pluck('id'))->not->toContain($appointment->id);
+});

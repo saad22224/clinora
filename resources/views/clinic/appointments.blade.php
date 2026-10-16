@@ -2,10 +2,6 @@
     <x-slot:title>المواعيد والدور</x-slot>
 
     @php
-        $sourceLabels = [
-            'website_landing_page'   => ['label' => 'صفحة الويب', 'class' => 'bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-400'],
-            'reception_manual_entry' => ['label' => 'الاستقبال', 'class' => 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-300'],
-        ];
         $statusMap = [
             'pending'   => ['label' => 'بانتظار التأكيد', 'class' => 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400'],
             'confirmed' => ['label' => 'مؤكد',           'class' => 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'],
@@ -35,23 +31,21 @@
     {{-- Date navigation --}}
     <div class="bg-white dark:bg-[#0F0F1A] border border-gray-100 dark:border-white/[0.06] rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
         <div class="flex items-center gap-2">
-            <a href="{{ route('clinic.appointments.index', ['date' => $prevDate, 'doctor_id' => $doctorId, 'view' => 'queue']) }}"
+            <a href="{{ route('clinic.appointments.index', ['date' => $prevDate, 'doctor_id' => $doctorId]) }}"
                class="px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 text-sm font-bold hover:bg-gray-50 dark:hover:bg-white/5">اليوم السابق</a>
             <form method="GET" action="{{ route('clinic.appointments.index') }}" class="flex items-center gap-2">
-                <input type="hidden" name="view" value="queue">
                 <input type="hidden" name="doctor_id" value="{{ $doctorId }}">
                 <input type="date" name="date" value="{{ $dateStr }}"
                        class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2 text-sm dark:text-white"
                        onchange="this.form.submit()">
             </form>
-            <a href="{{ route('clinic.appointments.index', ['date' => $nextDate, 'doctor_id' => $doctorId, 'view' => 'queue']) }}"
+            <a href="{{ route('clinic.appointments.index', ['date' => $nextDate, 'doctor_id' => $doctorId]) }}"
                class="px-3 py-2 rounded-xl border border-gray-200 dark:border-white/10 text-sm font-bold hover:bg-gray-50 dark:hover:bg-white/5">اليوم التالي</a>
-            <a href="{{ route('clinic.appointments.index', ['date' => now()->timezone(config('clinora.clinic_timezone'))->toDateString(), 'doctor_id' => $doctorId, 'view' => 'queue']) }}"
+            <a href="{{ route('clinic.appointments.index', ['date' => now()->timezone(config('clinora.clinic_timezone'))->toDateString(), 'doctor_id' => $doctorId]) }}"
                class="px-3 py-2 rounded-xl bg-brand-50 text-brand-700 text-sm font-bold">اليوم</a>
         </div>
         <div class="flex items-center gap-2">
             <form method="GET" action="{{ route('clinic.appointments.index') }}" class="flex items-center gap-2">
-                <input type="hidden" name="view" value="queue">
                 <input type="hidden" name="date" value="{{ $dateStr }}">
                 <select name="doctor_id" onchange="this.form.submit()"
                         class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2 text-sm font-bold dark:text-white">
@@ -142,97 +136,45 @@
                                     </div>
                                 </div>
                                 <div class="flex flex-wrap gap-1.5">
-                                    @if(!in_array($apt->status, ['cancelled','rejected'], true) && !in_array($apt->queue_status, ['completed'], true))
+                                    @if(! in_array($apt->queue_status, ['completed'], true))
                                         <button type="button"
                                                 data-announce-patient
                                                 data-call-url="{{ route('clinic.appointments.queue-action', $apt) }}"
                                                 data-patient-name="{{ $apt->patient?->name }}"
                                                 data-queue-number="{{ $apt->queue_number }}"
                                                 class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-violet-700 bg-violet-50 hover:bg-violet-100">
-                                            مناداة المريض
+                                            {{ $apt->queue_status === 'skipped' ? 'إعادة المناداة' : 'مناداة المريض' }}
                                         </button>
-                                        <form method="POST" action="{{ route('clinic.appointments.queue-action', $apt) }}">
-                                            @csrf
-                                            <input type="hidden" name="action" value="complete">
-                                            <button class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-emerald-700 hover:bg-emerald-50">إكمال</button>
-                                        </form>
-                                        <form method="POST" action="{{ route('clinic.appointments.queue-action', $apt) }}">
-                                            @csrf
-                                            <input type="hidden" name="action" value="skip">
-                                            <button class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100">تخطّي</button>
+                                        @if($apt->queue_status !== 'skipped')
+                                            <form method="POST" action="{{ route('clinic.appointments.queue-action', $apt) }}">
+                                                @csrf
+                                                <input type="hidden" name="action" value="complete">
+                                                <button type="submit" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-emerald-700 hover:bg-emerald-50">إكمال</button>
+                                            </form>
+                                            <form method="POST" action="{{ route('clinic.appointments.queue-action', $apt) }}">
+                                                @csrf
+                                                <input type="hidden" name="action" value="skip">
+                                                <button type="submit" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100">تخطّي</button>
+                                            </form>
+                                        @endif
+                                        <form method="POST" action="{{ route('clinic.appointments.update-status', $apt) }}"
+                                              onsubmit="return confirm('هل تريد إلغاء هذا الموعد نهائيًا؟');">
+                                            @csrf @method('PATCH')
+                                            <input type="hidden" name="status" value="cancelled">
+                                            <button type="submit" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100">إلغاء الموعد</button>
                                         </form>
                                     @endif
                                     @if($apt->status === 'pending')
                                         <form method="POST" action="{{ route('clinic.appointments.update-status', $apt) }}">
                                             @csrf @method('PATCH')
                                             <input type="hidden" name="status" value="confirmed">
-                                            <button class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-blue-600 hover:bg-blue-50">تأكيد الحجز</button>
+                                            <button type="submit" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-blue-600 hover:bg-blue-50">تأكيد الحجز</button>
                                         </form>
                                     @endif
                                 </div>
                             </div>
                         @endforeach
                     </div>
-                @endif
-            </div>
-
-            {{-- Legacy list filters --}}
-            <div class="bg-white dark:bg-[#0F0F1A] border border-gray-100 dark:border-white/[0.06] rounded-2xl shadow-sm overflow-hidden">
-                <div class="px-5 py-4 border-b border-gray-100 dark:border-white/[0.06]">
-                    <h3 class="font-black text-gray-900 dark:text-white">قائمة المواعيد</h3>
-                    <form method="GET" action="{{ route('clinic.appointments.index') }}" class="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-                        <input type="hidden" name="view" value="list">
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="بحث..."
-                               class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2 text-sm">
-                        <select name="status" class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2 text-sm font-bold">
-                            <option value="">كل الحالات</option>
-                            @foreach(['pending'=>'بانتظار التأكيد','confirmed'=>'مؤكد','completed'=>'مكتمل','cancelled'=>'ملغي','rejected'=>'مرفوض'] as $v=>$l)
-                                <option value="{{ $v }}" @selected(request('status')===$v)>{{ $l }}</option>
-                            @endforeach
-                        </select>
-                        <input type="date" name="date_from" value="{{ request('date_from') }}" class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2 text-sm">
-                        <button class="px-4 py-2 text-sm font-bold text-white bg-brand-600 rounded-xl">تصفية</button>
-                    </form>
-                </div>
-                @if($appointments->isEmpty())
-                    <div class="py-12 text-center text-sm text-gray-400">لا توجد نتائج.</div>
-                @else
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead>
-                                <tr class="border-b border-gray-100 dark:border-white/[0.06] bg-gray-50/50 dark:bg-white/[0.02]">
-                                    <th class="text-right px-4 py-3 text-xs font-black text-gray-400">الدور</th>
-                                    <th class="text-right px-4 py-3 text-xs font-black text-gray-400">المريض</th>
-                                    <th class="text-right px-4 py-3 text-xs font-black text-gray-400">التاريخ</th>
-                                    <th class="text-right px-4 py-3 text-xs font-black text-gray-400">الحالة</th>
-                                    <th class="text-right px-4 py-3 text-xs font-black text-gray-400">إجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-50 dark:divide-white/[0.04]">
-                                @foreach($appointments as $apt)
-                                    @php $status = $statusMap[$apt->status] ?? ['label'=>$apt->status,'class'=>'bg-gray-100 text-gray-600']; @endphp
-                                    <tr>
-                                        <td class="px-4 py-3 font-black text-brand-700">{{ $apt->queue_number ?? '—' }}</td>
-                                        <td class="px-4 py-3 font-bold">{{ $apt->patient?->name }}</td>
-                                        <td class="px-4 py-3">{{ $apt->scheduled_at?->format('Y/m/d') }}</td>
-                                        <td class="px-4 py-3"><span class="inline-flex px-2 py-1 rounded-lg text-xs font-bold {{ $status['class'] }}">{{ $status['label'] }}</span></td>
-                                        <td class="px-4 py-3">
-                                            @if(in_array($apt->status, ['pending','confirmed']))
-                                                <form method="POST" action="{{ route('clinic.appointments.update-status', $apt) }}" class="inline">
-                                                    @csrf @method('PATCH')
-                                                    <input type="hidden" name="status" value="cancelled">
-                                                    <button class="text-xs font-bold text-gray-500">إلغاء</button>
-                                                </form>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    @if($appointments->hasPages())
-                        <div class="px-5 py-4 border-t border-gray-100 dark:border-white/[0.06]">{{ $appointments->links() }}</div>
-                    @endif
                 @endif
             </div>
         </div>

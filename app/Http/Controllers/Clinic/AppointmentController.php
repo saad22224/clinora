@@ -25,21 +25,12 @@ class AppointmentController extends Controller
     public function index(Request $request)
     {
         $validated = $request->validate([
-            'source' => ['nullable', 'in:website_landing_page,reception_manual_entry'],
-            'status' => ['nullable', 'in:pending,confirmed,completed,rejected,cancelled'],
-            'queue_status' => ['nullable', 'in:waiting,called,in_progress,completed,skipped'],
-            'visit_type' => ['nullable', 'integer', 'exists:visit_types,id'],
-            'search' => ['nullable', 'string', 'max:100'],
             'date' => ['nullable', 'date'],
-            'date_from' => ['nullable', 'date'],
-            'date_to' => ['nullable', 'date'],
             'doctor_id' => ['nullable', 'integer', 'exists:users,id'],
-            'view' => ['nullable', 'in:queue,list'],
         ]);
 
         $clinicId = $this->currentClinicId();
         $clinic = $this->currentClinic();
-        $viewMode = $validated['view'] ?? 'queue';
 
         $selectedDate = isset($validated['date'])
             ? $this->queue->queueDateFor($validated['date'])
@@ -58,38 +49,6 @@ class AppointmentController extends Controller
         $queueSummary = $this->queue->daySummary($clinicId, $doctorId, $selectedDate);
         $dayQueue = $this->queue->dayQueue($clinicId, $doctorId, $selectedDate);
 
-        $query = Appointment::with(['patient', 'visitType', 'doctor'])
-            ->where('clinic_id', $clinicId)
-            ->when($validated['source'] ?? null, fn ($q, $v) => $q->where('source', $v))
-            ->when($validated['status'] ?? null, fn ($q, $v) => $q->where('status', $v))
-            ->when($validated['queue_status'] ?? null, fn ($q, $v) => $q->where('queue_status', $v))
-            ->when($validated['visit_type'] ?? null, fn ($q, $v) => $q->where('visit_type_id', $v))
-            ->when($validated['search'] ?? null, function ($q, $search) {
-                $q->whereHas('patient', fn ($pq) => $pq->where('name', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%"));
-            });
-
-        if ($viewMode === 'queue' || ! isset($validated['date_from'])) {
-            $query->whereDate('queue_date', $selectedDate->toDateString())
-                ->where('doctor_id', $doctorId);
-        } else {
-            $query->when($validated['date_from'] ?? null, fn ($q, $v) => $q->whereDate('scheduled_at', '>=', $v))
-                ->when($validated['date_to'] ?? null, fn ($q, $v) => $q->whereDate('scheduled_at', '<=', $v));
-        }
-
-        $summaryBase = Appointment::where('clinic_id', $clinicId);
-        $summary = [
-            'total' => (clone $summaryBase)->count(),
-            'pending' => (clone $summaryBase)->where('status', 'pending')->count(),
-            'confirmed' => (clone $summaryBase)->where('status', 'confirmed')->count(),
-            'completed' => (clone $summaryBase)->where('status', 'completed')->count(),
-            'cancelled' => (clone $summaryBase)->whereIn('status', ['cancelled', 'rejected'])->count(),
-        ];
-
-        $appointments = $viewMode === 'queue'
-            ? $query->orderByRaw('queue_number is null')->orderBy('queue_number')->paginate(50)->withQueryString()
-            : $query->latest('scheduled_at')->paginate(20)->withQueryString();
-
         $patients = Patient::where('clinic_id', $clinicId)
             ->orderBy('name')
             ->get(['id', 'name']);
@@ -100,13 +59,10 @@ class AppointmentController extends Controller
 
         $prevDate = $selectedDate->copy()->subDay()->toDateString();
         $nextDate = $selectedDate->copy()->addDay()->toDateString();
-        $quickMessages = config('clinora.staff_quick_messages', []);
 
         return view('clinic.appointments', compact(
-            'appointments',
             'patients',
             'visitTypes',
-            'summary',
             'queueSummary',
             'dayQueue',
             'selectedDate',
@@ -114,8 +70,6 @@ class AppointmentController extends Controller
             'nextDate',
             'doctors',
             'doctorId',
-            'viewMode',
-            'quickMessages',
         ));
     }
 
@@ -176,6 +130,10 @@ class AppointmentController extends Controller
                     $appointment->update(['queue_status' => AppointmentQueueService::STATUS_COMPLETED]);
                 }
             }
+
+            if (in_array($validated['status'], ['cancelled', 'rejected'], true)) {
+                return back()->with('success', 'تم إلغاء الموعد بنجاح.');
+            }
         }
 
         return back()->with('success', 'تم تحديث حالة الموعد بنجاح.');
@@ -214,7 +172,14 @@ class AppointmentController extends Controller
             ]);
         }
 
-        return back()->with('success', 'تم تحديث الدور بنجاح.');
+        $messages = [
+            'call' => 'تمت مناداة المريض.',
+            'in_progress' => 'تم بدء الكشف.',
+            'complete' => 'تم إكمال الموعد.',
+            'skip' => 'تم تخطّي المريض في الطابور.',
+        ];
+
+        return back()->with('success', $messages[$validated['action']] ?? 'تم تحديث الدور بنجاح.');
     }
 
     public function callNext(Request $request)

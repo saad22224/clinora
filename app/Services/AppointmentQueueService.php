@@ -205,6 +205,10 @@ class AppointmentQueueService
 
     public function skip(Appointment $appointment): Appointment
     {
+        if ($appointment->queue_status === self::STATUS_SKIPPED) {
+            return $appointment->fresh(['patient', 'visitType', 'doctor']) ?? $appointment;
+        }
+
         return $this->transition($appointment, self::STATUS_SKIPPED);
     }
 
@@ -303,6 +307,8 @@ class AppointmentQueueService
             ->where('clinic_id', $clinicId)
             ->when($doctorId, fn ($q) => $q->where('doctor_id', $doctorId))
             ->whereDate('queue_date', $queueDate)
+            ->whereNotIn('status', ['cancelled', 'rejected'])
+            ->orderByRaw("case when queue_status = 'skipped' then 1 else 0 end")
             ->orderByRaw('queue_number is null')
             ->orderBy('queue_number')
             ->orderBy('scheduled_at')
@@ -326,7 +332,7 @@ class AppointmentQueueService
                 self::STATUS_CALLED => [self::STATUS_WAITING, self::STATUS_CALLED, self::STATUS_SKIPPED, null],
                 self::STATUS_IN_PROGRESS => [self::STATUS_WAITING, self::STATUS_CALLED, self::STATUS_IN_PROGRESS],
                 self::STATUS_COMPLETED => [self::STATUS_WAITING, self::STATUS_CALLED, self::STATUS_IN_PROGRESS],
-                self::STATUS_SKIPPED => [self::STATUS_WAITING, self::STATUS_CALLED],
+                self::STATUS_SKIPPED => [self::STATUS_WAITING, self::STATUS_CALLED, self::STATUS_IN_PROGRESS, null],
                 self::STATUS_WAITING => [self::STATUS_SKIPPED, self::STATUS_CALLED],
                 default => [],
             };

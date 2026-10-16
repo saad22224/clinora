@@ -44,6 +44,30 @@ a[href], label[for], select, summary,
     cursor: pointer;
 }
 
+/* Dark mode: force native form controls (especially <select>) off system light chrome */
+html.dark {
+    color-scheme: dark;
+}
+
+.dark select {
+    color-scheme: dark;
+    /* Solid fill beats translucent Tailwind bg-* that leave a white native select underneath */
+    background-color: #1a1a24 !important;
+    color: #f3f4f6 !important;
+    border-color: rgb(255 255 255 / 0.12);
+}
+
+.dark select option,
+.dark select optgroup {
+    background-color: #14141a;
+    color: #f3f4f6;
+}
+
+.dark input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']):not([type='hidden']):not([type='submit']):not([type='button']),
+.dark textarea {
+    color-scheme: dark;
+}
+
 /* ── Modal transitions ── */
 [data-modal] {
     transition: opacity 0.2s ease;
@@ -136,7 +160,11 @@ select.form-control {
 }
 
 .dark select.form-control {
+    background-color: #1a1a24;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 0.75rem center;
+    background-size: 1rem;
 }
 
 /* Kill browser autofill white flash on dark forms */
