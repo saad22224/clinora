@@ -18,6 +18,7 @@ use App\Models\PrescriptionItem;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Models\VisitType;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
@@ -491,8 +492,8 @@ class QaDatasetBuilder
     /**
      * Fixed finance scenario matching EXPECTED_FINANCE_POPULATED.
      *
-     * @param  \Illuminate\Support\Collection<int, Patient>  $patients
-     * @param  \Illuminate\Support\Collection<int, VisitType>  $visitTypes
+     * @param  Collection<int, Patient>  $patients
+     * @param  Collection<int, VisitType>  $visitTypes
      */
     private function seedPopulatedFinanceScenario(
         Clinic $clinic,
@@ -625,7 +626,7 @@ class QaDatasetBuilder
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, VisitType>
+     * @return Collection<int, VisitType>
      */
     private function createVisitTypes(Clinic $clinic)
     {
@@ -680,6 +681,7 @@ class QaDatasetBuilder
 
         foreach ([
             'manage_appointments',
+            'use_staff_messages',
             'manage_patients',
             'manage_prescriptions',
             'manage_records',

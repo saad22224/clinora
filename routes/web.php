@@ -21,6 +21,7 @@ use App\Http\Controllers\Clinic\PrescriptionController;
 use App\Http\Controllers\Clinic\ReportController;
 use App\Http\Controllers\Clinic\SettingsController;
 use App\Http\Controllers\Clinic\StaffController;
+use App\Http\Controllers\Clinic\StaffMessageController;
 use App\Http\Controllers\Clinic\VisitTypeController;
 use App\Http\Controllers\Organization\ClinicSwitchController;
 use App\Http\Controllers\Organization\DashboardController as OrganizationDashboardController;
@@ -100,6 +101,15 @@ Route::get('/subscription-expired', function () {
 // ==========================================
 Route::get('/clinic-page/{slug}', [PublicClinicController::class, 'show'])->name('clinic.public.show');
 Route::post('/clinic-page/{slug}/book', [PublicClinicController::class, 'book'])->middleware('throttle:20,1')->name('clinic.public.book');
+Route::get('/clinic-page/{slug}/booking/{token}', [PublicClinicController::class, 'bookingConfirm'])
+    ->middleware('throttle:60,1')
+    ->name('clinic.public.booking.confirm');
+Route::get('/clinic-page/{slug}/booking/{token}/track', [PublicClinicController::class, 'bookingTrack'])
+    ->middleware('throttle:60,1')
+    ->name('clinic.public.booking.track');
+Route::get('/clinic-page/{slug}/booking/{token}/status', [PublicClinicController::class, 'bookingStatus'])
+    ->middleware('throttle:120,1')
+    ->name('clinic.public.booking.status');
 
 // ==========================================
 // Organization Dashboard
@@ -142,7 +152,15 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
             Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
             Route::post('/appointments', [AppointmentController::class, 'store'])->name('appointments.store');
             Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
+            Route::post('/appointments/{appointment}/queue', [AppointmentController::class, 'queueAction'])->name('appointments.queue-action');
+            Route::post('/appointments/queue/call-next', [AppointmentController::class, 'callNext'])->name('appointments.call-next');
+            Route::post('/appointments/queue/pause', [AppointmentController::class, 'pauseQueue'])->name('appointments.queue-pause');
             Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
+        });
+
+        Route::middleware('clinic.permission:use_staff_messages')->group(function () {
+            Route::get('/messages', [StaffMessageController::class, 'index'])->name('messages.index');
+            Route::post('/messages', [StaffMessageController::class, 'store'])->middleware('throttle:30,1')->name('messages.store');
         });
 
         Route::middleware('clinic.permission:manage_settings')->group(function () {

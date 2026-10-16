@@ -147,4 +147,23 @@ class AppointmentFactory extends Factory
             $appointment->amount_paid = (float) $appointment->price;
         });
     }
+
+    public function waiting(int $queueNumber = 1): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'queue_number' => $queueNumber,
+            'queue_date' => now(config('clinora.clinic_timezone', 'Africa/Cairo'))->toDateString(),
+            'queue_status' => 'waiting',
+            'tracking_token' => bin2hex(random_bytes(32)),
+            'status' => 'confirmed',
+        ]);
+    }
+
+    public function called(): static
+    {
+        return $this->waiting()->state(fn (array $attributes) => [
+            'queue_status' => 'called',
+            'called_at' => now(),
+        ]);
+    }
 }

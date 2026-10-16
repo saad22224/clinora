@@ -8,14 +8,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Permission;
 
 class StaffController extends Controller
 {
     public static array $permissionsList = [
         'manage_appointments' => [
             'name' => 'manage_appointments',
-            'label' => 'إدارة المواعيد والحجوزات',
-            'desc' => 'إضافة وتعديل وحذف مواعيد المرضى وتأكيد الحجوزات الإلكترونية',
+            'label' => 'إدارة المواعيد والدور والمناداة',
+            'desc' => 'الحجوزات، طابور اليوم، أرقام الدور، مناداة المرضى صوتيًا، إيقاف/استئناف المناداة',
+        ],
+        'use_staff_messages' => [
+            'name' => 'use_staff_messages',
+            'label' => 'تواصل الفريق والرسائل الداخلية',
+            'desc' => 'إرسال واستقبال رسائل الطبيب والسكرتارية والتنبيهات الفورية على الشاشة',
         ],
         'manage_patients' => [
             'name' => 'manage_patients',
@@ -39,15 +45,32 @@ class StaffController extends Controller
         ],
         'manage_settings' => [
             'name' => 'manage_settings',
-            'label' => 'إدارة إعدادات العيادة',
-            'desc' => 'تعديل بيانات العيادة، أوقات العمل، وسعر وأنواع الكشف والاستشارات',
+            'label' => 'إعدادات العيادة والصفحة العامة',
+            'desc' => 'بيانات العيادة، أوقات العمل، الخدمات، والصفحة العامة للحجز الإلكتروني',
         ],
     ];
+
+    /**
+     * @return list<string>
+     */
+    public static function permissionNames(): array
+    {
+        return array_keys(self::$permissionsList);
+    }
+
+    public static function ensurePermissionsExist(): void
+    {
+        foreach (self::permissionNames() as $name) {
+            Permission::findOrCreate($name, 'web');
+        }
+    }
 
     public function index()
     {
         $currentUser = Auth::user();
         abort_unless(in_array($currentUser->role, ['owner', 'doctor', 'superadmin'], true), 403);
+
+        self::ensurePermissionsExist();
 
         $staff = User::where('clinic_id', $this->currentClinicId())
             ->where('id', '!=', $currentUser->id)
@@ -66,6 +89,8 @@ class StaffController extends Controller
         $currentUser = Auth::user();
         abort_unless(in_array($currentUser->role, ['owner', 'doctor', 'superadmin'], true), 403);
 
+        self::ensurePermissionsExist();
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -73,7 +98,7 @@ class StaffController extends Controller
             'password' => ['required', 'string', 'min:8'],
             'job_title' => ['nullable', 'string', 'max:100'],
             'permissions' => ['nullable', 'array'],
-            'permissions.*' => ['string'],
+            'permissions.*' => ['string', Rule::in(self::permissionNames())],
         ]);
 
         $user = User::create([
@@ -101,13 +126,15 @@ class StaffController extends Controller
         abort_unless(in_array($currentUser->role, ['owner', 'doctor', 'superadmin'], true), 403);
         abort_if((int) $user->clinic_id !== $this->currentClinicId(), 403);
 
+        self::ensurePermissionsExist();
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone' => ['nullable', 'string', 'max:30'],
             'password' => ['nullable', 'string', 'min:8'],
             'permissions' => ['nullable', 'array'],
-            'permissions.*' => ['string'],
+            'permissions.*' => ['string', Rule::in(self::permissionNames())],
         ]);
 
         $data = [

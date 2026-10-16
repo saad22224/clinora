@@ -19,6 +19,22 @@
     --color-brand-900: oklch(0.28 0.08 178);
     --color-brand-950: oklch(0.18 0.05 178);
     --font-sans: 'Cairo', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Public clinic landing tokens (--color-primary overridden per-clinic in the blade) */
+    --color-primary: #005c55;
+    --color-primary-container: #0f766e;
+    --color-on-primary-container: #a3faef;
+    --color-secondary: #006b5f;
+    --color-tertiary: #005a6a;
+    --color-background: #f7f9fb;
+    --color-surface: #ffffff;
+    --color-outline: #6e7977;
+    --color-surface-variant: #e0e3e5;
+    --color-on-surface: #191c1e;
+    --color-on-surface-variant: #3e4947;
+    --spacing-container-padding-desktop: 2.5rem;
+    --spacing-stack-lg: 5rem;
+    --radius-3xl: 2rem;
 }
 
 /* ── Global: all buttons & interactive elements get pointer ── */

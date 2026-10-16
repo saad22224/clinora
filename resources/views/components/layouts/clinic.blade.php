@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/clinic-queue.js', 'resources/js/clinic-messages.js'])
     <script>
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
@@ -182,6 +182,46 @@
                 </a>
                 @endif
 
+                {{-- Staff team messages --}}
+                @if(Auth::user()?->clinic && (Auth::user()->role !== 'secretary' || Auth::user()->can('use_staff_messages')))
+                @php $quickMessages = config('clinora.staff_quick_messages', []); @endphp
+                <div class="relative" id="staff-msg-container"
+                     data-staff-messages
+                     data-messages-url="{{ route('clinic.messages.index') }}"
+                     data-messages-store-url="{{ route('clinic.messages.store') }}">
+                    <button id="staff-msg-toggle-btn" type="button" title="تواصل الفريق"
+                            class="relative p-2.5 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        <span id="staff-msg-badge" class="hidden absolute top-1.5 right-1.5 flex h-3.5 min-w-3.5 px-0.5 items-center justify-center rounded-full bg-brand-500 text-[8px] font-black text-white ring-2 ring-white dark:ring-[#0F0F14]"></span>
+                    </button>
+
+                    <div id="staff-msg-panel"
+                         class="hidden absolute left-0 mt-2 w-[22rem] sm:w-96 bg-white dark:bg-[#141420] rounded-2xl shadow-2xl border border-gray-100 dark:border-white/[0.08] z-[9999] overflow-hidden flex flex-col max-h-[min(32rem,calc(100vh-5rem))]">
+                        <div class="p-3.5 bg-gray-50 dark:bg-white/[0.02] border-b border-gray-100 dark:border-white/[0.06]">
+                            <p class="text-sm font-black text-gray-900 dark:text-white">تواصل الفريق</p>
+                            <p class="text-[11px] text-gray-400 mt-0.5">رسائل الطبيب والسكرتارية</p>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5 p-3 border-b border-gray-100 dark:border-white/[0.06]">
+                            @foreach($quickMessages as $qm)
+                                <button type="button" data-quick-message="{{ $qm }}"
+                                        class="px-2 py-1 rounded-lg text-[11px] font-bold bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-200 hover:bg-brand-50 hover:text-brand-700 dark:hover:bg-brand-900/20">
+                                    {{ \Illuminate\Support\Str::limit($qm, 26) }}
+                                </button>
+                            @endforeach
+                        </div>
+                        <div data-messages-list class="flex-1 overflow-y-auto p-3 space-y-2 min-h-[12rem]"></div>
+                        <form data-messages-form class="p-3 border-t border-gray-100 dark:border-white/[0.06] space-y-2 bg-white dark:bg-[#141420]">
+                            <textarea data-messages-input rows="2" maxlength="500" placeholder="اكتب رسالة…"
+                                      class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-3 py-2 text-sm resize-none dark:text-white"></textarea>
+                            <div class="flex items-center justify-between gap-2">
+                                <p data-messages-status class="text-[11px] font-bold text-slate-400"></p>
+                                <button type="submit" data-messages-send class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-500 disabled:opacity-50">إرسال</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                @endif
+
                 {{-- Notifications Dropdown (Vanilla JS) --}}
                 <div class="relative" id="notif-container">
                     <button id="notif-toggle-btn" type="button" title="الإشعارات والتنبيهات" class="relative p-2.5 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
@@ -295,6 +335,7 @@
                 notifBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
                     notifMenu.classList.toggle('hidden');
+                    document.getElementById('staff-msg-panel')?.classList.add('hidden');
                 });
 
                 document.addEventListener('click', function(e) {

@@ -25,6 +25,7 @@ class RolesAndAdminSeeder extends Seeder
 
         $permissions = [
             'manage_appointments',
+            'use_staff_messages',
             'manage_patients',
             'manage_prescriptions',
             'manage_records',
