@@ -1,586 +1,467 @@
 @extends('components.layout')
 
 @section('content')
-    <main>
-        <!-- Background Blobs -->
-        <div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden opacity-30 pointer-events-none">
-            <div
-                class="absolute -top-[10%] -right-[5%] w-[40%] h-[40%] bg-primary rounded-full blur-[120px] mix-blend-multiply">
-            </div>
-            <div
-                class="absolute top-[20%] -left-[10%] w-[35%] h-[35%] bg-secondary-container rounded-full blur-[120px] mix-blend-multiply">
-            </div>
-            <div
-                class="absolute -bottom-[10%] right-[20%] w-[30%] h-[30%] bg-tertiary-fixed-dim rounded-full blur-[120px] mix-blend-multiply">
-            </div>
-        </div>
-
-        <!-- Section 2: Hero -->
-        <section
-            class="px-4 sm:px-6 md:px-margin-desktop py-8 sm:py-12 md:py-section-gap max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-8 md:gap-12 overflow-hidden">
-            <div class="w-full md:w-1/2 space-y-4 sm:space-y-6 text-center md:text-right" data-aos="fade-up"
-                data-aos-duration="800">
-                <span
-                    class="inline-block px-4 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-xs sm:text-sm font-bold shadow-sm">
-                    الإصدار 2.0 الآن مع الذكاء الاصطناعي الطبي
-                </span>
-                <h1
-                    class="font-display-lg text-3xl sm:text-4xl md:text-5xl lg:text-display-lg gradient-text leading-tight font-black">
-                    نمِّ عيادتك<br />بالذكاء
-                    الاصطناعي</h1>
-                <p
-                    class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-lg mx-auto md:mx-0 leading-relaxed font-medium">
-                    كلينورا هي منصة متكاملة لإدارة العيادات تجمع بين إدارة المرضى، الحجز الإلكتروني، أتمتة واتساب،
-                    الذكاء الاصطناعي الطبي، الروشتات، المواعيد، والتحليلات في لوحة تحكم واحدة أنيقة.
-                </p>
-                <div
-                    class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center md:justify-start gap-3 sm:gap-4 pt-4 w-full sm:w-auto">
-                    <a href="{{ route('register') }}"
-                        class="bg-primary-container text-on-primary px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold font-label-md text-sm sm:text-base shadow-xl shadow-primary/30 hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto text-center inline-block">ابدأ
-                        الآن مجانًا</a>
-                    <a href="#how-it-works"
-                        class="glass text-on-surface px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold font-label-md text-sm sm:text-base hover:bg-surface-variant/50 transition-all duration-300 w-full sm:w-auto text-center inline-block">اطلب
-                        عرضًا تجريبيًا</a>
-                </div>
-            </div>
-            <div class="w-full md:w-1/2 relative min-h-[350px] sm:min-h-[450px] md:min-h-[500px] mt-6 md:mt-0"
-                data-aos="fade-up" data-aos-duration="900" data-aos-delay="150">
-                <!-- Dashboard Mockup -->
-                <div
-                    class="glass rounded-2xl sm:rounded-3xl w-full aspect-video soft-bloom p-4 sm:p-6 relative overflow-hidden border border-white/60 shadow-xl">
-                    <div
-                        class="flex items-center justify-between border-b border-outline-variant pb-3 sm:pb-4 mb-3 sm:mb-4">
-                        <div class="flex gap-1.5 sm:gap-2">
-                            <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-error"></div>
-                            <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-secondary-container"></div>
-                            <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-tertiary-fixed-dim"></div>
-                        </div>
-                        <div class="w-32 sm:w-48 h-3 sm:h-4 bg-surface-container-high rounded-full"></div>
+    <main class="space-y-20 sm:space-y-28 pb-20">
+        <!-- Section 1: Hero (Matches Reference Images 2 & 3 in Light & Dark Mode) -->
+        <section class="pt-8 sm:pt-14 md:pt-16 px-4 sm:px-6 md:px-12 max-w-[1360px] mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                <!-- Primary Column (Right in RTL) -->
+                <div class="lg:col-span-6 space-y-6 text-right" data-aos="fade-up">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-xs sm:text-sm font-extrabold">
+                        <span class="material-symbols-outlined text-base">bolt</span>
+                        <span>نظام سحابي متكامل لإدارة العيادات والمراكز الطبية</span>
                     </div>
-                    <div class="grid grid-cols-3 gap-2 sm:gap-4">
-                        <div class="col-span-2 space-y-2 sm:space-y-4">
-                            <div class="h-20 sm:h-32 bg-surface-container-low rounded-xl"></div>
-                            <div class="grid grid-cols-2 gap-2 sm:gap-4">
-                                <div class="h-14 sm:h-24 bg-surface-container-low rounded-xl"></div>
-                                <div class="h-14 sm:h-24 bg-surface-container-low rounded-xl"></div>
+
+                    <div class="space-y-3">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-[#0D9488] dark:text-[#14B8A6] tracking-tight leading-tight">
+                            كلينورا
+                        </h1>
+                        <p class="text-sm sm:text-base md:text-lg font-bold text-slate-500 dark:text-slate-400 tracking-wide leading-relaxed">
+                            الحجز الإلكتروني • الطابور اللحظي • الملف الطبي • الروشتات • الحسابات • سلاسل العيادات
+                        </p>
+                    </div>
+
+                    <!-- Instant Access Hero Card (Matches Reference Images 2 & 3) -->
+                    <div class="clinora-card rounded-3xl p-6 sm:p-8 relative overflow-hidden max-w-xl">
+                        <!-- Top Accent Gradient Bar -->
+                        <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-l from-indigo-600 via-blue-500 to-teal-400"></div>
+
+                        <div class="flex items-center justify-between gap-4 pb-4 mb-5 border-b border-slate-100 dark:border-white/[0.06]">
+                            <div class="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-extrabold text-sm sm:text-base">
+                                <span class="material-symbols-outlined text-xl">medical_services</span>
+                                <span>وصول فوري لمنصتك الطبية</span>
+                            </div>
+                            <span class="text-xs font-bold text-slate-500 dark:text-slate-400">تجربة مجانية • 30 يوماً</span>
+                        </div>
+
+                        <div class="space-y-3.5">
+                            <a href="{{ route('register') }}"
+                                class="w-full bg-[#F59E0B] hover:bg-[#D97706] text-white font-black py-3.5 px-6 rounded-xl shadow-md shadow-amber-500/20 flex items-center justify-center gap-2.5 text-sm sm:text-base transition-all hover:-translate-y-0.5">
+                                <span class="material-symbols-outlined text-xl">person_add</span>
+                                <span>إنشاء حساب عيادة جديد</span>
+                            </a>
+                            <a href="{{ route('login') }}"
+                                class="w-full bg-[#34548A] hover:bg-[#2B4675] text-white font-bold py-3.5 px-6 rounded-xl shadow-sm flex items-center justify-center gap-2.5 text-sm sm:text-base transition-all hover:-translate-y-0.5">
+                                <span class="material-symbols-outlined text-xl">login</span>
+                                <span>تسجيل الدخول للعيادة</span>
+                            </a>
+                        </div>
+
+                        <ul class="pt-5 mt-5 border-t border-slate-100 dark:border-white/[0.06] space-y-2.5 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                <span>صفحة حجز إلكتروني خاصة بعيادتك مع تتبع لحظي لرقم الدور</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                <span>ملف طبي إلكتروني شامل وروشتات جاهزة للطباعة الفورية</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                <span>إدارة دقيقة للإيرادات والمصروفات وصلاحيات فريق العمل</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Secondary Visual Showcase Column (Left in RTL — Matches Reference Images 2 & 3) -->
+                <div class="lg:col-span-6 relative space-y-5" data-aos="fade-up" data-aos-delay="120">
+                    <!-- Card 1: Top Operational Metric Card -->
+                    <div class="clinora-card rounded-3xl p-6 sm:p-7 max-w-md mr-auto lg:mr-6">
+                        <div class="flex items-center justify-between gap-4 mb-3">
+                            <span class="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400">طابور الانتظار اليومي</span>
+                            <span class="w-9 h-9 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-lg">trending_up</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-11 h-11 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-2xl">format_list_numbered</span>
+                            </div>
+                            <div>
+                                <p class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight">نداء الدور اللحظي</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-0.5">تنظيم مرن لحركة المرضى بين الاستقبال وغرفة الكشف</p>
                             </div>
                         </div>
-                        <div class="space-y-2 sm:space-y-4">
-                            <div class="h-full bg-surface-container-low rounded-xl"></div>
+                    </div>
+
+                    <!-- Card 2: Highlighted Indigo/Royal-Blue Gradient Card -->
+                    <div class="bg-gradient-to-br from-[#4F46E5] to-[#3730A3] text-white rounded-3xl p-6 sm:p-8 shadow-2xl shadow-indigo-500/30 max-w-md mr-auto">
+                        <div class="flex items-center gap-3.5 mb-5">
+                            <div class="w-12 h-12 rounded-full bg-white/15 border border-white/30 flex items-center justify-center text-lg font-black text-white shrink-0">
+                                د
+                            </div>
+                            <div>
+                                <p class="text-base sm:text-lg font-extrabold text-white">الملف الطبي والروشتة الرقمية</p>
+                                <p class="text-xs text-indigo-100/80 font-medium">سجل تشخيصي ومرفقات طبية معزولة لكل عيادة</p>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-[11px] font-bold uppercase tracking-wider text-indigo-200">دليل الأدوية والطباعة الفورية</p>
+                            <p class="text-2xl sm:text-3xl font-black text-white">روشتة جاهزة بنقرة واحدة</p>
                         </div>
                     </div>
-                </div>
-                <!-- Floating Cards -->
-                <div
-                    class="absolute -top-4 sm:-top-8 left-1 sm:-left-4 glass p-2.5 sm:p-4 rounded-xl soft-bloom float-animation float-delayed-1 w-36 sm:w-48 shadow-lg border border-white/80 z-10">
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <div
-                            class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shrink-0">
-                            <span class="material-symbols-outlined text-sm sm:text-base">calendar_today</span>
+
+                    <!-- Card 3: Bottom Live Status Card -->
+                    <div class="clinora-card rounded-3xl p-5 sm:p-6 max-w-md mr-auto lg:mr-10">
+                        <p class="text-xs font-extrabold text-slate-700 dark:text-slate-200 mb-3">حالة الحجز الإلكتروني والفواتير</p>
+                        <div class="flex items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <span class="w-9 h-9 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-lg">check</span>
+                                </span>
+                                <div>
+                                    <p class="text-sm font-extrabold text-slate-900 dark:text-white">تأكيد الحجز وإصدار الفاتورة</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">مزامنة فورية بين الاستقبال والطبيب</p>
+                                </div>
+                            </div>
+                            <span class="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-400 shrink-0">+مفعل فورياً</span>
                         </div>
-                        <div>
-                            <p class="text-[10px] sm:text-label-sm font-label-sm text-on-surface-variant font-bold">المواعيد
-                            </p>
-                            <p class="text-sm sm:text-headline-md font-headline-md font-extrabold text-primary">24</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="absolute top-1/4 -right-1 sm:-right-6 glass p-2.5 sm:p-4 rounded-xl soft-bloom float-animation float-delayed-2 w-36 sm:w-48 shadow-lg border border-white/80 z-10">
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <div
-                            class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-tertiary-container flex items-center justify-center text-on-tertiary shrink-0">
-                            <span class="material-symbols-outlined text-sm sm:text-base">payments</span>
-                        </div>
-                        <div>
-                            <p class="text-[10px] sm:text-label-sm font-label-sm text-on-surface-variant font-bold">إيرادات
-                                اليوم</p>
-                            <p class="text-sm sm:text-headline-md font-headline-md font-extrabold text-tertiary-container">
-                                1.2 ألف $</p>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="absolute -bottom-4 sm:bottom-6 left-1 sm:-left-6 glass p-2.5 sm:p-4 rounded-xl soft-bloom float-animation float-delayed-3 w-44 sm:w-56 border border-cyan-400/40 shadow-lg z-10">
-                    <div class="flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2">
-                        <div
-                            class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white shrink-0 shadow-md">
-                            <span class="material-symbols-outlined text-xs sm:text-sm"
-                                style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-                        </div>
-                        <p class="text-xs sm:text-label-md font-label-md font-bold text-on-surface">المساعد الذكي</p>
-                    </div>
-                    <div class="space-y-1.5 sm:space-y-2">
-                        <div class="h-1.5 sm:h-2 w-full bg-outline-variant/60 rounded-full"></div>
-                        <div class="h-1.5 sm:h-2 w-3/4 bg-outline-variant/60 rounded-full"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: Trust Bar -->
-        <section id="about" class="bg-surface-container-low py-8 sm:py-12 border-y border-outline-variant/30">
-            <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop text-center">
-                <p class="font-label-md text-xs sm:text-label-md text-on-surface-variant mb-6 sm:mb-8 font-bold"
-                    data-aos="fade-up">كل ما تحتاجه
-                    عيادتك في منصة واحدة</p>
-                <div class="flex flex-wrap justify-center gap-6 sm:gap-10 md:gap-16 lg:gap-24 items-center opacity-75">
-                    <div class="flex items-center gap-2" data-aos="zoom-in" data-aos-delay="0">
-                        <span class="material-symbols-outlined text-primary text-xl sm:text-2xl">verified_user</span>
-                        <span class="font-bold text-on-surface text-xs sm:text-base">آمن ومشفّر</span>
+        <!-- Section 2: Platform Capabilities & Architecture Overview (Matches Reference Image 1's 3-Card Row) -->
+        <section id="about" class="px-4 sm:px-6 md:px-12 max-w-[1360px] mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12 space-y-3" data-aos="fade-up">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                    ركائز تشغيلية مصممة للعيادات الحديثة
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                    بنية سحابية تجمع بين سهولة الاستخدام اليومي، الصلاحيات الدقيقة لفريق العمل، والعزل الكامل لبيانات كل عيادة.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="clinora-card rounded-2xl p-6 sm:p-7 flex items-center gap-5" data-aos="fade-up" data-aos-delay="0">
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-3xl">groups</span>
                     </div>
-                    <div class="flex items-center gap-2" data-aos="zoom-in" data-aos-delay="100">
-                        <span class="material-symbols-outlined text-primary text-xl sm:text-2xl">cloud</span>
-                        <span class="font-bold text-on-surface text-xs sm:text-base">مستضاف سحابيًا</span>
+                    <div>
+                        <p class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">صلاحيات فريق العيادة</p>
+                        <p class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">7 صلاحيات</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">تحكم مرن للأطباء والسكرتارية والمحاسبة</p>
                     </div>
-                    <div class="flex items-center gap-2" data-aos="zoom-in" data-aos-delay="200">
-                        <span class="material-symbols-outlined text-primary text-xl sm:text-2xl">psychology</span>
-                        <span class="font-bold text-on-surface text-xs sm:text-base">مدعوم بالذكاء الاصطناعي</span>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="clinora-card rounded-2xl p-6 sm:p-7 flex items-center gap-5" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-3xl">verified_user</span>
                     </div>
-                    <div class="flex items-center gap-2" data-aos="zoom-in" data-aos-delay="300">
-                        <span class="material-symbols-outlined text-primary text-xl sm:text-2xl">devices</span>
-                        <span class="font-bold text-on-surface text-xs sm:text-base">مزامنة عبر جميع الأجهزة</span>
+                    <div>
+                        <p class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">عزل وحماية السجلات</p>
+                        <p class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">100% مستقل</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">بيانات ومرفقات كل عيادة معزولة بالكامل</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="clinora-card rounded-2xl p-6 sm:p-7 flex items-center gap-5" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 rounded-2xl bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-3xl">calendar_clock</span>
+                    </div>
+                    <div>
+                        <p class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">فترة التجربة المجانية</p>
+                        <p class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white mt-1">30 يوماً</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">تجربة شاملة لجميع الأدوات بدون بطاقة ائتمان</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 4: Features Grid -->
-        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto"
-            id="features">
-            <div class="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4" data-aos="fade-up">
-                <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-on-surface">أدوات
-                    قوية للعيادات الحديثة</h2>
-                <p
-                    class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium">
-                    ركّز على رعاية مرضاك ودع
-                    كلينورا تتولى الباقي بأتمتة ذكية ورؤى تحليلية دقيقة.</p>
+        <!-- Section 3: Simple 3-Step Process (Matches Reference Image 1's "Simple 3-Step Process") -->
+        <section id="how-it-works" class="px-4 sm:px-6 md:px-12 max-w-[1360px] mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12 space-y-3" data-aos="fade-up">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                    ابدأ في 3 خطوات بسيطة
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                    أنشئ حساب عيادتك، شارك صفحة الحجز الخاصة بك، وأدر المواعيد والملفات الطبية بسهولة.
+                </p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-gutter">
-                <!-- AI Assistant -->
-                <div class="glass p-6 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom hover:-translate-y-2 transition-all duration-300 group hover:border-primary/30 border border-white/60"
-                    data-aos="fade-up" data-aos-delay="0">
-                    <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary-fixed-dim flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
-                        <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl"
-                            style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="clinora-card rounded-2xl p-7 text-right space-y-4 relative overflow-hidden" data-aos="fade-up" data-aos-delay="0">
+                    <div class="flex items-center justify-between">
+                        <span class="w-12 h-12 rounded-2xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-black text-xl">1</span>
+                        <span class="material-symbols-outlined text-slate-300 dark:text-slate-700 text-3xl">app_registration</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">المساعد الذكي
-                    </h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">لخّص تاريخ المريض
-                        وحلّل ملفات PDF
-                        ونتائج التحاليل فورًا بالذكاء الاصطناعي الطبي.</p>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">أنشئ حساب عيادتك</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        سجّل اسم العيادة وبيانات الطبيب المسؤول، واضبط مواعيد العمل وأنواع الكشوفات وأسعارها خلال دقائق.
+                    </p>
                 </div>
-                <!-- Online Booking -->
-                <div class="glass p-6 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom hover:-translate-y-2 transition-all duration-300 group hover:border-primary/30 border border-white/60"
-                    data-aos="fade-up" data-aos-delay="100">
-                    <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-surface-container-high flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
-                        <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">event</span>
+
+                <div class="clinora-card rounded-2xl p-7 text-right space-y-4 relative overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center justify-between">
+                        <span class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-black text-xl">2</span>
+                        <span class="material-symbols-outlined text-slate-300 dark:text-slate-700 text-3xl">share</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">الحجز الإلكتروني
-                    </h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">امنح عيادتك رابط حجز
-                        خاص بها ليتمكن
-                        المرضى من حجز المواعيد على مدار الساعة.</p>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">فعّل الحجز والطابور اللحظي</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        استقبل حجوزات المرضى عبر صفحة عيادتك الإلكترونية أو من مكتب الاستقبال، مع منح كل مريض رابطاً لمتابعة دوره مباشرة.
+                    </p>
                 </div>
-                <!-- WhatsApp Automation -->
-                <div class="glass p-6 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom hover:-translate-y-2 transition-all duration-300 group hover:border-primary/30 border border-white/60"
-                    data-aos="fade-up" data-aos-delay="200">
-                    <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-tertiary-fixed flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
-                        <span class="material-symbols-outlined text-tertiary text-2xl sm:text-3xl">chat</span>
+
+                <div class="clinora-card rounded-2xl p-7 text-right space-y-4 relative overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center justify-between">
+                        <span class="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center font-black text-xl">3</span>
+                        <span class="material-symbols-outlined text-slate-300 dark:text-slate-700 text-3xl">clinical_notes</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">مزامنة واتساب
-                    </h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">تأكيدات وتذكيرات
-                        مواعيد آلية تُرسل
-                        مباشرة إلى المرضى.</p>
+                    <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">أدر الكشوفات والتقارير المالية</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        سجّل التشخيصات، اطبع الروشتات الإلكترونية، ارفع التحاليل والأشعة، وتابع إيرادات ومصروفات عيادتك بدقة.
+                    </p>
                 </div>
-                <!-- EMR -->
-                <div class="glass p-6 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom hover:-translate-y-2 transition-all duration-300 group hover:border-primary/30 border border-white/60"
-                    data-aos="fade-up" data-aos-delay="300">
-                    <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-surface-container-high flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
-                        <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">folder_shared</span>
+            </div>
+        </section>
+
+        <!-- Section 4: Core Features Grid (Only Genuine Implemented Capabilities) -->
+        <section id="features" class="px-4 sm:px-6 md:px-12 max-w-[1360px] mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12 space-y-3" data-aos="fade-up">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                    أدوات متكاملة لإدارة جميع أعمال عيادتك
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                    كل وحدة في كلينورا مصممة لتسهيل العمل اليومي للطبيب وفريق الاستقبال والإدارة المالية.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+                <!-- Feature 1 -->
+                <div class="clinora-card rounded-2xl p-6 space-y-4 hover:-translate-y-1 transition-all" data-aos="fade-up" data-aos-delay="0">
+                    <div class="w-12 h-12 rounded-xl bg-teal-500/15 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-2xl">event_available</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">سجل طبي إلكتروني
-                        متقدم</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">تاريخ المريض الكامل
-                        والسجلات والوسائط
-                        منظمة في جدول زمني أنيق.</p>
+                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">صفحة حجز إلكتروني خاصة</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        صفحة ويب مخصصة باسم عيادتك تتيح للمرضى حجز المواعيد واختيار نوع الكشف والحصول على رمز تأكيد فوري.
+                    </p>
                 </div>
-                <!-- Appointments -->
-                <div class="glass p-6 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom hover:-translate-y-2 transition-all duration-300 group hover:border-primary/30 border border-white/60"
-                    data-aos="fade-up" data-aos-delay="0">
-                    <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-surface-container-high flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
-                        <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">calendar_month</span>
+
+                <!-- Feature 2 -->
+                <div class="clinora-card rounded-2xl p-6 space-y-4 hover:-translate-y-1 transition-all" data-aos="fade-up" data-aos-delay="50">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-2xl">queue_play_next</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">طابور ذكي وإدارة مواعيد</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">إدارة مرئية لطابور الانتظار اليومي لكل طبيب، مع مناداة صوتية وإعادة جدولة مرنة ورابط تتبّع لحظي للمريض.</p>
+                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">طابور انتظار وتتبع لحظي</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        إدارة مرئية لطابور الانتظار اليومي مع إمكانية نداء المريض التالي، إيقاف الطابور مؤقتاً، ومتابعة المريض لدوره مباشرة.
+                    </p>
                 </div>
-                <!-- Digital Prescriptions -->
-                <div class="glass p-6 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom hover:-translate-y-2 transition-all duration-300 group hover:border-primary/30 border border-white/60"
-                    data-aos="fade-up" data-aos-delay="100">
-                    <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-secondary-fixed flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
-                        <span class="material-symbols-outlined text-secondary text-2xl sm:text-3xl">description</span>
+
+                <!-- Feature 3 -->
+                <div class="clinora-card rounded-2xl p-6 space-y-4 hover:-translate-y-1 transition-all" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-2xl">folder_shared</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">روشتات إلكترونية جاهزة للطباعة
-                    </h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">أنشئ روشتات رقمية احترافية باسم عيادتك مدعومة بقاعدة بيانات الأدوية المصرية وجاهزة للطباعة الفورية.</p>
+                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">ملف طبي إلكتروني شامل</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        توثيق التاريخ المرضي، الحساسية، العمليات السابقة، والتشخيصات السريرية لكل زيارة في ملف منظم لكل مريض.
+                    </p>
                 </div>
-                <!-- Reception Dashboard -->
-                <div class="glass p-6 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom hover:-translate-y-2 transition-all duration-300 group hover:border-primary/30 border border-white/60"
-                    data-aos="fade-up" data-aos-delay="200">
-                    <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-surface-container-high flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
-                        <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">monitoring</span>
+
+                <!-- Feature 4 -->
+                <div class="clinora-card rounded-2xl p-6 space-y-4 hover:-translate-y-1 transition-all" data-aos="fade-up" data-aos-delay="150">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-500 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-2xl">description</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">مركز الاستقبال وتواصل الفريق
-                    </h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">حالة لحظية لغرف الانتظار، رسائل فورية بين الطبيب والسكرتارية، وصلاحيات مخصصة لكل موظف.</p>
+                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">روشتات إلكترونية جاهزة للطباعة</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        إصدار روشتات رقمية دقيقة مدعومة بالبحث الفوري في قاعدة بيانات الأدوية مع قالب طباعة احترافي باسم العيادة.
+                    </p>
                 </div>
-                <!-- Financial & Multi-Branch System -->
-                <div class="glass p-6 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom hover:-translate-y-2 transition-all duration-300 group hover:border-primary/30 border border-white/60"
-                    data-aos="fade-up" data-aos-delay="300">
-                    <div
-                        class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-surface-container-high flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform shadow-md">
-                        <span class="material-symbols-outlined text-primary text-2xl sm:text-3xl">account_balance_wallet</span>
+
+                <!-- Feature 5 -->
+                <div class="clinora-card rounded-2xl p-6 space-y-4 hover:-translate-y-1 transition-all" data-aos="fade-up" data-aos-delay="0">
+                    <div class="w-12 h-12 rounded-xl bg-sky-500/15 text-sky-600 dark:text-sky-400 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-2xl">cloud_upload</span>
                     </div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-on-surface">الإدارة المالية وسلاسل العيادات
-                    </h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm leading-relaxed">تتبّع الإيرادات والمصروفات والمديونيات بدقة، مع لوحة تحكم مجمعة لإدارة الفروع المتعددة.</p>
+                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">أرشيف المرفقات والتقارير الطبية</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        رفع وحفظ صور الأشعة ونتائج التحاليل وملفات PDF في مساحة تخزين خاصة لا يمكن الوصول إليها إلا للمصرح لهم بالعيادة.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="clinora-card rounded-2xl p-6 space-y-4 hover:-translate-y-1 transition-all" data-aos="fade-up" data-aos-delay="50">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-2xl">forum</span>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">مركز الاستقبال وتواصل الفريق</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        قناة رسائل داخلية فورية بين الطبيب ومكتب الاستقبال لتنسيق دخول المرضى والملاحظات العاجلة داخل العيادة.
+                    </p>
+                </div>
+
+                <!-- Feature 7 -->
+                <div class="clinora-card rounded-2xl p-6 space-y-4 hover:-translate-y-1 transition-all" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/15 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-2xl">payments</span>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">الفواتير والتقارير المالية</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        تسجيل الإيرادات والمصروفات، متابعة المدفوعات النقدية والإلكترونية، واستخراج تقارير مالية تفصيلية لكل فترة.
+                    </p>
+                </div>
+
+                <!-- Feature 8 -->
+                <div class="clinora-card rounded-2xl p-6 space-y-4 hover:-translate-y-1 transition-all" data-aos="fade-up" data-aos-delay="150">
+                    <div class="w-12 h-12 rounded-xl bg-teal-500/15 text-teal-600 dark:text-teal-400 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-2xl">domain</span>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-slate-900 dark:text-white">إدارة سلاسل العيادات والفروع</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        لوحة تحكم مركزية لأصحاب المراكز الطبية لإدارة عدة فروع، الانتقال السلس بينها، وعرض التقارير المجمعة.
+                    </p>
                 </div>
             </div>
         </section>
 
         <!-- Section 5: Comparison Table -->
-        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-4xl mx-auto">
-            <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-center mb-8 sm:mb-12 text-on-surface"
-                data-aos="fade-up">ميزة كلينورا التنافسية</h2>
-            <div class="overflow-x-auto w-full rounded-2xl sm:rounded-3xl border border-outline-variant/60 glass soft-bloom shadow-xl"
-                data-aos="fade-up" data-aos-delay="100">
-                <table class="min-w-[500px] w-full border-collapse text-right">
-                    <thead>
-                        <tr class="bg-surface-container/80">
-                            <th class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">الميزة</th>
-                            <th
-                                class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface-variant opacity-60">
-                                العيادة
-                                التقليدية</th>
-                            <th class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-primary">كلينورا SaaS</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-outline-variant/40">
-                        <tr>
-                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">حجز المرضى
-                            </td>
-                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span>
-                                عبر الهاتف
-                                فقط</td>
-                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold">
-                                <span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span>
-                                إلكترونيًا على
-                                مدار الساعة</td>
-                        </tr>
-                        <tr>
-                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">الملخصات
-                                الطبية</td>
-                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span>
-                                كتابة
-                                يدوية</td>
-                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold">
-                                <span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span>
-                                إنشاء فوري
-                                بالذكاء الاصطناعي</td>
-                        </tr>
-                        <tr>
-                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">الإشعارات</td>
-                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span>
-                                رسائل SMS
-                                يدوية</td>
-                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold">
-                                <span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span>
-                                واتساب تلقائي
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">الوصول إلى
-                                البيانات</td>
-                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span>
-                                سيرفر محلي
-                                فقط</td>
-                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold">
-                                <span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span>
-                                سحابي من أي جهاز
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="p-4 sm:p-6 font-bold text-xs sm:text-sm md:text-base text-on-surface">سرعة الروشتة
-                            </td>
-                            <td class="p-4 sm:p-6 text-error text-xs sm:text-sm md:text-base font-semibold"><span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">close</span>
-                                كتابة
-                                يدوية</td>
-                            <td class="p-4 sm:p-6 text-tertiary-container text-xs sm:text-sm md:text-base font-extrabold">
-                                <span
-                                    class="material-symbols-outlined align-middle ml-1 text-base sm:text-lg">check_circle</span>
-                                قالب رقمي</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <section class="px-4 sm:px-6 md:px-12 max-w-5xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12 space-y-3" data-aos="fade-up">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                    ميزة كلينورا التنافسية
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium">
+                    مقارنة عملية بين الإدارة الورقية التقليدية وإدارة عيادتك عبر نظام كلينورا السحابي.
+                </p>
             </div>
-        </section>
 
-        <!-- Section 6: AI Section -->
-        <section
-            class="mx-3 sm:mx-6 md:mx-margin-desktop py-10 sm:py-16 md:py-section-gap rounded-2xl sm:rounded-3xl md:rounded-[40px] bg-gradient-to-br from-inverse-surface to-[#0b101c] text-on-primary-container overflow-hidden relative shadow-2xl"
-            id="ai">
-            <div class="absolute inset-0 pointer-events-none opacity-20">
-                <div class="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full blur-[100px]"></div>
-                <div class="absolute bottom-0 right-0 w-80 h-80 bg-cyan-500 rounded-full blur-[100px]"></div>
-            </div>
-            <div
-                class="max-w-container-max mx-auto px-4 sm:px-8 md:px-margin-desktop flex flex-col lg:flex-row items-center gap-8 sm:gap-12 md:gap-16 relative z-10">
-                <div class="w-full lg:w-2/5 space-y-4 sm:space-y-6 text-center lg:text-right" data-aos="fade-up">
-                    <div class="flex items-center justify-center lg:justify-start gap-2 text-cyan-400 font-bold">
-                        <span class="material-symbols-outlined"
-                            style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-                        <span class="font-label-md text-xs sm:text-label-md tracking-widest uppercase">الجيل القادم من
-                            الذكاء</span>
-                    </div>
-                    <h2
-                        class="font-display-lg text-2xl sm:text-3xl md:text-4xl lg:text-display-lg text-white leading-tight font-black">
-                        تعرّف على مساعدك الطبي الذكي
-                    </h2>
-                    <p
-                        class="font-body-lg text-sm sm:text-base md:text-body-lg text-outline-variant font-medium leading-relaxed">
-                        يفهم الذكاء الاصطناعي المتخصص لدينا المصطلحات الطبية. يمكنه معالجة سنوات من تاريخ المريض ونتائج
-                        التحاليل وقوائم الأدوية لتقديم ملخصات دقيقة وتحديد المخاطر المحتملة في ثوانٍ.
-                    </p>
-                    <ul class="space-y-3 sm:space-y-4 text-right inline-block md:block">
-                        <li class="flex items-center gap-3 text-white font-semibold text-xs sm:text-sm md:text-base">
-                            <span class="material-symbols-outlined text-cyan-400 shrink-0">check_circle</span>
-                            <span>تلخيص الملاحظات السريرية فورًا وبدقة</span>
-                        </li>
-                        <li class="flex items-center gap-3 text-white font-semibold text-xs sm:text-sm md:text-base">
-                            <span class="material-symbols-outlined text-cyan-400 shrink-0">check_circle</span>
-                            <span>إبراز نتائج التحاليل والقراءات الحرجة</span>
-                        </li>
-                        <li class="flex items-center gap-3 text-white font-semibold text-xs sm:text-sm md:text-base">
-                            <span class="material-symbols-outlined text-cyan-400 shrink-0">check_circle</span>
-                            <span>التحقق من تفاعلات وتداخلات الأدوية</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="w-full lg:w-3/5" data-aos="fade-up" data-aos-delay="150">
-                    <div
-                        class="bg-surface-container-lowest/5 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border border-white/10 ai-glow shadow-2xl">
-                        <div class="space-y-4 sm:space-y-6">
-                            <!-- Message 1 -->
-                            <div class="flex gap-2.5 sm:gap-4 items-start">
-                                <div
-                                    class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                                    <span class="material-symbols-outlined text-white text-xs sm:text-sm">person</span>
-                                </div>
-                                <div class="bg-white/10 p-3 sm:p-4 rounded-2xl rounded-tr-none max-w-[90%] sm:max-w-[80%]">
-                                    <p class="text-white text-xs sm:text-sm md:text-body-md font-medium leading-relaxed">هل
-                                        يمكنك تلخيص تاريخ السيد أحمد مع التركيز على
-                                        عوامل خطر القلب؟</p>
-                                </div>
-                            </div>
-                            <!-- Message 2 -->
-                            <div class="flex gap-2.5 sm:gap-4 items-start justify-end">
-                                <div
-                                    class="bg-primary/20 border border-primary/30 p-3.5 sm:p-5 rounded-2xl rounded-tl-none max-w-[92%] sm:max-w-[85%]">
-                                    <div class="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3 text-cyan-400">
-                                        <span class="material-symbols-outlined text-[10px] sm:text-xs"
-                                            style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-                                        <span
-                                            class="text-[10px] sm:text-xs font-extrabold uppercase tracking-tighter">كلينورا
-                                            AI</span>
-                                    </div>
-                                    <p class="text-white text-xs sm:text-sm md:text-body-md mb-2 sm:mb-3 font-bold">
-                                        استنادًا إلى السجلات من 2021 إلى 2024:</p>
-                                    <ul
-                                        class="space-y-1 sm:space-y-2 text-outline-variant text-xs sm:text-sm list-disc pr-4 sm:pr-5 font-medium leading-relaxed">
-                                        <li>ارتفاع ضغط الدم المزمن (آخر قراءة 145/95)</li>
-                                        <li>تاريخ من فرط شحميات الدم (LDL بمعدل 160 في أكتوبر 2023)</li>
-                                        <li>تاريخ عائلي: والده أصيب بنوبة قلبية في عمر 52</li>
-                                        <li>مدخّن حاليًا (حوالي 10 سجائر يوميًا)</li>
-                                    </ul>
-                                    <div
-                                        class="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-white/10 flex items-center gap-2 sm:gap-3">
-                                        <div
-                                            class="px-2 py-0.5 sm:py-1 bg-yellow-500/20 text-yellow-400 text-[9px] sm:text-[11px] rounded uppercase font-extrabold shrink-0">
-                                            تنبيه حرج</div>
-                                        <p class="text-[11px] sm:text-xs text-yellow-400 font-bold leading-tight">المريض لم
-                                            يصرف روشتة أتورفاستاتين منذ 45
-                                            يومًا.</p>
-                                    </div>
-                                </div>
-                                <div
-                                    class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shrink-0 shadow-lg">
-                                    <span class="material-symbols-outlined text-white text-xs sm:text-sm"
-                                        style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="clinora-card rounded-3xl overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                <div class="overflow-x-auto">
+                    <table class="min-w-[540px] w-full border-collapse text-right">
+                        <thead>
+                            <tr class="bg-slate-100/80 dark:bg-white/[0.04] border-b border-slate-200/80 dark:border-white/[0.07]">
+                                <th class="p-4 sm:p-5 font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white">مجال العمل</th>
+                                <th class="p-4 sm:p-5 font-bold text-xs sm:text-sm text-slate-500 dark:text-slate-400">الإدارة التقليدية</th>
+                                <th class="p-4 sm:p-5 font-extrabold text-xs sm:text-sm text-teal-600 dark:text-teal-400">منصة كلينورا</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200/70 dark:divide-white/[0.06] text-xs sm:text-sm">
+                            <tr>
+                                <td class="p-4 sm:p-5 font-extrabold text-slate-900 dark:text-white">حجز المواعيد ومتابعة الدور</td>
+                                <td class="p-4 sm:p-5 text-rose-600 dark:text-rose-400 font-semibold">
+                                    <span class="material-symbols-outlined align-middle ml-1 text-base">close</span>
+                                    حجز هاتفي يدوي وتكدس في غرفة الانتظار
+                                </td>
+                                <td class="p-4 sm:p-5 text-emerald-600 dark:text-emerald-400 font-extrabold">
+                                    <span class="material-symbols-outlined align-middle ml-1 text-base">check_circle</span>
+                                    حجز إلكتروني على مدار الساعة وتتبع لحظي لرقم الدور
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 sm:p-5 font-extrabold text-slate-900 dark:text-white">السجل الطبي والمرفقات</td>
+                                <td class="p-4 sm:p-5 text-rose-600 dark:text-rose-400 font-semibold">
+                                    <span class="material-symbols-outlined align-middle ml-1 text-base">close</span>
+                                    ملفات ورقية معرضة للتلف أو الضياع
+                                </td>
+                                <td class="p-4 sm:p-5 text-emerald-600 dark:text-emerald-400 font-extrabold">
+                                    <span class="material-symbols-outlined align-middle ml-1 text-base">check_circle</span>
+                                    أرشيف إلكتروني مؤمّن للتشخيصات والتحاليل والأشعة
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 sm:p-5 font-extrabold text-slate-900 dark:text-white">إصدار الروشتات الطبية</td>
+                                <td class="p-4 sm:p-5 text-rose-600 dark:text-rose-400 font-semibold">
+                                    <span class="material-symbols-outlined align-middle ml-1 text-base">close</span>
+                                    كتابة يدوية متكررة بدون سجل دوائي
+                                </td>
+                                <td class="p-4 sm:p-5 text-emerald-600 dark:text-emerald-400 font-extrabold">
+                                    <span class="material-symbols-outlined align-middle ml-1 text-base">check_circle</span>
+                                    روشتة رقمية مرتبطة بقاعدة الأدوية وجاهزة للطباعة
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 sm:p-5 font-extrabold text-slate-900 dark:text-white">الحسابات والتقارير المالية</td>
+                                <td class="p-4 sm:p-5 text-rose-600 dark:text-rose-400 font-semibold">
+                                    <span class="material-symbols-outlined align-middle ml-1 text-base">close</span>
+                                    جرد يدوي يصعب معه تتبع صافي الربح
+                                </td>
+                                <td class="p-4 sm:p-5 text-emerald-600 dark:text-emerald-400 font-extrabold">
+                                    <span class="material-symbols-outlined align-middle ml-1 text-base">check_circle</span>
+                                    تقارير فورية للإيرادات والمصروفات وطرق الدفع
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 sm:p-5 font-extrabold text-slate-900 dark:text-white">إدارة الفروع وفريق العمل</td>
+                                <td class="p-4 sm:p-5 text-rose-600 dark:text-rose-400 font-semibold">
+                                    <span class="material-symbols-outlined align-middle ml-1 text-base">close</span>
+                                    صعوبة متابعة الفروع وتداخل صلاحيات الموظفين
+                                </td>
+                                <td class="p-4 sm:p-5 text-emerald-600 dark:text-emerald-400 font-extrabold">
+                                    <span class="material-symbols-outlined align-middle ml-1 text-base">check_circle</span>
+                                    صلاحيات مخصصة لكل موظف ولوحة مجمعة لسلاسل العيادات
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
-        <!-- Section 7: How it Works -->
-        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto"
-            id="how-it-works">
-            <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-center mb-12 sm:mb-16 text-on-surface"
-                data-aos="fade-up">ابدأ خلال دقائق</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 text-center">
-                <div class="space-y-4 sm:space-y-6" data-aos="fade-up" data-aos-delay="0">
-                    <div
-                        class="w-14 h-14 sm:w-16 sm:h-16 bg-primary-fixed rounded-full flex items-center justify-center mx-auto text-primary text-xl sm:text-2xl font-black shadow-lg">
-                        1</div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface">أنشئ حسابك</h3>
-                    <p
-                        class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-base leading-relaxed max-w-xs mx-auto">
-                        سجّل واضبط ملف عيادتك، وساعات العمل، والخدمات
-                        التخصصية.</p>
-                </div>
-                <div class="space-y-4 sm:space-y-6" data-aos="fade-up" data-aos-delay="150">
-                    <div
-                        class="w-14 h-14 sm:w-16 sm:h-16 bg-secondary-fixed rounded-full flex items-center justify-center mx-auto text-secondary text-xl sm:text-2xl font-black shadow-lg">
-                        2</div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface">شارك رابطك</h3>
-                    <p
-                        class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-base leading-relaxed max-w-xs mx-auto">
-                        ضع رابط الحجز على جوجل أو إنستغرام أو واتساب. يحجز
-                        المرضى مباشرة دون اتصال.</p>
-                </div>
-                <div class="space-y-4 sm:space-y-6" data-aos="fade-up" data-aos-delay="300">
-                    <div
-                        class="w-14 h-14 sm:w-16 sm:h-16 bg-tertiary-fixed rounded-full flex items-center justify-center mx-auto text-tertiary text-xl sm:text-2xl font-black shadow-lg">
-                        3</div>
-                    <h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface">أدر كل شيء</h3>
-                    <p
-                        class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-base leading-relaxed max-w-xs mx-auto">
-                        ادخل إلى لوحة التحكم لعرض المواعيد وإدارة المرضى
-                        والاستفادة من رؤى الذكاء الاصطناعي.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 8: Benefits & Statistics -->
-        <section class="bg-primary/5 py-12 md:py-section-gap border-y border-primary/10">
-            <div class="max-w-container-max mx-auto px-4 sm:px-6 md:px-margin-desktop">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md"
-                        data-aos="zoom-in" data-aos-delay="0">
-                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-primary mb-2 font-black">40%
-                        </p>
-                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">تقليل حالات
-                            عدم
-                            الحضور</p>
-                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">من خلال تذكيرات واتساب
-                            الآلية.</p>
-                    </div>
-                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md"
-                        data-aos="zoom-in" data-aos-delay="100">
-                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-secondary mb-2 font-black">
-                            +10 ساعات</p>
-                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">توفير أسبوعي
-                        </p>
-                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">تقليل الأعمال الإدارية
-                            والرد على
-                            المكالمات.</p>
-                    </div>
-                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md"
-                        data-aos="zoom-in" data-aos-delay="200">
-                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-tertiary mb-2 font-black">2x
-                        </p>
-                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">سرعة الحجز
-                        </p>
-                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">يحب المرضى تجربة الحجز
-                            السلسة.</p>
-                    </div>
-                    <div class="glass bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl soft-bloom text-center border border-white/80 shadow-md"
-                        data-aos="zoom-in" data-aos-delay="300">
-                        <p class="text-3xl sm:text-4xl md:text-display-lg font-display-lg text-primary mb-2 font-black">
-                            100%</p>
-                        <p class="text-xs sm:text-label-md font-bold text-on-surface uppercase tracking-wider">بلا أوراق
-                        </p>
-                        <p class="text-xs sm:text-body-md text-on-surface-variant mt-2 font-medium">تحوّل رقمي كامل
-                            للعيادات.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 9: Who Clinora Is For (Clinical Roles & Specialties) -->
-        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto">
-            <div class="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4" data-aos="fade-up">
-                <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-on-surface">
+        <!-- Section 6: Who Clinora Is For (Clinical Roles & Specialties) -->
+        <section class="px-4 sm:px-6 md:px-12 max-w-[1360px] mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12 space-y-3" data-aos="fade-up">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
                     مصممة لتناسب كل دور داخل منشأتك الطبية
                 </h2>
-                <p class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium">
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
                     سواء كنت تدير عيادة فردية، مركزاً طبياً متخصصاً، أو سلسلة عيادات متعددة الفروع، توفر كلينورا صلاحيات وأدوات مخصصة لكل فرد في فريقك.
                 </p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom relative border border-white/60 shadow-lg flex flex-col justify-between"
-                    data-aos="fade-up" data-aos-delay="0">
-                    <div>
-                        <div class="w-12 h-12 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary mb-5 shadow-sm">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Role 1 -->
+                <div class="clinora-card rounded-2xl p-7 flex flex-col justify-between space-y-6" data-aos="fade-up" data-aos-delay="0">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                             <span class="material-symbols-outlined text-2xl">stethoscope</span>
                         </div>
-                        <h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface mb-3">للأطباء والاستشاريين</h3>
-                        <p class="font-body-lg text-xs sm:text-sm md:text-body-md mb-6 text-on-surface-variant leading-relaxed font-medium">
-                            ملف طبي متكامل يشمل التاريخ المرضي والجراحي، التشخيصات، المرفقات الطبية الخاصة، والروشتات الإلكترونية مع مساعد ذكي لمراجعة الحالة السريرية.
+                        <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">للأطباء والاستشاريين</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                            ملف طبي متكامل يشمل التاريخ المرضي والجراحي، التشخيصات، المرفقات الطبية الخاصة، والروشتات الإلكترونية الجاهزة للطباعة.
                         </p>
                     </div>
-                    <div class="flex items-center gap-2 pt-4 border-t border-outline-variant/30 text-xs font-bold text-primary">
+                    <div class="flex items-center gap-2 pt-4 border-t border-slate-200/70 dark:border-white/[0.06] text-xs font-extrabold text-indigo-600 dark:text-indigo-400">
                         <span class="material-symbols-outlined text-base">verified</span>
                         <span>سجل مرضي آمن ومعزول لكل عيادة</span>
                     </div>
                 </div>
-                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom relative border border-white/60 shadow-lg flex flex-col justify-between"
-                    data-aos="fade-up" data-aos-delay="150">
-                    <div>
-                        <div class="w-12 h-12 rounded-2xl bg-tertiary-fixed flex items-center justify-center text-tertiary mb-5 shadow-sm">
+
+                <!-- Role 2 -->
+                <div class="clinora-card rounded-2xl p-7 flex flex-col justify-between space-y-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                             <span class="material-symbols-outlined text-2xl">support_agent</span>
                         </div>
-                        <h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface mb-3">لفريق الاستقبال والسكرتارية</h3>
-                        <p class="font-body-lg text-xs sm:text-sm md:text-body-md mb-6 text-on-surface-variant leading-relaxed font-medium">
-                            إدارة حجوزات اليوم، نداء الدور الصوتي، إيقاف واستئناف الطابور، تسجيل التحصيلات والمصروفات، والتواصل الفوري مع الطبيب بصلاحيات دقيقة قابلة للتخصيص.
+                        <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">لفريق الاستقبال والسكرتارية</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                            إدارة حجوزات اليوم، نداء الدور اللحظي، إيقاف واستئناف الطابور، تسجيل التحصيلات والمصروفات، والتواصل الفوري مع الطبيب بصلاحيات دقيقة.
                         </p>
                     </div>
-                    <div class="flex items-center gap-2 pt-4 border-t border-outline-variant/30 text-xs font-bold text-tertiary">
+                    <div class="flex items-center gap-2 pt-4 border-t border-slate-200/70 dark:border-white/[0.06] text-xs font-extrabold text-emerald-600 dark:text-emerald-400">
                         <span class="material-symbols-outlined text-base">tune</span>
                         <span>صلاحيات مرنة حسب مهام كل موظف</span>
                     </div>
                 </div>
-                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom relative border border-white/60 shadow-lg flex flex-col justify-between"
-                    data-aos="fade-up" data-aos-delay="300">
-                    <div>
-                        <div class="w-12 h-12 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary mb-5 shadow-sm">
+
+                <!-- Role 3 -->
+                <div class="clinora-card rounded-2xl p-7 flex flex-col justify-between space-y-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center">
                             <span class="material-symbols-outlined text-2xl">domain</span>
                         </div>
-                        <h3 class="font-headline-md text-lg sm:text-xl font-bold text-on-surface mb-3">لمديري المراكز وسلاسل العيادات</h3>
-                        <p class="font-body-lg text-xs sm:text-sm md:text-body-md mb-6 text-on-surface-variant leading-relaxed font-medium">
+                        <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">لمديري المراكز وسلاسل العيادات</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
                             لوحة تحكم مركزية لإدارة عدة فروع تحت اشتراك موحد، مع إمكانية الدخول لأي فرع ومتابعة التقارير المالية المجمعة ومؤشرات الأداء لكل عيادة.
                         </p>
                     </div>
-                    <div class="flex items-center gap-2 pt-4 border-t border-outline-variant/30 text-xs font-bold text-secondary">
+                    <div class="flex items-center gap-2 pt-4 border-t border-slate-200/70 dark:border-white/[0.06] text-xs font-extrabold text-amber-600 dark:text-amber-400">
                         <span class="material-symbols-outlined text-base">analytics</span>
                         <span>تقارير مالية وتشغيلية لكل فرع وللسلسلة</span>
                     </div>
@@ -588,164 +469,203 @@
             </div>
         </section>
 
-        <!-- Section 9.5: Pricing -->
-        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto"
-            id="pricing">
-            <div class="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4" data-aos="fade-up">
-                <h2 class="font-display-lg text-2xl sm:text-3xl md:text-headline-lg font-extrabold text-on-surface">خطط
-                    أسعار تناسب عيادتك</h2>
-                <p
-                    class="font-body-lg text-sm sm:text-base md:text-body-lg text-on-surface-variant max-w-2xl mx-auto font-medium">
-                    تجربة مجانية لمدة 30 يومًا بجميع المميزات، وخطط سنوية مرنة تناسب نمو عيادتك أو فروعك الطبية.</p>
+        <!-- Section 7: Pricing Plans -->
+        <section id="pricing" class="px-4 sm:px-6 md:px-12 max-w-[1360px] mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12 space-y-3" data-aos="fade-up">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                    خطط أسعار واضحة ومرنة
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                    ابدأ بتجربة مجانية لمدة 30 يوماً بجميع المميزات، واختر الباقة المناسبة لعيادتك الفردية أو سلسلة فروعك الطبية.
+                </p>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
-                <!-- Free Trial -->
-                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom flex flex-col border border-white/60 shadow-md"
-                    data-aos="fade-up" data-aos-delay="0">
-                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-on-surface">تجريبية مجانية
-                    </h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-body-md mb-6">لتجربة جميع
-                        مميزات النظام بدون أي التزامات.
-                    </p>
-                    <div class="mb-6">
-                        <span
-                            class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-primary">مجاناً</span>
-                        <span class="text-on-surface-variant font-body-md text-sm sm:text-base font-bold"> / لمدة 30
-                            يومًا</span>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+                <!-- Plan 1: Free Trial -->
+                <div class="clinora-card rounded-3xl p-7 sm:p-8 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="0">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-extrabold mb-3">
+                            بدون التزامات
+                        </span>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white mb-1">تجريبية مجانية</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-6 font-medium">
+                            لتجربة جميع أدوات إدارة العيادة عملياً قبل الاشتراك.
+                        </p>
+                        <div class="mb-6 pb-6 border-b border-slate-200/70 dark:border-white/[0.06]">
+                            <span class="text-3xl sm:text-4xl font-black text-teal-600 dark:text-teal-400">مجاناً</span>
+                            <span class="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400"> / لمدة 30 يوماً</span>
+                        </div>
+                        <ul class="space-y-3 mb-8 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
+                                <span>تفعيل فوري لحساب العيادة وصفحة الحجز العام</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
+                                <span>إدارة المواعيد وطابور الانتظار اللحظي</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
+                                <span>ملف طبي إلكتروني شامل وروشتات جاهزة للطباعة</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
+                                <span>إدارة الفواتير والتقارير المالية وصلاحيات الفريق</span>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="space-y-3 mb-8 flex-1">
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">مفتوح فيها جميع
-                                مميزات النظام بالكامل</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">حجز إلكتروني وإدارة
-                                مواعيد وتقويم ذكي</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">المساعد الطبي الذكي
-                                والروشتات الإلكترونية</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تذكيرات واتساب وسجل
-                                طبي إلكتروني متقدم</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">صلاحية كاملة لمدة 30
-                                يومًا مجانًا</span></li>
-                    </ul>
-                    <a class="glass text-on-surface text-center px-6 py-3.5 rounded-xl font-bold font-label-md text-sm sm:text-base hover:bg-surface-variant/50 transition-all duration-300 border border-outline-variant/40"
-                        href="{{ route('register') }}">ابدأ تجربتك المجانية</a>
+                    <a href="{{ route('register') }}"
+                        class="w-full text-center bg-[#34548A] hover:bg-[#2B4675] text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-sm">
+                        ابدأ تجربتك المجانية
+                    </a>
                 </div>
-                <!-- Pro (highlighted) -->
-                <div class="bg-primary-container text-on-primary p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom flex flex-col relative sm:-translate-y-2 shadow-2xl shadow-primary/30"
-                    data-aos="fade-up" data-aos-delay="150">
-                    <span
-                        class="absolute -top-3 right-8 bg-white text-primary text-xs font-black px-3 py-1 rounded-full shadow-md">الأكثر
-                        طلبًا</span>
-                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-white">احترافية</h3>
-                    <p class="text-white/80 font-body-md text-xs sm:text-sm md:text-body-md mb-6">مثالية للعيادات والمراكز
-                        الطبية الموحدة.</p>
-                    <div class="mb-6">
-                        <span
-                            class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-white">5,000</span>
-                        <span class="text-white/80 font-body-md text-sm sm:text-base font-bold"> جنيه / سنويًا</span>
+
+                <!-- Plan 2: Pro Single Clinic (Highlighted) -->
+                <div class="bg-gradient-to-b from-[#1E293B] to-[#0F172A] dark:from-[#182038] dark:to-[#101526] text-white rounded-3xl p-7 sm:p-8 flex flex-col justify-between relative shadow-2xl border border-indigo-500/40 lg:-translate-y-2" data-aos="fade-up" data-aos-delay="100">
+                    <span class="absolute -top-3.5 right-7 bg-[#F59E0B] text-white text-xs font-black px-3.5 py-1 rounded-full shadow-md">
+                        الأكثر اختياراً للعيادات
+                    </span>
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-extrabold mb-3">
+                            للعيادات المستقلة
+                        </span>
+                        <h3 class="text-xl font-black text-white mb-1">الباقة الاحترافية</h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mb-6 font-medium">
+                            مثالية للعيادات الفردية والمراكز الطبية الموحدة.
+                        </p>
+                        <div class="mb-6 pb-6 border-b border-white/10">
+                            <span class="text-3xl sm:text-4xl font-black text-white">5,000</span>
+                            <span class="text-xs sm:text-sm font-bold text-slate-300"> جنيه / سنوياً</span>
+                        </div>
+                        <ul class="space-y-3 mb-8 text-xs sm:text-sm font-semibold text-slate-200">
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-teal-400 text-lg">check_circle</span>
+                                <span>جميع مميزات النظام للعيادة بدون حدود للمواعيد</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-teal-400 text-lg">check_circle</span>
+                                <span>حسابات متعددة للأطباء والسكرتارية بصلاحيات مخصصة</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-teal-400 text-lg">check_circle</span>
+                                <span>أرشيف خاص للمرفقات الطبية والتحاليل والأشعة</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-teal-400 text-lg">check_circle</span>
+                                <span>تقارير مالية وتشغيلية مفصلة ودعم فني مستمر</span>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="space-y-3 mb-8 flex-1">
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">مفتوح فيها جميع مميزات
-                                النظام بالكامل</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">حجز إلكتروني وإدارة
-                                مواعيد غير محدودة</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">المساعد الطبي الذكي
-                                والروشتات الإلكترونية</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">تذكيرات واتساب وسجل طبي
-                                إلكتروني متكامل</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-cyan-300 text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-white">دعم فني مستمر وتحديثات
-                                تلقائية</span></li>
-                    </ul>
-                    <a class="bg-white text-primary text-center px-6 py-3.5 rounded-xl font-bold font-label-md text-sm sm:text-base hover:scale-105 transition-transform shadow-lg"
-                        href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer">اشترك الآن</a>
+                    <a href="{{ route('register') }}"
+                        class="w-full text-center bg-[#F59E0B] hover:bg-[#D97706] text-white font-black py-3.5 px-6 rounded-xl transition-all shadow-lg shadow-amber-500/25">
+                        اشترك وابدأ الآن
+                    </a>
                 </div>
-                <!-- Enterprise -->
-                <div class="glass p-6 sm:p-8 md:p-card-padding rounded-2xl sm:rounded-3xl soft-bloom flex flex-col border border-white/60 shadow-md"
-                    data-aos="fade-up" data-aos-delay="300">
-                    <h3 class="font-headline-md text-xl sm:text-headline-md font-bold mb-1 text-on-surface">المؤسسات
-                        والفروع</h3>
-                    <p class="text-on-surface-variant font-body-md text-xs sm:text-sm md:text-body-md mb-6">للأفرع المتعددة
-                        والمجمعات الطبية الكبرى.
-                    </p>
-                    <div class="mb-6">
-                        <span
-                            class="text-3xl sm:text-4xl md:text-display-lg font-display-lg font-black text-primary">10,000</span>
-                        <span class="text-on-surface-variant font-body-md text-sm sm:text-base font-bold"> جنيه /
-                            سنويًا</span>
+
+                <!-- Plan 3: Enterprise / Multi-Branch -->
+                <div class="clinora-card rounded-3xl p-7 sm:p-8 flex flex-col justify-between" data-aos="fade-up" data-aos-delay="200">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-extrabold mb-3">
+                            للسلاسل والمجمعات
+                        </span>
+                        <h3 class="text-xl font-black text-slate-900 dark:text-white mb-1">المؤسسات والفروع</h3>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-6 font-medium">
+                            للمراكز الطبية التي تدير أكثر من فرع تحت إدارة واحدة.
+                        </p>
+                        <div class="mb-6 pb-6 border-b border-slate-200/70 dark:border-white/[0.06]">
+                            <span class="text-3xl sm:text-4xl font-black text-indigo-600 dark:text-indigo-400">10,000</span>
+                            <span class="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400"> جنيه / سنوياً</span>
+                        </div>
+                        <ul class="space-y-3 mb-8 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
+                                <span>لوحة تحكم مركزية لإدارة سلاسل العيادات والفروع</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
+                                <span>انتقال فوري بين الفروع مع عزل مستقل لبيانات كل فرع</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
+                                <span>تقارير مالية وتشغيلية مجمعة على مستوى السلسلة</span>
+                            </li>
+                            <li class="flex items-center gap-2.5">
+                                <span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
+                                <span>إدارة صلاحيات مديري الفروع والموظفين بمرونة</span>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="space-y-3 mb-8 flex-1">
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تشمل جميع مميزات
-                                النظام بالكامل</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-bold text-primary">ميزة إدارة أكثر من فرع
-                                وأكثر من عيادة</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-bold text-primary">لوحة تحكم خاصة لمدير
-                                الأفرع والعيادات</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">تقارير وتحليلات
-                                مجمعة لجميع الفروع</span></li>
-                        <li class="flex items-center gap-2.5"><span
-                                class="material-symbols-outlined text-tertiary text-lg">check_circle</span><span
-                                class="text-xs sm:text-sm md:text-body-md font-medium text-on-surface">مدير حساب مخصص ودعم
-                                فني ذو أولوية</span></li>
-                    </ul>
-                    <a class="glass text-on-surface text-center px-6 py-3.5 rounded-xl font-bold font-label-md text-sm sm:text-base hover:bg-surface-variant/50 transition-all duration-300 border border-outline-variant/40"
-                        href="https://wa.me/201099615358" target="_blank" rel="noopener noreferrer">اشترك الآن</a>
+                    <a href="{{ url('/#contact') }}"
+                        class="w-full text-center bg-[#34548A] hover:bg-[#2B4675] text-white font-bold py-3.5 px-6 rounded-xl transition-all shadow-sm">
+                        تواصل لتفعيل باقة الفروع
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Section 10: CTA Section -->
-        <section class="px-4 sm:px-6 md:px-margin-desktop py-12 md:py-section-gap max-w-container-max mx-auto">
-            <div class="bg-gradient-to-r from-primary-container to-blue-700 rounded-2xl sm:rounded-3xl md:rounded-[40px] p-6 sm:p-12 md:p-24 text-center text-on-primary relative overflow-hidden shadow-2xl shadow-primary/30"
-                data-aos="zoom-in">
-                <div
-                    class="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 -translate-x-1/2 blur-[80px]">
+        <!-- Section 8: FAQ -->
+        <section id="faq" class="px-4 sm:px-6 md:px-12 max-w-4xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-12 space-y-3" data-aos="fade-up">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                    الأسئلة الشائعة
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium">
+                    إجابات واضحة حول كيفية عمل منصة كلينورا وإدارة بيانات عيادتك.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="clinora-card rounded-2xl p-6" data-aos="fade-up">
+                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mb-2">
+                        كيف تعمل الفترة التجريبية المجانية؟
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        بمجرد إنشاء حساب عيادتك، يتم تفعيل اشتراك تجريبي مجاني تلقائياً يتيح لك استخدام لوحة التحكم، إدارة المرضى والمواعيد، إصدار الروشتات، وتجربة صفحة الحجز العام بدون الحاجة لبطاقة ائتمان.
+                    </p>
                 </div>
-                <div
-                    class="absolute bottom-0 right-0 w-64 h-64 bg-cyan-500/20 rounded-full translate-y-1/2 translate-x-1/2 blur-[80px]">
+
+                <div class="clinora-card rounded-2xl p-6" data-aos="fade-up" data-aos-delay="50">
+                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mb-2">
+                        هل بيانات المرضى والمرفقات الطبية معزولة لكل عيادة؟
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        نعم، يطبق النظام عزلاً كاملاً للبيانات (Multi-Tenant Isolation) بحيث ترتبط سجلات المرضى، المواعيد، الفواتير، والملفات الطبية المرفوعة بعيادتك فقط ولا يمكن لأي عيادة أخرى الاطلاع عليها.
+                    </p>
                 </div>
-                <h2
-                    class="font-display-lg text-2xl sm:text-3xl md:text-4xl lg:text-display-lg mb-4 sm:mb-6 relative z-10 font-black">
-                    جاهز لتنمية عيادتك؟</h2>
-                <p
-                    class="font-body-lg text-xs sm:text-base md:text-body-lg mb-8 sm:mb-10 max-w-2xl mx-auto opacity-90 relative z-10 font-medium leading-relaxed">
-                    انضم إلى مئات
-                    العيادات حول العالم التي تعمل على تحديث رعاية مرضاها بمنصة كلينورا الذكية.</p>
-                <div
-                    class="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3 sm:gap-4 relative z-10 w-full sm:w-auto max-w-md mx-auto sm:max-w-none">
-                    <a class="bg-white text-primary px-6 sm:px-8 md:px-10 py-3.5 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg md:text-headline-md hover:scale-105 transition-transform inline-block w-full sm:w-auto text-center shadow-lg"
-                        href="{{ route('register') }}">ابدأ تجربتك
-                        المجانية</a>
-                    <a class="bg-white/10 backdrop-blur-md border border-white/20 text-white px-6 sm:px-8 md:px-10 py-3.5 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg md:text-headline-md hover:bg-white/20 transition-all inline-block w-full sm:w-auto text-center"
-                        href="#contact">اطلب عرضًا تجريبيًا</a>
+
+                <div class="clinora-card rounded-2xl p-6" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mb-2">
+                        هل يمكنني تحديد صلاحيات مختلفة للسكرتارية والأطباء؟
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        نعم، يمكن لمالك العيادة إضافة حسابات للأطباء وموظفي الاستقبال وتحديد الصلاحيات المسموحة لكل مستخدم بدقة (مثل إدارة المواعيد فقط، أو إدارة المرضى، أو الفواتير والتقارير).
+                    </p>
                 </div>
-                <p class="mt-6 sm:mt-8 text-xs sm:text-sm opacity-75 font-medium">لا حاجة لبطاقة ائتمان. يمكنك الإلغاء في
-                    أي وقت.</p>
+            </div>
+        </section>
+
+        <!-- Section 9: Final CTA Banner -->
+        <section class="px-4 sm:px-6 md:px-12 max-w-[1360px] mx-auto">
+            <div class="clinora-card rounded-3xl p-8 sm:p-12 md:p-16 text-center relative overflow-hidden" data-aos="zoom-in">
+                <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-l from-indigo-600 via-teal-500 to-amber-500"></div>
+                <div class="max-w-2xl mx-auto space-y-5 relative z-10">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                        ابدأ تنظيم عيادتك رقمياً اليوم
+                    </h2>
+                    <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium leading-relaxed">
+                        أنشئ حساب عيادتك في دقيقة واحدة واحصل على صفحة حجز إلكتروني خاصة، نظام طابور لحظي، وسجل طبي متكامل لمرضاك.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center items-stretch sm:items-center gap-3.5 pt-2 max-w-md mx-auto sm:max-w-none">
+                        <a href="{{ route('register') }}"
+                            class="bg-[#F59E0B] hover:bg-[#D97706] text-white font-black px-8 py-4 rounded-xl shadow-md shadow-amber-500/20 text-sm sm:text-base transition-all hover:-translate-y-0.5">
+                            ابدأ تجربتك المجانية
+                        </a>
+                        <a href="{{ route('login') }}"
+                            class="bg-[#34548A] hover:bg-[#2B4675] text-white font-bold px-8 py-4 rounded-xl shadow-sm text-sm sm:text-base transition-all hover:-translate-y-0.5">
+                            تسجيل الدخول
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
     </main>

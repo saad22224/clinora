@@ -240,20 +240,30 @@ Route::middleware(['auth', 'superadmin'])
         Route::delete('/plans/{plan}', [PlanController::class, 'destroy'])->name('plans.destroy');
 
         Route::get('/revenue', function () {
+            abort_unless(config('clinora.features.admin_placeholder_pages', false), 404);
+
             return view('admin.revenue');
         })->name('revenue.index');
         Route::get('/tickets', function () {
+            abort_unless(config('clinora.features.admin_placeholder_pages', false), 404);
+
             return view('admin.tickets');
         })->name('tickets.index');
         Route::get('/users', function () {
+            abort_unless(config('clinora.features.admin_placeholder_pages', false), 404);
+
             return view('admin.users');
         })->name('users.index');
         Route::get('/roles', function () {
+            abort_unless(config('clinora.features.admin_placeholder_pages', false), 404);
+
             return view('admin.roles');
         })->name('roles.index');
         Route::get('/settings', [AdminSettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
         Route::get('/logs', function () {
+            abort_unless(config('clinora.features.admin_placeholder_pages', false), 404);
+
             return view('admin.logs');
         })->name('logs.index');
 

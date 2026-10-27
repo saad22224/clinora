@@ -376,18 +376,74 @@ test('public landing login and registration views render cleanly without debug s
     $landing = $this->get(route('home'))->assertOk()->getContent();
     expect($landing)
         ->toContain('id="about"')
+        ->toContain('id="features"')
+        ->toContain('id="how-it-works"')
+        ->toContain('id="pricing"')
+        ->toContain('id="faq"')
+        ->toContain('id="theme-toggle"')
+        ->toContain('data-theme-toggle')
         ->toContain('مصممة لتناسب كل دور داخل منشأتك الطبية')
         ->not->toContain('lh3.googleusercontent.com/aida-public')
-        ->not->toContain('موثوق به من أكثر من 500');
+        ->not->toContain('موثوق به من أكثر من 500')
+        ->not->toContain('الذكاء الاصطناعي')
+        ->not->toContain('المساعد الذكي')
+        ->not->toContain('كلينورا AI')
+        ->not->toContain('id="ai"')
+        ->not->toContain('واتساب')
+        ->not->toContain('wa.me');
 
     $login = $this->get(route('login'))->assertOk()->getContent();
     expect($login)
         ->not->toContain('background-color: red')
-        ->toContain('id="toggle-login-password"');
+        ->toContain('id="toggle-login-password"')
+        ->toContain('id="theme-toggle"')
+        ->toContain('clinora-card');
 
     $register = $this->get(route('register', ['ref' => $marketer->referral_code]))->assertOk()->getContent();
     expect($register)
         ->not->toContain('background-color: red')
         ->toContain('id="toggle-register-password"')
+        ->toContain('id="theme-toggle"')
+        ->toContain('clinora-card')
         ->toContain($marketer->referral_code);
+
+    $forgot = $this->get(route('password.request'))->assertOk()->getContent();
+    expect($forgot)
+        ->toContain('id="theme-toggle"')
+        ->toContain('clinora-card');
+});
+
+test('superadmin placeholder sections are hidden from sidebar and return 404 while functional admin sections remain accessible', function () {
+    $superadmin = User::factory()->superAdmin()->create();
+    $superadmin->assignRole('superadmin');
+
+    $dashboardHtml = $this->actingAs($superadmin)
+        ->get(route('admin.dashboard'))
+        ->assertOk()
+        ->getContent();
+
+    expect($dashboardHtml)
+        ->toContain(route('admin.clinics.index'))
+        ->toContain(route('admin.organizations.index'))
+        ->toContain(route('admin.subscriptions.index'))
+        ->toContain(route('admin.marketers.index'))
+        ->toContain(route('admin.notifications.index'))
+        ->toContain(route('admin.settings.index'))
+        ->not->toContain(route('admin.revenue.index'))
+        ->not->toContain(route('admin.tickets.index'))
+        ->not->toContain(route('admin.users.index'))
+        ->not->toContain(route('admin.roles.index'))
+        ->not->toContain(route('admin.logs.index'));
+
+    foreach (['admin.revenue.index', 'admin.tickets.index', 'admin.users.index', 'admin.roles.index', 'admin.logs.index'] as $placeholderRoute) {
+        $this->actingAs($superadmin)
+            ->get(route($placeholderRoute))
+            ->assertNotFound();
+    }
+
+    foreach (['admin.clinics.index', 'admin.organizations.index', 'admin.subscriptions.index', 'admin.marketers.index', 'admin.notifications.index', 'admin.settings.index'] as $functionalRoute) {
+        $this->actingAs($superadmin)
+            ->get(route($functionalRoute))
+            ->assertOk();
+    }
 });
