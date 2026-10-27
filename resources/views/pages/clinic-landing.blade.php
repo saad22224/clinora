@@ -615,14 +615,9 @@
                                     <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/15 border border-indigo-500/20 text-lg font-black text-indigo-600 dark:text-indigo-400">
                                         {{ $loop->iteration }}
                                     </div>
-                                    @if (! empty($visitType->duration))
-                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-white/5 px-3 py-1 text-xs font-bold text-slate-600 dark:text-slate-300">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                            </svg>
-                                            <span>{{ $visitType->duration }} دقيقة</span>
-                                        </span>
-                                    @endif
+                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-teal-500/10 px-3 py-1 text-xs font-extrabold text-teal-600 dark:text-teal-400">
+                                        <span>حجز إلكتروني فوري</span>
+                                    </span>
                                 </div>
                                 <h3 class="mb-2 text-xl font-black text-slate-900 dark:text-white">{{ $visitType->name }}</h3>
                                 @if ($visitType->description)
