@@ -46,14 +46,14 @@ class RolesAndAdminSeeder extends Seeder
             $doctorRole->syncPermissions($permissions);
         }
 
-        $email = env('SUPERADMIN_EMAIL');
-        $password = env('SUPERADMIN_PASSWORD');
+        $email = config('clinora.superadmin.email');
+        $password = config('clinora.superadmin.password');
 
         if (! empty($email) && ! empty($password)) {
             $admin = User::firstOrCreate(
                 ['email' => $email],
                 [
-                    'name' => env('SUPERADMIN_NAME', 'مدير النظام'),
+                    'name' => config('clinora.superadmin.name', 'مدير النظام'),
                     'password' => Hash::make($password),
                     'role' => 'superadmin',
                 ]

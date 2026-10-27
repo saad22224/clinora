@@ -39,6 +39,10 @@ class EnsureOrganizationMember
             abort(403, 'ليس لديك صلاحية للوصول إلى هذه المنظمة.');
         }
 
+        if (! $request->routeIs('organization.clinics.enter')) {
+            $request->session()->forget('active_clinic_id');
+        }
+
         $request->attributes->set('organization', $organization);
         $request->attributes->set('organization_membership', $membership);
         app()->instance('organization', $organization);

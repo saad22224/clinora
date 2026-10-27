@@ -43,7 +43,10 @@ class AuthController extends Controller
                 );
             }
 
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route(
+                $user->homeRouteName(),
+                $user->homeRouteParameters()
+            ));
         }
 
         return back()->withErrors([
@@ -175,7 +178,7 @@ class AuthController extends Controller
             return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
         }
 
-        if (trim($request->otp) != (string) $savedOtp) {
+        if (! hash_equals((string) $savedOtp, trim($request->otp))) {
             return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
         }
 

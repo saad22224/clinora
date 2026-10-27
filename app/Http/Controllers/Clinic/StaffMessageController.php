@@ -81,7 +81,8 @@ class StaffMessageController extends Controller
     {
         $user = Auth::user();
         abort_unless($user instanceof User, 403);
-        abort_unless((int) $user->clinic_id === $this->currentClinicId(), 403);
+        $clinic = $this->currentClinic();
+        abort_unless($clinic && app(\App\Services\SubscriptionService::class)->userCanAccessClinic($user, $clinic), 403);
         abort_unless(in_array($user->role, ['owner', 'doctor', 'secretary', 'superadmin'], true), 403);
 
         if (in_array($user->role, ['owner', 'doctor', 'superadmin'], true)) {

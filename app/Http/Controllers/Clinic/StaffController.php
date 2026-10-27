@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class StaffController extends Controller
 {
@@ -110,6 +111,7 @@ class StaffController extends Controller
             'role' => 'secretary',
         ]);
 
+        Role::firstOrCreate(['name' => 'secretary', 'guard_name' => 'web']);
         $user->assignRole('secretary');
 
         if (! empty($validated['permissions'])) {
@@ -125,6 +127,7 @@ class StaffController extends Controller
         $currentUser = Auth::user();
         abort_unless(in_array($currentUser->role, ['owner', 'doctor', 'superadmin'], true), 403);
         abort_if((int) $user->clinic_id !== $this->currentClinicId(), 403);
+        abort_if($user->role === 'owner' && ! in_array($currentUser->role, ['owner', 'superadmin'], true), 403, 'لا يمكن تعديل حساب مالك العيادة.');
 
         self::ensurePermissionsExist();
 
@@ -161,6 +164,7 @@ class StaffController extends Controller
         abort_unless(in_array($currentUser->role, ['owner', 'doctor', 'superadmin'], true), 403);
         abort_if((int) $user->clinic_id !== $this->currentClinicId(), 403);
         abort_if($user->id == $currentUser->id, 403, 'لا يمكنك حذف حسابك الشخصي.');
+        abort_if($user->role === 'owner', 403, 'لا يمكن حذف الحساب الرئيسي لمالك العيادة.');
 
         $user->delete();
 

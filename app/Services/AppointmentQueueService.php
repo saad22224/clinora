@@ -83,6 +83,12 @@ class AppointmentQueueService
 
         $fallback = User::query()->where('clinic_id', $clinic->id)->value('id');
 
+        if (! $fallback && $clinic->organization_id) {
+            $fallback = $clinic->organization?->memberships()
+                ->orderByRaw("case when role = 'owner' then 0 else 1 end")
+                ->value('user_id');
+        }
+
         if (! $fallback) {
             throw new RuntimeException('لا يوجد طبيب أو مستخدم مرتبط بهذه العيادة لتعيين الدور.');
         }

@@ -110,7 +110,6 @@ class AppointmentFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'source' => 'website_landing_page',
-            'status' => 'pending',
         ]);
     }
 
@@ -118,7 +117,6 @@ class AppointmentFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'source' => 'reception_manual_entry',
-            'status' => 'confirmed',
         ]);
     }
 

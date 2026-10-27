@@ -32,9 +32,9 @@ class NotificationController extends Controller
 
     public function markRead(ClinicNotification $notification)
     {
-        if ($notification->clinic_id === $this->currentClinicId()) {
-            $notification->update(['is_read' => true]);
-        }
+        abort_if((int) $notification->clinic_id !== $this->currentClinicId(), 403);
+
+        $notification->update(['is_read' => true]);
 
         return redirect()->back()->with('success', 'تم تحديد الإشعار كمقروء.');
     }

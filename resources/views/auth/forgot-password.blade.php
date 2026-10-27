@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="pt-2">
-                    <button style="background-color: red;" type="submit" class="w-full flex justify-center items-center gap-2 py-4 px-6 border border-transparent rounded-2xl shadow-xl text-lg font-black text-white bg-gradient-to-l from-brand-600 to-teal-600 hover:from-brand-500 hover:to-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-600 transition-all hover:-translate-y-0.5 cursor-pointer">
+                    <button type="submit" class="w-full flex justify-center items-center gap-2 py-4 px-6 border border-transparent rounded-2xl shadow-xl text-lg font-black text-white bg-gradient-to-l from-brand-600 to-teal-600 hover:from-brand-500 hover:to-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-600 transition-all hover:-translate-y-0.5 cursor-pointer">
                         <span>{{ $isWhatsApp ? 'إرسال كود التحقق عبر واتساب' : 'إرسال كود التحقق عبر البريد الإلكتروني' }}</span>
                         <span class="material-symbols-outlined text-xl">send</span>
                     </button>

@@ -58,4 +58,17 @@ return [
         'files_prefix' => env('CLINORA_QA_FILES_PREFIX', 'medical-records/qa'),
     ],
 
+    'gemini_api_keys' => array_values(array_filter([
+        env('GEMINI_API'),
+        env('GEMINI_API2'),
+        env('GEMINI_API3'),
+        env('GEMINI_API4'),
+    ])),
+
+    'superadmin' => [
+        'name' => env('SUPERADMIN_NAME', 'مدير النظام'),
+        'email' => env('SUPERADMIN_EMAIL'),
+        'password' => env('SUPERADMIN_PASSWORD'),
+    ],
+
 ];

@@ -45,6 +45,15 @@ beforeEach(function () {
     }
 });
 
+afterEach(function () {
+    $dir = storage_path('app/qa-manifests');
+    if (File::isDirectory($dir)) {
+        foreach (File::files($dir) as $file) {
+            File::delete($file->getPathname());
+        }
+    }
+});
+
 function generateQaDataset(string $profile = 'small'): string
 {
     $exit = Artisan::call('clinora:qa-generate', [
@@ -247,5 +256,5 @@ test('generated accounts support authentication permission finance and medical w
     $this->actingAs($owner)->get(route('clinic.records.download', $file))->assertOk();
 
     $peerOwner = User::query()->where('email', 'qa+peer-owner@clinora.test')->first();
-    $this->actingAs($peerOwner)->get(route('clinic.records.download', $file))->assertForbidden();
+    $this->actingAs($peerOwner)->get(route('clinic.records.download', $file))->assertNotFound();
 });

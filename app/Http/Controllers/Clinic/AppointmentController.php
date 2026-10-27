@@ -42,9 +42,12 @@ class AppointmentController extends Controller
             ->orderBy('name')
             ->get(['id', 'name', 'role']);
 
-        $doctorId = isset($validated['doctor_id'])
-            ? (int) $validated['doctor_id']
-            : $this->queue->resolveDoctorId($clinic, Auth::user()?->role === 'doctor' ? Auth::id() : null);
+        $doctorId = $this->queue->resolveDoctorId(
+            $clinic,
+            isset($validated['doctor_id'])
+                ? (int) $validated['doctor_id']
+                : (Auth::user()?->role === 'doctor' ? Auth::id() : null)
+        );
 
         $queueSummary = $this->queue->daySummary($clinicId, $doctorId, $selectedDate);
         $dayQueue = $this->queue->dayQueue($clinicId, $doctorId, $selectedDate);
@@ -90,12 +93,18 @@ class AppointmentController extends Controller
 
         $validated['scheduled_at'] = Carbon::parse($validated['scheduled_at'])->startOfDay();
 
-        DB::transaction(function () use ($validated, $visitType) {
+        $clinic = $this->currentClinic();
+        $doctorId = $this->queue->resolveDoctorId(
+            $clinic,
+            Auth::user()?->role === 'doctor' ? Auth::id() : null
+        );
+
+        DB::transaction(function () use ($validated, $visitType, $doctorId) {
             $appointment = Appointment::create([
                 ...$validated,
                 'price' => $visitType->price,
                 'clinic_id' => $this->currentClinicId(),
-                'doctor_id' => Auth::id(),
+                'doctor_id' => $doctorId,
                 'status' => 'confirmed',
                 'source' => 'reception_manual_entry',
             ]);
@@ -190,9 +199,10 @@ class AppointmentController extends Controller
         ]);
 
         $clinic = $this->currentClinic();
-        $doctorId = isset($validated['doctor_id'])
-            ? (int) $validated['doctor_id']
-            : $this->queue->resolveDoctorId($clinic, Auth::id());
+        $doctorId = $this->queue->resolveDoctorId(
+            $clinic,
+            isset($validated['doctor_id']) ? (int) $validated['doctor_id'] : Auth::id()
+        );
 
         try {
             $next = $this->queue->callNext(
@@ -240,9 +250,10 @@ class AppointmentController extends Controller
         ]);
 
         $clinic = $this->currentClinic();
-        $doctorId = isset($validated['doctor_id'])
-            ? (int) $validated['doctor_id']
-            : $this->queue->resolveDoctorId($clinic, Auth::id());
+        $doctorId = $this->queue->resolveDoctorId(
+            $clinic,
+            isset($validated['doctor_id']) ? (int) $validated['doctor_id'] : Auth::id()
+        );
 
         $this->queue->setPaused(
             $clinic,

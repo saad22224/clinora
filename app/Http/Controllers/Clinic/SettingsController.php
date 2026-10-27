@@ -28,7 +28,7 @@ class SettingsController extends Controller
             'address' => ['nullable', 'string', 'max:500'],
             'latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['nullable', 'numeric', 'between:-180,180'],
-            'theme_color' => ['nullable', 'string', 'max:7'],
+            'theme_color' => ['nullable', 'string', 'max:7', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'doctor_image' => ['nullable', 'image', 'max:2048'],
             'working_hours' => ['nullable', 'array'],
             'hero_title' => ['nullable', 'string', 'max:255'],

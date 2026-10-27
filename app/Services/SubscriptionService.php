@@ -18,6 +18,21 @@ class SubscriptionService
             return false;
         }
 
+        $activeClinicId = session('active_clinic_id');
+        if ($activeClinicId) {
+            $clinic = Clinic::query()->find($activeClinicId);
+            if ($clinic && $this->userCanAccessClinic($user, $clinic)) {
+                return $this->hasActiveAccessForClinic($clinic);
+            }
+        }
+
+        if ($user->clinic_id) {
+            $clinic = $user->clinic;
+            if ($clinic) {
+                return $this->hasActiveAccessForClinic($clinic);
+            }
+        }
+
         $subscription = $this->resolveSubscriptionForUser($user);
 
         return $this->isSubscriptionActive($subscription);

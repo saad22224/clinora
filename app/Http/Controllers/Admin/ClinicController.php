@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class ClinicController extends Controller
 {
@@ -80,6 +81,7 @@ class ClinicController extends Controller
             'clinic_id' => $clinic->id,
             'role' => 'owner',
         ]);
+        Role::firstOrCreate(['name' => 'clinic_owner', 'guard_name' => 'web']);
         $owner->assignRole('clinic_owner');
 
         return redirect()->route('admin.clinics.index')
@@ -108,12 +110,18 @@ class ClinicController extends Controller
     {
         abort_if(auth()->user()?->role !== 'superadmin', 403);
 
-        $user = $clinic->users()->first();
+        $user = $clinic->users()->where('role', 'owner')->first()
+            ?? $clinic->users()->first()
+            ?? ($clinic->organization_id ? $clinic->organization?->owner() : null);
+
         if (! $user) {
             return back()->withErrors(['error' => 'لا يوجد مستخدم مرتبط بهذه العيادة.']);
         }
 
-        session(['superadmin_impersonator_id' => auth()->id()]);
+        session([
+            'superadmin_impersonator_id' => auth()->id(),
+            'active_clinic_id' => $clinic->id,
+        ]);
         auth()->login($user);
 
         return redirect()->route('clinic.dashboard')->with('success', 'تم الدخول إلى لوحة تحكم عيادة: '.$clinic->name);
@@ -126,7 +134,7 @@ class ClinicController extends Controller
             $admin = User::find($adminId);
             if ($admin && $admin->role == 'superadmin') {
                 auth()->login($admin);
-                session()->forget('superadmin_impersonator_id');
+                session()->forget(['superadmin_impersonator_id', 'active_clinic_id', 'active_organization_id']);
 
                 return redirect()->route('admin.clinics.index')->with('success', 'تم العودة إلى لوحة السوبر أدمن بنجاح.');
             }

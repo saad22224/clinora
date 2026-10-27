@@ -28,6 +28,9 @@
     </style>
 </head>
 <body class="font-sans antialiased bg-slate-50 text-gray-900 dark:bg-[#0A0A0F] dark:text-gray-100 flex min-h-screen overflow-hidden">
+    @php
+        $currentClinic = app()->bound('tenant') ? app('tenant') : Auth::user()?->clinic;
+    @endphp
 
     {{-- ══════ SIDEBAR BACKDROP ON MOBILE ══════ --}}
     <div id="sidebar-backdrop" class="hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-xs md:hidden transition-opacity"></div>
@@ -48,8 +51,8 @@
             </div>
             <div class="flex items-center gap-1">
                 {{-- View Public Page Button --}}
-                @if(Auth::user()->clinic?->slug)
-                <a href="{{ route('clinic.public.show', Auth::user()->clinic->slug) }}" target="_blank"
+                @if($currentClinic?->slug)
+                <a href="{{ route('clinic.public.show', $currentClinic->slug) }}" target="_blank"
                    title="عرض الصفحة العامة"
                    class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 dark:hover:text-brand-400 transition-all" >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
@@ -149,7 +152,7 @@
 
         {{-- Topbar --}}
         @php
-            $unreadNotifications = Auth::user()?->clinic ? \App\Models\ClinicNotification::where('clinic_id', Auth::user()->clinic->id)->where('is_read', false)->latest()->get() : collect();
+            $unreadNotifications = $currentClinic ? \App\Models\ClinicNotification::where('clinic_id', $currentClinic->id)->where('is_read', false)->latest()->get() : collect();
             $unreadCount = $unreadNotifications->count();
         @endphp
         <header class="h-[68px] bg-white/90 dark:bg-[#0F0F14]/90 backdrop-blur-xl border-b border-gray-100 dark:border-white/[0.06] flex items-center justify-between px-4 sm:px-6 z-[999] shrink-0 relative">
@@ -174,8 +177,8 @@
                 </button>
 
                 {{-- View public page quick button --}}
-                @if(Auth::user()->clinic?->slug)
-                <a href="{{ route('clinic.public.show', Auth::user()->clinic->slug) }}" target="_blank"
+                @if($currentClinic?->slug)
+                <a href="{{ route('clinic.public.show', $currentClinic->slug) }}" target="_blank"
                    class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 text-xs font-bold rounded-xl border border-brand-200 text-brand-600 hover:bg-brand-50 dark:border-brand-700/40 dark:text-brand-400 dark:hover:bg-brand-900/20 transition-colors">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     عرض الصفحة العامة
@@ -183,7 +186,7 @@
                 @endif
 
                 {{-- Staff team messages --}}
-                @if(Auth::user()?->clinic && (Auth::user()->role !== 'secretary' || Auth::user()->can('use_staff_messages')))
+                @if($currentClinic && (Auth::user()->role !== 'secretary' || Auth::user()->can('use_staff_messages')))
                 @php $quickMessages = config('clinora.staff_quick_messages', []); @endphp
                 <div class="relative" id="staff-msg-container"
                      data-staff-messages

@@ -141,7 +141,7 @@ class PasswordResetController extends Controller
             return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
         }
 
-        if (trim($request->otp) != (string) $savedOtp) {
+        if (! hash_equals((string) $savedOtp, trim($request->otp))) {
             return back()->withErrors(['otp' => 'كود التحقق المدخل غير صحيح أو منتهي الصلاحية.']);
         }
 
@@ -188,6 +188,7 @@ class PasswordResetController extends Controller
         session()->forget([
             'password_reset_user_id',
             'password_reset_otp',
+            'password_reset_otp_expires_at',
             'password_reset_phone',
             'password_reset_otp_verified',
         ]);

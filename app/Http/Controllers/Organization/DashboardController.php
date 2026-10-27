@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Organization;
 
 use App\Http\Controllers\Controller;
 use App\Models\Organization;
+use App\Models\Scopes\TenantScope;
 use App\Services\SubscriptionService;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,10 @@ class DashboardController extends Controller
         $remaining = $this->subscriptionService->remainingClinicSlots($organization);
 
         $clinics = $organization->clinics()
-            ->withCount(['patients', 'appointments'])
+            ->withCount([
+                'patients' => fn ($query) => $query->withoutGlobalScope(TenantScope::class),
+                'appointments' => fn ($query) => $query->withoutGlobalScope(TenantScope::class),
+            ])
             ->latest()
             ->get();
 

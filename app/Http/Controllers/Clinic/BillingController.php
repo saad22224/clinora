@@ -76,6 +76,10 @@ class BillingController extends Controller
                 $appointment = Appointment::query()
                     ->where('clinic_id', $clinic->id)
                     ->findOrFail($validated['appointment_id']);
+
+                if (! empty($validated['patient_id'])) {
+                    abort_if((int) $appointment->patient_id !== (int) $validated['patient_id'], 422, 'الموعد المختار لا ينتمي إلى المريض المحدد.');
+                }
             }
 
             Finance::create([

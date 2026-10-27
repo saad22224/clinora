@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Finance;
 use App\Models\Organization;
+use App\Models\Patient;
 use App\Models\Scopes\TenantScope;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -79,8 +80,13 @@ class FinanceReportService
                 'clinic_id' => $clinic->id,
                 'clinic_name' => $clinic->name,
                 'is_active' => $clinic->is_active,
-                'patients_count' => $clinic->patients()->count(),
-                'appointments_count' => $clinic->appointments()
+                'patients_count' => Patient::query()
+                    ->withoutGlobalScope(TenantScope::class)
+                    ->where('clinic_id', $clinic->id)
+                    ->count(),
+                'appointments_count' => Appointment::query()
+                    ->withoutGlobalScope(TenantScope::class)
+                    ->where('clinic_id', $clinic->id)
                     ->whereBetween('scheduled_at', [$from->copy()->startOfDay(), $to->copy()->endOfDay()])
                     ->count(),
                 ...$metrics,

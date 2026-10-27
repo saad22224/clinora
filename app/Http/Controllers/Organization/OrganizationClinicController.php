@@ -44,7 +44,10 @@ class OrganizationClinicController extends Controller
             ? Carbon::parse($validated['date_to'])->endOfDay()
             : now()->endOfDay();
 
-        $clinic->loadCount(['patients', 'users']);
+        $clinic->loadCount([
+            'patients' => fn ($query) => $query->withoutGlobalScope(TenantScope::class),
+            'users',
+        ]);
 
         $appointmentsInPeriod = Appointment::query()
             ->withoutGlobalScope(TenantScope::class)

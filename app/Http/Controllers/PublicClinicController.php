@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Clinic;
 use App\Models\Patient;
+use App\Models\Scopes\TenantScope;
 use App\Models\VisitType;
 use App\Services\AppointmentQueueService;
 use App\Services\AppointmentTrackingService;
@@ -47,7 +48,7 @@ class PublicClinicController extends Controller
         abort_if((int) $visitType->clinic_id !== (int) $clinic->id, 403);
 
         $appointment = DB::transaction(function () use ($clinic, $validated, $visitType) {
-            $patient = Patient::firstOrCreate(
+            $patient = Patient::withoutGlobalScope(TenantScope::class)->firstOrCreate(
                 [
                     'clinic_id' => $clinic->id,
                     'phone' => $validated['patient_phone'],

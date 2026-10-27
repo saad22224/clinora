@@ -20,7 +20,9 @@ class PatientAIChatController extends Controller
 
         $request->validate([
             'message' => ['required', 'string', 'max:2000'],
-            'history' => ['nullable', 'array'],
+            'history' => ['nullable', 'array', 'max:30'],
+            'history.*.role' => ['required_with:history', 'string', 'in:user,model,assistant'],
+            'history.*.message' => ['required_with:history', 'string', 'max:5000'],
         ]);
 
         $patient->load([
@@ -150,12 +152,7 @@ PROMPT;
      */
     private function callGemini(Patient $patient, string $systemContext, string $userMessage, array $history): string
     {
-        $apiKeys = array_filter([
-            env('GEMINI_API'),
-            env('GEMINI_API2'),
-            env('GEMINI_API3'),
-            env('GEMINI_API4'),
-        ]);
+        $apiKeys = array_filter((array) config('clinora.gemini_api_keys', []));
 
         if (empty($apiKeys)) {
             return 'عذراً، خدمة المساعد الذكي غير مفعلة حالياً في النظام.';
@@ -164,27 +161,38 @@ PROMPT;
         // Build conversation history for multi-turn
         $contents = [];
         foreach ($history as $turn) {
+            if (! is_array($turn) || ! isset($turn['role'], $turn['message'])) {
+                continue;
+            }
             $contents[] = [
                 'role' => $turn['role'] === 'user' ? 'user' : 'model',
-                'parts' => [['text' => $turn['message']]],
+                'parts' => [['text' => (string) $turn['message']]],
             ];
         }
 
         // Gather attached medical files (images/PDFs up to 10 files <= 10MB each)
         $userParts = [];
         foreach ($patient->medicalFiles->take(10) as $file) {
-            if ($file->file_path && Storage::disk('public')->exists($file->file_path)) {
-                $size = Storage::disk('public')->size($file->file_path);
+            if (! $file->file_path) {
+                continue;
+            }
+
+            $disk = Storage::disk('local')->exists($file->file_path)
+                ? 'local'
+                : (Storage::disk('public')->exists($file->file_path) ? 'public' : null);
+
+            if ($disk !== null) {
+                $size = Storage::disk($disk)->size($file->file_path);
                 if ($size <= 10 * 1024 * 1024) {
-                    $mimeType = Storage::disk('public')->mimeType($file->file_path);
-                    if (in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'application/pdf'])) {
+                    $mimeType = Storage::disk($disk)->mimeType($file->file_path);
+                    if (in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'application/pdf'], true)) {
                         $userParts[] = [
                             'text' => "[مرفق صورة/ملف طبي: {$file->type} - تاريخ المرفق: {$file->created_at->format('Y/m/d')}]",
                         ];
                         $userParts[] = [
                             'inlineData' => [
                                 'mimeType' => $mimeType,
-                                'data' => base64_encode(Storage::disk('public')->get($file->file_path)),
+                                'data' => base64_encode((string) Storage::disk($disk)->get($file->file_path)),
                             ],
                         ];
                     }

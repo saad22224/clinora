@@ -108,9 +108,11 @@ class QaManifest
             return null;
         }
 
+        clearstatcache();
+
         $files = collect(File::files($this->directoryPath()))
             ->filter(fn ($file) => $file->getExtension() === 'json')
-            ->sortByDesc(fn ($file) => $file->getMTime())
+            ->sortByDesc(fn ($file) => sprintf('%010d_%s', $file->getMTime(), $file->getFilename()))
             ->values();
 
         if ($files->isEmpty()) {
