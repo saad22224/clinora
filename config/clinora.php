@@ -71,4 +71,25 @@ return [
         'password' => env('SUPERADMIN_PASSWORD'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Offline license generator (company signing)
+    |--------------------------------------------------------------------------
+    |
+    | Private Ed25519 seed lives only on the server filesystem (never in git,
+    | the database, or browser responses). Public key must also be shipped in
+    | Clinora Offline releases under the same key_id.
+    |
+    */
+
+    'offline_license' => [
+        'key_id' => env('CLINORA_OFFLINE_LICENSE_KEY_ID'),
+        'private_key_path' => env('CLINORA_OFFLINE_LICENSE_PRIVATE_KEY_PATH'),
+        // When false, issuance is allowed with a non-production / test key_id (local only).
+        'production' => (bool) env('CLINORA_OFFLINE_LICENSE_PRODUCTION', true),
+        'default_grace_days' => 30,
+        'default_max_devices' => 5,
+        'default_min_match' => 3,
+    ],
+
 ];

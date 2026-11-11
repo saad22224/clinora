@@ -51,6 +51,7 @@
             <x-admin.nav-item route="admin.notifications.index" icon="bell" label="إشعارات العيادات" badge="جديد" />
             <x-admin.nav-item route="admin.marketers.index" icon="users" label="المسوقون والإحالات" badge="جديد" />
             <x-admin.nav-item route="admin.subscriptions.index" icon="credit-card" label="الباقات والاشتراكات" />
+            <x-admin.nav-item route="admin.offline-licenses.index" icon="credit-card" label="تراخيص Offline" badge="جديد" />
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-slate-600 uppercase tracking-widest">إعدادات النظام</p>
             @if(config('clinora.features.whatsapp_enabled'))

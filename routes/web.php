@@ -276,4 +276,19 @@ Route::middleware(['auth', 'superadmin'])
         Route::get('/notifications', [AdminNotificationController::class, 'index'])->name('notifications.index');
         Route::post('/notifications', [AdminNotificationController::class, 'store'])->name('notifications.store');
         Route::delete('/notifications/{notification}', [AdminNotificationController::class, 'destroy'])->name('notifications.destroy');
+
+        Route::get('/offline-licenses', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'index'])->name('offline-licenses.index');
+        Route::get('/offline-licenses/create', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'create'])->name('offline-licenses.create');
+        Route::get('/offline-licenses/keys', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'keys'])->name('offline-licenses.keys');
+        Route::get('/offline-licenses/preview', function () {
+            return redirect()
+                ->route('admin.offline-licenses.create')
+                ->with('error', 'افتح صفحة الإصدار والصق رمز CLNREQ1 ثم اضغط «فك الرمز والمتابعة».');
+        })->name('offline-licenses.preview.get');
+        Route::post('/offline-licenses/preview', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'preview'])->name('offline-licenses.preview');
+        Route::post('/offline-licenses', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'store'])->name('offline-licenses.store');
+        Route::post('/offline-licenses/renew', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'renew'])->name('offline-licenses.renew.store');
+        Route::get('/offline-licenses/{offlineLicense}', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'show'])->whereNumber('offlineLicense')->name('offline-licenses.show');
+        Route::get('/offline-licenses/{offlineLicense}/download', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'download'])->whereNumber('offlineLicense')->name('offline-licenses.download');
+        Route::get('/offline-licenses/{offlineLicense}/renew', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'renewForm'])->whereNumber('offlineLicense')->name('offline-licenses.renew');
     });
