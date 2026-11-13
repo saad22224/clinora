@@ -140,7 +140,7 @@
                                         <button type="button"
                                                 data-announce-patient
                                                 data-call-url="{{ route('clinic.appointments.queue-action', $apt) }}"
-                                                data-patient-name="{{ $apt->patient?->name }}"
+                                                data-patient-name="{{ e($apt->patient?->name ?? '') }}"
                                                 data-queue-number="{{ $apt->queue_number }}"
                                                 class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-violet-700 bg-violet-50 hover:bg-violet-100">
                                             {{ $apt->queue_status === 'skipped' ? 'إعادة المناداة' : 'مناداة المريض' }}

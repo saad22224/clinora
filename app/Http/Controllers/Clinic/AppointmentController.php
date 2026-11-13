@@ -164,6 +164,14 @@ class AppointmentController extends Controller
                 'skip' => $this->queue->skip($appointment),
             };
         } catch (InvalidArgumentException|RuntimeException $e) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => $e->getMessage(),
+                    'errors' => ['queue' => [$e->getMessage()]],
+                ], 422);
+            }
+
             return back()->withErrors(['queue' => $e->getMessage()]);
         }
 
@@ -211,6 +219,14 @@ class AppointmentController extends Controller
                 isset($validated['date']) ? Carbon::parse($validated['date']) : null,
             );
         } catch (RuntimeException $e) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => $e->getMessage(),
+                    'errors' => ['queue' => [$e->getMessage()]],
+                ], 422);
+            }
+
             return back()->withErrors(['queue' => $e->getMessage()]);
         }
 

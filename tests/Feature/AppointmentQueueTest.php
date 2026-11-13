@@ -137,6 +137,48 @@ test('call next and position ahead reflect queue changes', function () {
     expect($queue->positionAhead($second->fresh()))->toBe(0);
 });
 
+test('json call and call-next return patient_name for voice announcements', function () {
+    ['clinic' => $clinic, 'doctorA' => $doctor, 'owner' => $owner, 'patient' => $patient] = seedQueueClinic();
+    $queue = app(AppointmentQueueService::class);
+
+    $patient->update(['name' => 'أحمد علي']);
+
+    $appointment = $queue->assignOnCreate(Appointment::factory()->forClinic($clinic)->create([
+        'doctor_id' => $doctor->id,
+        'patient_id' => $patient->id,
+        'scheduled_at' => now(),
+        'status' => 'confirmed',
+    ]));
+
+    $fresh = $appointment->fresh();
+    expect($fresh?->queue_status)->toBe('waiting')
+        ->and($fresh?->status)->toBe('confirmed')
+        ->and($fresh?->patient?->name)->toBe('أحمد علي');
+
+    $this->actingAs($owner)
+        ->from(route('clinic.appointments.index'))
+        ->postJson(route('clinic.appointments.queue-action', $appointment), ['action' => 'call'])
+        ->assertSuccessful()
+        ->assertJsonPath('appointment.patient_name', 'أحمد علي')
+        ->assertJsonPath('appointment.queue_number', $appointment->queue_number);
+
+    $next = $queue->assignOnCreate(Appointment::factory()->forClinic($clinic)->create([
+        'doctor_id' => $doctor->id,
+        'patient_id' => Patient::factory()->forClinic($clinic)->create(['name' => 'سارة محمود'])->id,
+        'scheduled_at' => now(),
+        'status' => 'confirmed',
+    ]));
+
+    $this->actingAs($owner)
+        ->postJson(route('clinic.appointments.call-next'), [
+            'doctor_id' => $doctor->id,
+            'date' => now(config('clinora.clinic_timezone'))->toDateString(),
+        ])
+        ->assertSuccessful()
+        ->assertJsonPath('appointment.patient_name', 'سارة محمود')
+        ->assertJsonPath('appointment.id', $next->id);
+});
+
 test('reschedule assigns a new queue number for the new day', function () {
     ['clinic' => $clinic, 'doctorA' => $doctor] = seedQueueClinic();
     $queue = app(AppointmentQueueService::class);
