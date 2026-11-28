@@ -4,15 +4,27 @@ namespace App\Http\Controllers\Clinic;
 
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
+use App\Models\VisitType;
 use Illuminate\Http\Request;
 
 class PatientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = trim((string) $request->query('search', ''));
+
         $patients = Patient::where('clinic_id', $this->currentClinicId())
+            ->when($query !== '', function ($builder) use ($query) {
+                $builder->where(function ($inner) use ($query) {
+                    $inner->where('name', 'LIKE', "%{$query}%")
+                        ->orWhere('phone', 'LIKE', "%{$query}%")
+                        ->orWhere('notes', 'LIKE', "%{$query}%")
+                        ->orWhere('medical_history', 'LIKE', "%{$query}%");
+                });
+            })
             ->latest()
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
 
         return view('clinic.patients', compact('patients'));
     }
@@ -23,11 +35,18 @@ class PatientController extends Controller
 
         $patient->load([
             'medicalFiles' => fn ($q) => $q->latest(),
-            'prescriptions' => fn ($q) => $q->with('items')->latest(),
-            'diagnoses',
+            'prescriptions' => fn ($q) => $q->with(['items', 'visit'])->latest(),
+            'diagnoses' => fn ($q) => $q->with('visit')->latest('diagnosed_at'),
+            'visits' => fn ($q) => $q->with('doctor')->latest('visited_at'),
+            'appointments' => fn ($q) => $q->with('visitType')->latest('scheduled_at')->limit(20),
         ]);
 
-        return view('clinic.patient-medical-file', compact('patient'));
+        $visitTypes = VisitType::query()
+            ->where('clinic_id', $this->currentClinicId())
+            ->orderBy('name')
+            ->get();
+
+        return view('clinic.patient-medical-file', compact('patient', 'visitTypes'));
     }
 
     public function store(Request $request)
@@ -42,6 +61,8 @@ class PatientController extends Controller
             'surgical_history' => ['nullable', 'string', 'max:5000'],
             'notes' => ['nullable', 'string', 'max:2000'],
         ]);
+
+        $validated = Patient::fillAgeFromDobWhenEmpty($validated);
 
         Patient::create([
             ...$validated,
@@ -66,6 +87,8 @@ class PatientController extends Controller
             'surgical_history' => ['nullable', 'string', 'max:5000'],
             'notes' => ['nullable', 'string', 'max:2000'],
         ]);
+
+        $validated = Patient::fillAgeFromDobWhenEmpty($validated);
 
         $patient->update($validated);
 

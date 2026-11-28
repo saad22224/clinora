@@ -41,13 +41,16 @@ class PublicClinicController extends Controller
             'patient_email' => ['nullable', 'email', 'max:255'],
             'visit_type_id' => ['required', 'exists:visit_types,id'],
             'preferred_date' => ['required', 'date', 'after_or_equal:today'],
+            'preferred_time' => ['required', 'date_format:H:i'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 
         $visitType = VisitType::findOrFail($validated['visit_type_id']);
         abort_if((int) $visitType->clinic_id !== (int) $clinic->id, 403);
 
-        $appointment = DB::transaction(function () use ($clinic, $validated, $visitType) {
+        $scheduledAt = Carbon::parse($validated['preferred_date'].' '.$validated['preferred_time']);
+
+        $appointment = DB::transaction(function () use ($clinic, $validated, $visitType, $scheduledAt) {
             $patient = Patient::withoutGlobalScope(TenantScope::class)->firstOrCreate(
                 [
                     'clinic_id' => $clinic->id,
@@ -76,7 +79,7 @@ class PublicClinicController extends Controller
                 'doctor_id' => $doctorId,
                 'visit_type_id' => $visitType->id,
                 'price' => $visitType->price,
-                'scheduled_at' => Carbon::parse($validated['preferred_date'])->startOfDay(),
+                'scheduled_at' => $scheduledAt,
                 'status' => 'pending',
                 'source' => 'website_landing_page',
                 'notes' => $appointmentNotes ?: null,
@@ -90,12 +93,12 @@ class PublicClinicController extends Controller
             'token' => $appointment->tracking_token,
         ]);
 
-        $dateStr = Carbon::parse($validated['preferred_date'])->timezone($this->queue->timezone())->translatedFormat('l، d F Y');
+        $dateStr = $scheduledAt->timezone($this->queue->timezone())->translatedFormat('l، d F Y').' — '.$scheduledAt->timezone($this->queue->timezone())->format('h:i A');
         $queueLabel = $appointment->queue_number ? "• رقم الدور: *{$appointment->queue_number}*\n" : '';
 
         app(WhatsAppService::class)->sendMessage(
             $validated['patient_phone'],
-            "مرحباً بك في *{$clinic->name}* 🏥\n\nلقد تم استلام طلب حجزك بنجاح:\n• الخدمة: {$visitType->name}\n• التاريخ: {$dateStr}\n{$queueLabel}\nرابط متابعة الدور:\n{$confirmUrl}\n\nسيقوم فريق الاستقبال بمراجعة الموعد عند الحاجة. نتمنى لك دوام الصحة والعافية."
+            "مرحباً بك في *{$clinic->name}* 🏥\n\nلقد تم استلام طلب حجزك بنجاح:\n• الخدمة: {$visitType->name}\n• الموعد: {$dateStr}\n{$queueLabel}\nرابط متابعة الدور:\n{$confirmUrl}\n\nسيقوم فريق الاستقبال بمراجعة الموعد عند الحاجة. نتمنى لك دوام الصحة والعافية."
         );
 
         return redirect()->route('clinic.public.booking.confirm', [

@@ -43,7 +43,7 @@ class AppointmentTrackingService
                 ? Carbon::parse($appointment->queue_date)->toDateString()
                 : optional($appointment->scheduled_at)?->toDateString(),
             'appointment_date_label' => $appointment->scheduled_at
-                ? $appointment->scheduled_at->timezone($this->queue->timezone())->translatedFormat('l، d F Y')
+                ? $appointment->scheduled_at->timezone($this->queue->timezone())->translatedFormat('l، d F Y').' — '.$appointment->scheduled_at->timezone($this->queue->timezone())->format('h:i A')
                 : null,
             'queue_number' => $appointment->queue_number,
             'queue_status' => $appointment->queue_status,

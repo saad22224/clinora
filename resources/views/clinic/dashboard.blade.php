@@ -158,7 +158,7 @@
                                 <div>
                                     <p class="text-sm font-bold text-gray-900 dark:text-white group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400 transition-colors">{{ $appointment->patient->name }}</p>
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                        {{ $appointment->scheduled_at->format('Y-m-d') }}
+                                        {{ $appointment->scheduled_at->format('Y-m-d') }} • {{ $appointment->scheduled_at->format('h:i A') }}
                                         @if($appointment->visitType) • {{ $appointment->visitType->name }} @endif
                                     </p>
                                 </div>
@@ -215,7 +215,7 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-bold text-gray-900 dark:text-white truncate group-hover/link:text-brand-600 dark:group-hover/link:text-brand-400 transition-colors">{{ $apt->patient->name }}</p>
-                                        <p class="text-xs text-gray-400 truncate">{{ $apt->scheduled_at->format('Y/m/d') }} • {{ $apt->visitType?->name ?? '—' }}</p>
+                                        <p class="text-xs text-gray-400 truncate">{{ $apt->scheduled_at->format('Y/m/d') }} • {{ $apt->scheduled_at->format('h:i A') }} • {{ $apt->visitType?->name ?? '—' }}</p>
                                     </div>
                                 </a>
                                 @else

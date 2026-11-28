@@ -189,7 +189,8 @@ test('secretary creating appointment assigns clinic doctor and appears in day qu
         ->post(route('clinic.appointments.store'), [
             'patient_id' => $patient->id,
             'visit_type_id' => $visitType->id,
-            'scheduled_at' => now()->toDateString(),
+            'scheduled_date' => now()->toDateString(),
+            'scheduled_time' => '10:00',
             'notes' => 'حجز من الاستقبال',
         ])
         ->assertRedirect(route('clinic.appointments.index'));
@@ -220,6 +221,7 @@ test('public booking while authenticated in another clinic reuses existing patie
             'patient_phone' => '01099887766',
             'visit_type_id' => $visitTypeB->id,
             'preferred_date' => now()->addDay()->toDateString(),
+            'preferred_time' => '14:00',
         ])
         ->assertRedirect();
 

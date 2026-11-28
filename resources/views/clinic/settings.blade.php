@@ -247,6 +247,55 @@
                     </div>
                 </div>
 
+                {{-- Prescription print preferences --}}
+                <div class="bg-white dark:bg-[#0F0F1A] border border-gray-100 dark:border-white/[0.06] rounded-2xl shadow-sm overflow-hidden mb-6">
+                    <div class="px-6 py-4 border-b border-gray-100 dark:border-white/[0.06]">
+                        <h3 class="font-black text-gray-900 dark:text-white">طباعة الروشتة</h3>
+                        <p class="text-xs text-gray-400 mt-1">يؤثر على طباعة الروشتة فقط، دون تغيير لغة التطبيق</p>
+                    </div>
+                    <div class="p-6 space-y-5">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">تصميم الروشتة</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                @foreach($prescriptionLayouts as $key => $label)
+                                    <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-white/10 cursor-pointer hover:border-brand-400">
+                                        <input type="radio" name="prescription_layout" value="{{ $key }}"
+                                               @checked(old('prescription_layout', $clinic->prescription_layout ?? 'classic') === $key)
+                                               class="text-brand-600 focus:ring-brand-500">
+                                        <span class="text-sm font-bold text-gray-800 dark:text-gray-200">{{ $label }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">لغة طباعة الروشتة</label>
+                            <div class="flex flex-wrap gap-3">
+                                <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 dark:border-white/10 cursor-pointer">
+                                    <input type="radio" name="prescription_print_locale" value="ar"
+                                           @checked(old('prescription_print_locale', $clinic->prescription_print_locale ?? 'ar') === 'ar')
+                                           class="text-brand-600">
+                                    <span class="text-sm font-bold">العربية</span>
+                                </label>
+                                <label class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 dark:border-white/10 cursor-pointer">
+                                    <input type="radio" name="prescription_print_locale" value="en"
+                                           @checked(old('prescription_print_locale', $clinic->prescription_print_locale ?? 'ar') === 'en')
+                                           class="text-brand-600">
+                                    <span class="text-sm font-bold">English</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach($prescriptionLayouts as $key => $label)
+                                <a href="{{ route('clinic.prescriptions.print-preview', ['layout' => $key, 'locale' => old('prescription_print_locale', $clinic->prescription_print_locale ?? 'ar')]) }}"
+                                   target="_blank"
+                                   class="px-3 py-1.5 text-xs font-bold rounded-lg border border-brand-200 text-brand-700 bg-brand-50 hover:bg-brand-100 dark:bg-brand-900/20 dark:text-brand-300 dark:border-brand-800">
+                                    معاينة: {{ $label }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Save Button --}}
                 <div class="flex justify-end">
                     <button type="submit"

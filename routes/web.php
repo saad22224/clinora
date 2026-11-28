@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ClinicController;
 use App\Http\Controllers\Admin\MarketerController;
 use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
+use App\Http\Controllers\Admin\OfflineLicenseController;
 use App\Http\Controllers\Admin\OrganizationController as AdminOrganizationController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
@@ -12,16 +13,21 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Clinic\AppointmentController;
 use App\Http\Controllers\Clinic\BillingController;
 use App\Http\Controllers\Clinic\DashboardController;
+use App\Http\Controllers\Clinic\LabOrderController;
 use App\Http\Controllers\Clinic\MedicalFileController;
 use App\Http\Controllers\Clinic\NotificationController as ClinicNotificationController;
 use App\Http\Controllers\Clinic\PatientAIChatController;
+use App\Http\Controllers\Clinic\PatientAppointmentController;
 use App\Http\Controllers\Clinic\PatientController;
 use App\Http\Controllers\Clinic\PatientDiagnosisController;
 use App\Http\Controllers\Clinic\PrescriptionController;
+use App\Http\Controllers\Clinic\PrescriptionTemplateController;
+use App\Http\Controllers\Clinic\RadiologyOrderController;
 use App\Http\Controllers\Clinic\ReportController;
 use App\Http\Controllers\Clinic\SettingsController;
 use App\Http\Controllers\Clinic\StaffController;
 use App\Http\Controllers\Clinic\StaffMessageController;
+use App\Http\Controllers\Clinic\VisitController;
 use App\Http\Controllers\Clinic\VisitTypeController;
 use App\Http\Controllers\Organization\ClinicSwitchController;
 use App\Http\Controllers\Organization\DashboardController as OrganizationDashboardController;
@@ -146,6 +152,16 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
             Route::post('/patients/{patient}/diagnoses', [PatientDiagnosisController::class, 'store'])->name('patients.diagnoses.store');
             Route::delete('/patients/{patient}/diagnoses/{diagnosis}', [PatientDiagnosisController::class, 'destroy'])->name('patients.diagnoses.destroy');
             Route::post('/patients/{patient}/ai-chat', [PatientAIChatController::class, 'chat'])->name('patients.ai-chat');
+            Route::post('/patients/{patient}/visits', [VisitController::class, 'store'])->name('visits.store');
+            Route::get('/patients/{patient}/visits/{visit}', [VisitController::class, 'show'])->name('visits.show');
+            Route::put('/patients/{patient}/visits/{visit}', [VisitController::class, 'update'])->name('visits.update');
+            Route::post('/patients/{patient}/visits/{visit}/diagnoses', [VisitController::class, 'storeDiagnosis'])->name('visits.diagnoses.store');
+            Route::put('/patients/{patient}/visits/{visit}/diagnoses/{diagnosis}', [VisitController::class, 'updateDiagnosis'])->name('visits.diagnoses.update');
+            Route::post('/patients/{patient}/appointments', [PatientAppointmentController::class, 'store'])->name('patients.appointments.store');
+            Route::post('/patients/{patient}/visits/{visit}/lab-orders', [LabOrderController::class, 'store'])->name('lab-orders.store');
+            Route::get('/patients/{patient}/visits/{visit}/lab-orders/{labOrder}/print', [LabOrderController::class, 'print'])->name('lab-orders.print');
+            Route::post('/patients/{patient}/visits/{visit}/radiology-orders', [RadiologyOrderController::class, 'store'])->name('radiology-orders.store');
+            Route::get('/patients/{patient}/visits/{visit}/radiology-orders/{radiologyOrder}/print', [RadiologyOrderController::class, 'print'])->name('radiology-orders.print');
         });
 
         Route::middleware('clinic.permission:manage_appointments')->group(function () {
@@ -166,6 +182,7 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
         Route::middleware('clinic.permission:manage_settings')->group(function () {
             Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
             Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+            Route::get('/prescriptions/print-preview', [PrescriptionController::class, 'previewPrint'])->name('prescriptions.print-preview');
             Route::get('/visit-types', [VisitTypeController::class, 'index'])->name('visit-types.index');
             Route::post('/visit-types', [VisitTypeController::class, 'store'])->name('visit-types.store');
             Route::put('/visit-types/{visitType}', [VisitTypeController::class, 'update'])->name('visit-types.update');
@@ -178,6 +195,10 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
             Route::post('/prescriptions', [PrescriptionController::class, 'store'])->name('prescriptions.store');
             Route::get('/prescriptions/{prescription}/print', [PrescriptionController::class, 'print'])->name('prescriptions.print');
             Route::delete('/prescriptions/{prescription}', [PrescriptionController::class, 'destroy'])->name('prescriptions.destroy');
+            Route::get('/prescription-templates', [PrescriptionTemplateController::class, 'index'])->name('prescription-templates.index');
+            Route::post('/prescription-templates', [PrescriptionTemplateController::class, 'store'])->name('prescription-templates.store');
+            Route::put('/prescription-templates/{prescriptionTemplate}', [PrescriptionTemplateController::class, 'update'])->name('prescription-templates.update');
+            Route::delete('/prescription-templates/{prescriptionTemplate}', [PrescriptionTemplateController::class, 'destroy'])->name('prescription-templates.destroy');
         });
 
         Route::middleware('clinic.permission:manage_records')->group(function () {
@@ -186,6 +207,8 @@ Route::middleware(['auth', IdentifyTenant::class, CheckSubscriptionStatus::class
             Route::get('/records/{medicalFile}/download', [MedicalFileController::class, 'download'])->name('records.download');
             Route::get('/records/{medicalFile}/preview', [MedicalFileController::class, 'preview'])->name('records.preview');
             Route::delete('/records/{medicalFile}', [MedicalFileController::class, 'destroy'])->name('records.destroy');
+            Route::post('/patients/{patient}/visits/{visit}/lab-orders/{labOrder}/results', [LabOrderController::class, 'updateResults'])->name('lab-orders.results');
+            Route::post('/patients/{patient}/visits/{visit}/radiology-orders/{radiologyOrder}/results', [RadiologyOrderController::class, 'updateResults'])->name('radiology-orders.results');
         });
 
         Route::middleware('clinic.permission:manage_billing')->group(function () {
@@ -277,18 +300,18 @@ Route::middleware(['auth', 'superadmin'])
         Route::post('/notifications', [AdminNotificationController::class, 'store'])->name('notifications.store');
         Route::delete('/notifications/{notification}', [AdminNotificationController::class, 'destroy'])->name('notifications.destroy');
 
-        Route::get('/offline-licenses', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'index'])->name('offline-licenses.index');
-        Route::get('/offline-licenses/create', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'create'])->name('offline-licenses.create');
-        Route::get('/offline-licenses/keys', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'keys'])->name('offline-licenses.keys');
+        Route::get('/offline-licenses', [OfflineLicenseController::class, 'index'])->name('offline-licenses.index');
+        Route::get('/offline-licenses/create', [OfflineLicenseController::class, 'create'])->name('offline-licenses.create');
+        Route::get('/offline-licenses/keys', [OfflineLicenseController::class, 'keys'])->name('offline-licenses.keys');
         Route::get('/offline-licenses/preview', function () {
             return redirect()
                 ->route('admin.offline-licenses.create')
                 ->with('error', 'افتح صفحة الإصدار والصق رمز CLNREQ1 ثم اضغط «فك الرمز والمتابعة».');
         })->name('offline-licenses.preview.get');
-        Route::post('/offline-licenses/preview', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'preview'])->name('offline-licenses.preview');
-        Route::post('/offline-licenses', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'store'])->name('offline-licenses.store');
-        Route::post('/offline-licenses/renew', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'renew'])->name('offline-licenses.renew.store');
-        Route::get('/offline-licenses/{offlineLicense}', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'show'])->whereNumber('offlineLicense')->name('offline-licenses.show');
-        Route::get('/offline-licenses/{offlineLicense}/download', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'download'])->whereNumber('offlineLicense')->name('offline-licenses.download');
-        Route::get('/offline-licenses/{offlineLicense}/renew', [App\Http\Controllers\Admin\OfflineLicenseController::class, 'renewForm'])->whereNumber('offlineLicense')->name('offline-licenses.renew');
+        Route::post('/offline-licenses/preview', [OfflineLicenseController::class, 'preview'])->name('offline-licenses.preview');
+        Route::post('/offline-licenses', [OfflineLicenseController::class, 'store'])->name('offline-licenses.store');
+        Route::post('/offline-licenses/renew', [OfflineLicenseController::class, 'renew'])->name('offline-licenses.renew.store');
+        Route::get('/offline-licenses/{offlineLicense}', [OfflineLicenseController::class, 'show'])->whereNumber('offlineLicense')->name('offline-licenses.show');
+        Route::get('/offline-licenses/{offlineLicense}/download', [OfflineLicenseController::class, 'download'])->whereNumber('offlineLicense')->name('offline-licenses.download');
+        Route::get('/offline-licenses/{offlineLicense}/renew', [OfflineLicenseController::class, 'renewForm'])->whereNumber('offlineLicense')->name('offline-licenses.renew');
     });

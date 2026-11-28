@@ -60,7 +60,8 @@ test('reception appointment stores source column', function () {
     $this->actingAs($owner)->post(route('clinic.appointments.store'), [
         'patient_id' => $patient->id,
         'visit_type_id' => $visitType->id,
-        'scheduled_at' => now()->addDay()->toDateString(),
+        'scheduled_date' => now()->addDay()->toDateString(),
+        'scheduled_time' => '10:00',
         'notes' => null,
     ])->assertRedirect();
 
@@ -92,6 +93,7 @@ test('public booking stores website source', function () {
         'patient_phone' => '01033333333',
         'visit_type_id' => $visitType->id,
         'preferred_date' => now()->addDays(2)->toDateString(),
+        'preferred_time' => '11:30',
         'notes' => 'اختبار',
     ]);
 
@@ -156,7 +158,8 @@ test('reception appointment receives a queue number', function () {
     $this->actingAs($owner)->post(route('clinic.appointments.store'), [
         'patient_id' => $patient->id,
         'visit_type_id' => $visitType->id,
-        'scheduled_at' => now()->toDateString(),
+        'scheduled_date' => now()->toDateString(),
+        'scheduled_time' => '09:15',
         'notes' => null,
     ])->assertRedirect();
 

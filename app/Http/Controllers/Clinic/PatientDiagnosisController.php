@@ -13,19 +13,9 @@ class PatientDiagnosisController extends Controller
     {
         abort_if($patient->clinic_id != $this->currentClinicId(), 403);
 
-        $validated = $request->validate([
-            'diagnosis' => ['required', 'string', 'max:2000'],
-            'notes' => ['nullable', 'string', 'max:5000'],
-            'diagnosed_at' => ['required', 'date'],
-        ]);
-
-        PatientDiagnosis::create([
-            ...$validated,
-            'clinic_id' => $this->currentClinicId(),
-            'patient_id' => $patient->id,
-        ]);
-
-        return back()->with('success', 'تم إضافة التشخيص بنجاح!');
+        return back()
+            ->withErrors(['diagnosis' => 'يجب إضافة التشخيص من داخل زيارة طبية مرتبطة بالمريض.'])
+            ->withInput();
     }
 
     public function destroy(Patient $patient, PatientDiagnosis $diagnosis)

@@ -60,14 +60,7 @@ class PatientAIChatController extends Controller
             default => 'غير محدد',
         };
 
-        // Age: prefer dob-calculated age, fallback to explicit age field
-        if ($patient->dob) {
-            $age = $patient->dob->diffInYears(now()).' سنة';
-        } elseif ($patient->age) {
-            $age = $patient->age.' سنة';
-        } else {
-            $age = 'غير محدد';
-        }
+        $age = $patient->displayAge() !== null ? $patient->displayAge().' سنة' : 'غير محدد';
 
         // Medical files summary
         $filesText = $patient->medicalFiles->isEmpty()

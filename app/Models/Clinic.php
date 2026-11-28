@@ -54,6 +54,8 @@ class Clinic extends Model
         'hero_subtitle',
         'about_us',
         'social_links',
+        'prescription_layout',
+        'prescription_print_locale',
     ];
 
     protected $casts = [

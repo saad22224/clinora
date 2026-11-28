@@ -80,7 +80,8 @@ class AppointmentController extends Controller
     {
         $validated = $request->validate([
             'patient_id' => ['required', 'exists:patients,id'],
-            'scheduled_at' => ['required', 'date', 'after_or_equal:today'],
+            'scheduled_date' => ['required', 'date', 'after_or_equal:today'],
+            'scheduled_time' => ['required', 'date_format:H:i'],
             'visit_type_id' => ['required', 'exists:visit_types,id'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
@@ -91,7 +92,7 @@ class AppointmentController extends Controller
         $patient = Patient::findOrFail($validated['patient_id']);
         abort_if((int) $patient->clinic_id !== $this->currentClinicId(), 403);
 
-        $validated['scheduled_at'] = Carbon::parse($validated['scheduled_at'])->startOfDay();
+        $scheduledAt = Carbon::parse($validated['scheduled_date'].' '.$validated['scheduled_time']);
 
         $clinic = $this->currentClinic();
         $doctorId = $this->queue->resolveDoctorId(
@@ -99,9 +100,12 @@ class AppointmentController extends Controller
             Auth::user()?->role === 'doctor' ? Auth::id() : null
         );
 
-        DB::transaction(function () use ($validated, $visitType, $doctorId) {
+        DB::transaction(function () use ($validated, $visitType, $doctorId, $scheduledAt) {
             $appointment = Appointment::create([
-                ...$validated,
+                'patient_id' => $validated['patient_id'],
+                'visit_type_id' => $validated['visit_type_id'],
+                'notes' => $validated['notes'] ?? null,
+                'scheduled_at' => $scheduledAt,
                 'price' => $visitType->price,
                 'clinic_id' => $this->currentClinicId(),
                 'doctor_id' => $doctorId,

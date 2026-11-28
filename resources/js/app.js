@@ -81,5 +81,35 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!confirm(msg)) e.preventDefault();
         });
     });
+
+    // ─── Auto-fill age from date of birth ─────────────────────────
+    const ageFromDob = (value) => {
+        if (!value) return '';
+        const dob = new Date(value + 'T00:00:00');
+        if (Number.isNaN(dob.getTime())) return '';
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const monthDiff = today.getMonth() - dob.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+            age -= 1;
+        }
+        return age >= 0 && age <= 150 ? String(age) : '';
+    };
+
+    document.querySelectorAll('[data-dob-age-source]').forEach((dobInput) => {
+        const form = dobInput.closest('form');
+        const ageInput = form?.querySelector('[data-dob-age-target]');
+        if (!ageInput) return;
+
+        const syncAge = () => {
+            const calculated = ageFromDob(dobInput.value);
+            if (calculated !== '') {
+                ageInput.value = calculated;
+            }
+        };
+
+        dobInput.addEventListener('change', syncAge);
+        dobInput.addEventListener('input', syncAge);
+    });
 });
 

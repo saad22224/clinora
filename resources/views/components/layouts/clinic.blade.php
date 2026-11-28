@@ -90,9 +90,6 @@
             @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_prescriptions'))
                 <x-clinic.nav-item route="clinic.prescriptions.index" icon="document-text" label="الوصفات الطبية" />
             @endif
-            @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_records'))
-                <x-clinic.nav-item route="clinic.records.index" icon="folder" label="السجلات الطبية" />
-            @endif
 
             <p class="px-3 pt-5 pb-2 text-[10px] font-black text-gray-400 dark:text-gray-600 uppercase tracking-widest">الإدارة والمالية</p>
             @if(Auth::user()->role !== 'secretary' || Auth::user()->can('manage_billing'))

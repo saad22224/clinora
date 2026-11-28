@@ -4,16 +4,19 @@ namespace App\Http\Controllers\Clinic;
 
 use App\Http\Controllers\Controller;
 use App\Services\ImageOptimizationService;
+use App\Support\PrescriptionPrint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class SettingsController extends Controller
 {
     public function index()
     {
         $clinic = $this->currentClinic();
+        $prescriptionLayouts = PrescriptionPrint::layoutLabels();
 
-        return view('clinic.settings', compact('clinic'));
+        return view('clinic.settings', compact('clinic', 'prescriptionLayouts'));
     }
 
     public function update(Request $request)
@@ -35,6 +38,8 @@ class SettingsController extends Controller
             'hero_subtitle' => ['nullable', 'string', 'max:255'],
             'about_us' => ['nullable', 'string'],
             'social_links' => ['nullable', 'array'],
+            'prescription_layout' => ['nullable', 'string', Rule::in(PrescriptionPrint::layouts())],
+            'prescription_print_locale' => ['nullable', 'string', Rule::in(['ar', 'en'])],
         ]);
 
         // Handle image upload

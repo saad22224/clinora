@@ -23,4 +23,9 @@ class PatientDiagnosis extends Model
     {
         return $this->belongsTo(Patient::class);
     }
+
+    public function visit(): BelongsTo
+    {
+        return $this->belongsTo(Visit::class);
+    }
 }

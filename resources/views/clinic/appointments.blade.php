@@ -126,6 +126,9 @@
                                     </div>
                                     <div class="min-w-0">
                                         <p class="font-bold text-gray-900 dark:text-white truncate">{{ $apt->patient?->name ?? 'مريض' }}</p>
+                                        <p class="text-sm font-black text-brand-600 dark:text-brand-400 mt-0.5">
+                                            الساعة {{ $apt->scheduled_at?->format('h:i A') ?? '—' }}
+                                        </p>
                                         <div class="flex flex-wrap gap-1.5 mt-1">
                                             <span class="inline-flex px-2 py-0.5 rounded-lg text-[11px] font-bold {{ $qStatus['class'] }}">{{ $qStatus['label'] }}</span>
                                             <span class="inline-flex px-2 py-0.5 rounded-lg text-[11px] font-bold {{ $bStatus['class'] }}">{{ $bStatus['label'] }}</span>
@@ -209,10 +212,17 @@
                             @endforeach
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-1.5">تاريخ الموعد *</label>
-                        <input type="date" name="scheduled_at" value="{{ old('scheduled_at', date('Y-m-d')) }}" min="{{ date('Y-m-d') }}" required
-                               class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-bold mb-1.5">تاريخ الموعد *</label>
+                            <input type="date" name="scheduled_date" value="{{ old('scheduled_date', date('Y-m-d')) }}" min="{{ date('Y-m-d') }}" required
+                                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-1.5">ساعة الموعد *</label>
+                            <input type="time" name="scheduled_time" value="{{ old('scheduled_time', '10:00') }}" required
+                                   class="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-2.5 text-sm">
+                        </div>
                     </div>
                     <div>
                         <label class="block text-sm font-bold mb-1.5">الخدمة *</label>

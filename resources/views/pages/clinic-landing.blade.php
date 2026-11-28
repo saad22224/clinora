@@ -832,6 +832,14 @@
                                             value="{{ old('preferred_date', date('Y-m-d')) }}" min="{{ date('Y-m-d') }}" required
                                             class="clinora-input w-full rounded-xl px-4 py-3.5 text-sm font-semibold" />
                                     </div>
+                                    <div>
+                                        <label for="preferred_time" class="block text-sm font-extrabold text-slate-800 dark:text-slate-200 mb-2">
+                                            ساعة الموعد <span class="text-rose-500">*</span>
+                                        </label>
+                                        <input type="time" id="preferred_time" name="preferred_time"
+                                            value="{{ old('preferred_time', '10:00') }}" required
+                                            class="clinora-input w-full rounded-xl px-4 py-3.5 text-sm font-semibold" />
+                                    </div>
                                 </div>
 
                                 <div>

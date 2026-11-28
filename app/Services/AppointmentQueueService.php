@@ -153,8 +153,10 @@ class AppointmentQueueService
                 ->lockForUpdate()
                 ->max('queue_number');
 
+            $parsedSchedule = Carbon::parse($newScheduledAt);
+            // Preserve the selected clock time; only queue_date uses the calendar day.
             $locked->forceFill([
-                'scheduled_at' => Carbon::parse($newScheduledAt)->startOfDay(),
+                'scheduled_at' => $parsedSchedule,
                 'queue_number' => ((int) $max) + 1,
                 'queue_date' => $queueDate->toDateString(),
                 'queue_status' => self::STATUS_WAITING,
